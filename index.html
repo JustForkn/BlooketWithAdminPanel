@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Blooket — Recreated + Admin</title>
-<link rel="icon" href="https://blooket.com/favicon.ico">
+<link rel="icon" type="image/x-icon" href="https://blooket.com/favicon.ico">
+<link rel="shortcut icon" type="image/x-icon" href="https://blooket.com/favicon.ico">
 <link rel="apple-touch-icon" href="https://blooket.com/apple-touch-icon.png">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -339,6 +340,15 @@ footer{border-top:1px solid var(--border);background:var(--surface);padding:44px
 .pointer{cursor:pointer}
 .relative{position:relative}
 
+/* BLOOK PICKER GRID */
+.picker-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;max-height:420px;overflow-y:auto;padding:8px;border-radius:var(--r);background:var(--bg-3);border:1px solid var(--border)}
+.picker-blook{position:relative;background:var(--surface);border:2px solid var(--border);border-radius:var(--r);padding:8px 6px 6px;text-align:center;cursor:pointer;transition:.18s}
+.picker-blook:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--brand)}
+.picker-blook.selected{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 12%,var(--surface));box-shadow:0 0 0 3px rgba(124,58,237,.25)}
+.picker-blook img{width:70%;height:auto;aspect-ratio:1;object-fit:contain;display:block;margin:0 auto}
+.picker-blook .name{font-size:.7rem;font-weight:900;margin-top:6px;line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.picker-blook .check{position:absolute;top:4px;right:4px;background:var(--brand);color:#fff;border-radius:50%;width:20px;height:20px;display:grid;place-items:center;font-size:.7rem;font-weight:900;box-shadow:0 2px 6px rgba(124,58,237,.5)}
+
 /* ADMIN */
 .admin-toggle{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:var(--r);background:var(--surface-2);border:1px solid var(--border);margin-bottom:9px;transition:.2s}
 .admin-toggle.on{background:color-mix(in srgb,var(--good) 14%,var(--surface));border-color:var(--good)}
@@ -356,7 +366,7 @@ html[data-theme="dark"] .admin-header{background:linear-gradient(135deg,#000,#1e
 /* RESPONSIVE */
 @media(max-width:1080px){.g6{grid-template-columns:repeat(4,1fr)}.g5{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:900px){.nav-links{display:none}#hamburger{display:grid}.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:640px){.wrap{padding:0 15px}.g6,.g5,.g4,.g3,.g2{grid-template-columns:repeat(2,1fr)}.hero{padding:56px 0 70px}.hero-stats{gap:24px}.modal-body{padding:18px}.modal-head{padding:16px 18px}#toast-root{left:14px;right:14px;bottom:14px;align-items:stretch}.toast{max-width:100%}}
+@media(max-width:640px){.wrap{padding:0 15px}.g6,.g5,.g4,.g3,.g2{grid-template-columns:repeat(2,1fr)}.hero{padding:56px 0 70px}.hero-stats{gap:24px}.modal-body{padding:18px}.modal-head{padding:16px 18px}#toast-root{left:14px;right:14px;bottom:14px;align-items:stretch}.toast{max-width:100%}.picker-grid{grid-template-columns:repeat(auto-fill,minmax(72px,1fr))}}
 
 #mobile-menu{position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;z-index:880;background:var(--surface);padding:20px;display:none;flex-direction:column;gap:8px}
 #mobile-menu.open{display:flex}
@@ -367,7 +377,7 @@ html[data-theme="dark"] .admin-header{background:linear-gradient(135deg,#000,#1e
 
 <nav id="nav">
   <div class="brand" onclick="location.hash='#/'">
-    <div class="brand-badge"><img src="https://blooket.com/favicon.ico" alt=""></div>
+    <div class="brand-badge"><img src="https://blooket.com/favicon.ico" alt="" onerror="this.style.display='none'"></div>
     <span class="brand-text">Blooket</span>
   </div>
   <div class="nav-links" id="nav-links">
@@ -400,7 +410,6 @@ html[data-theme="dark"] .admin-header{background:linear-gradient(135deg,#000,#1e
 const S3_BASE    = "https://blooket.s3.us-east-2.amazonaws.com/blooks/";
 const MEDIA_BASE = "https://media.blooket.com/image/upload/";
 
-/* PACK ICON URLs — from Blooket's pack art CDN */
 const PACK_ICONS = {
   "Farm Animal":   "https://media.blooket.com/image/upload/v1645222006/Blooks/yellowBird.svg",
   "Pet":           "https://media.blooket.com/image/upload/v1556831934/Blooks/dog.svg",
@@ -659,7 +668,6 @@ const BLOOK_MAP = Object.fromEntries(BLOOKS.map(b => [b.name, b]));
 
 const RARITIES = ["Common","Uncommon","Rare","Epic","Legendary","Chroma","Mystical"];
 
-/* NEW RARITY WEIGHTS — Chromas and Mysticals EXTREMELY rare */
 const RARITY_WEIGHT = {
   Common:    10000,
   Uncommon:  1200,
@@ -673,7 +681,6 @@ const RARITY_WEIGHT = {
 const RARITY_DUPLICATE_REWARD = {Common:5,Uncommon:10,Rare:25,Epic:50,Legendary:100,Chroma:250,Mystical:500};
 const RARITY_ORDER = {Common:0,Uncommon:1,Rare:2,Epic:3,Legendary:4,Chroma:5,Mystical:6};
 
-/* PACKS — using the correct pack icon URLs */
 const PACKS = [
   { id:"Farm Animal",   name:"Farm Animal",   price:10,  icon:"Chick",             color:"#4ab96d", desc:"The classic starter pack. Moo, oink, cluck." },
   { id:"Pet",           name:"Pet",           price:15,  icon:"Dog",               color:"#f49849", desc:"Furry (and scaly) friends for your collection." },
@@ -695,36 +702,28 @@ const PACKS = [
 ];
 const PACK_MAP = Object.fromEntries(PACKS.map(p => [p.id, p]));
 
-/* FIX: Pack pool — every pack gets a UNIQUE random assortment.
-   Chromas/Mysticals from ANY set can appear in any pack, but extremely rarely. */
 function packPool(packId){
   if(packId === "Mystical"){
     return BLOOKS.filter(b => b.rarity === "Mystical" || b.rarity === "Chroma");
   }
   const basePool = BLOOKS.filter(b => b.set === packId);
-  // Add cross-set chromas and mysticals as ultra-rare bonus pulls
   const bonusPool = BLOOKS.filter(b => b.rarity === "Chroma" || b.rarity === "Mystical");
   return [...basePool, ...bonusPool];
 }
 
-/* FIX: Each pack has its own odds. Chromas/Mysticals in normal packs are SUPER rare. */
 function packOdds(packId){
   const pool = packPool(packId);
   const byRarityCount = {};
   pool.forEach(b => { byRarityCount[b.rarity] = (byRarityCount[b.rarity]||0)+1; });
-
-  // For NORMAL packs, chromas/mysticals get a much higher penalty
   const isNormalPack = packId !== "Mystical";
   const weighted = pool.map(b => {
     let weight = RARITY_WEIGHT[b.rarity] / byRarityCount[b.rarity];
-    // Extra rarity penalty for chromas/mysticals in normal packs
     if(isNormalPack){
       if(b.rarity === "Chroma") weight *= 0.02;
       if(b.rarity === "Mystical") weight *= 0.005;
     }
     return { blook: b, weight };
   });
-
   const total = weighted.reduce((s,w)=>s+w.weight,0) || 1;
   const entries = weighted.map(w => ({ blook:w.blook, chance: (w.weight/total)*100 }));
   const byRarity = {};
@@ -732,10 +731,8 @@ function packOdds(packId){
   return { entries, byRarity, total };
 }
 
-/* FIX: TRUE RANDOM roll — no biases, no cached results */
 function rollBlook(packId){
   const { entries, total } = packOdds(packId);
-  // Use crypto-strength randomness when available
   let r;
   if(window.crypto && window.crypto.getRandomValues){
     const buf = new Uint32Array(1);
@@ -753,7 +750,7 @@ function rollBlook(packId){
 }
 
 /* STATE */
-const SAVE_KEY = "blooket-recreation-v3";
+const SAVE_KEY = "blooket-recreation-v4";
 const DEFAULT_STATE = {
   user:null, tokens:500, xp:0, owned:{},
   stats:{games:0,wins:0,correct:0,wrong:0,packsOpened:0,bestStreak:0,tokensEarned:0,tokensSpent:0,blooksFound:0},
@@ -812,7 +809,15 @@ const State = {
   hasBlook(name){ return !!this.data.owned[name]; },
   uniqueOwned(){ return Object.keys(this.data.owned).length; },
   totalOwned(){ return Object.values(this.data.owned).reduce((a,b)=>a+b,0); },
-  completion(){ return (this.uniqueOwned() / BLOOKS.length) * 100; }
+  completion(){ return (this.uniqueOwned() / BLOOKS.length) * 100; },
+  /* Returns array of blook NAMES the user owns */
+  ownedNames(){
+    return Object.keys(this.data.owned).filter(n => BLOOK_MAP[n]);
+  },
+  /* Returns array of full blook objects the user owns */
+  ownedBlooks(){
+    return this.ownedNames().map(n => BLOOK_MAP[n]);
+  }
 };
 
 function levelInfo(xp){
@@ -916,7 +921,7 @@ const UI = {
   }
 };
 
-/* ADMIN — moved to Settings */
+/* ADMIN */
 const ADMIN_PASSWORD = "6171399";
 const ADMIN_SESSION_KEY = "blooket-admin-session";
 
@@ -1119,7 +1124,7 @@ const Admin = {
   setProfile(name, avatar){
     if(!State.data.user) return { ok:false, msg:"No profile" };
     if(name) State.data.user.name = String(name).slice(0, 18);
-    if(avatar && (BLOOK_MAP[avatar] || State.data.owned[avatar])) State.data.user.avatar = avatar;
+    if(avatar && State.data.owned[avatar]) State.data.user.avatar = avatar;
     State.save(); App.refreshUserChip();
     return { ok:true };
   },
@@ -1795,30 +1800,54 @@ const Views = {
   },
 
   login(){
-    const avatars = ["Chick","Penguin","Astronaut","Baby Shark","Fox","Ghost","Panda","Lion","Cat","Dog","Narwhal","Megalodon"];
+    /* Show ALL blooks the player owns — if they own nothing yet, show a starter pick */
+    const ownedNames = State.ownedNames();
+    const blooks = ownedNames.length
+      ? ownedNames.map(n => BLOOK_MAP[n])
+      : BLOOKS.slice(0, 12); /* fallback: show some starter blooks if user owns nothing */
+
+    const currentAvatar = State.data.user ? State.data.user.avatar : (blooks[0] ? blooks[0].name : "Chick");
+
     return `
     <section class="section">
-      <div class="wrap-narrow" style="max-width:520px">
+      <div class="wrap-narrow" style="max-width:620px">
         <div class="card reveal-up">
           <div class="tc mb24">
-            <div style="width:74px;height:74px;border-radius:22px;background:var(--grad-brand);display:grid;place-items:center;margin:0 auto 16px;box-shadow:0 12px 32px rgba(124,58,237,.4)">${blookImg(BLOOK_MAP["Chick"],"")}</div>
-            <h2>Create your profile</h2>
-            <p class="muted small mt8">Stored locally. No account required.</p>
+            <div style="width:74px;height:74px;border-radius:22px;background:var(--grad-brand);display:grid;place-items:center;margin:0 auto 16px;box-shadow:0 12px 32px rgba(124,58,237,.4)">${blookImg(BLOOK_MAP[currentAvatar] || BLOOK_MAP["Chick"],"")}</div>
+            <h2>${State.data.user ? "Edit your profile" : "Create your profile"}</h2>
+            <p class="muted small mt8">
+              ${ownedNames.length
+                ? `Choose any of the <b>${ownedNames.length}</b> Blooks you own as your avatar.`
+                : `You don't own any Blooks yet — showing some starters. Open packs to unlock more!`}
+            </p>
           </div>
+
           <div class="field">
             <label class="label">Display name</label>
             <input class="input" id="login-name" placeholder="e.g. BlookMaster" maxlength="18" value="${State.data.user ? esc(State.data.user.name) : ''}">
           </div>
+
           <div class="field">
-            <label class="label">Choose your avatar Blook</label>
-            <div class="grid g6" style="gap:9px" id="avatar-grid">
-              ${avatars.map((n,i) => {
-                const b = BLOOK_MAP[n];
-                return `<div class="blook-card ${i===0?'owned':''}" data-avatar="${esc(n)}" style="padding:7px 4px 4px">${blookImg(b,"blook-img")}</div>`;
+            <label class="label">Choose your avatar Blook ${ownedNames.length ? `(${ownedNames.length} owned)` : "(showing starters)"}</label>
+            <div class="picker-grid" id="avatar-picker">
+              ${blooks.map(b => {
+                const count = State.data.owned[b.name] || 0;
+                const isSelected = b.name === currentAvatar;
+                return `
+                  <div class="picker-blook ${isSelected ? 'selected' : ''}" data-avatar="${esc(b.name)}" title="${esc(b.name)}">
+                    ${isSelected ? '<div class="check">✓</div>' : ''}
+                    ${count > 1 ? `<div class="blook-count" style="font-size:.6rem;padding:1px 6px">×${count}</div>` : ''}
+                    ${blookImg(b,"")}
+                    <div class="name">${esc(b.name)}</div>
+                  </div>`;
               }).join("")}
             </div>
           </div>
-          <button class="btn btn-primary btn-lg btn-block mt16" id="login-submit">Start Playing</button>
+
+          <button class="btn btn-primary btn-lg btn-block mt16" id="login-submit">
+            ${State.data.user ? "Save Changes" : "Start Playing"}
+          </button>
+
           ${State.data.user ? `<div class="divider"></div><button class="btn btn-ghost btn-block" id="login-logout">Sign out of ${esc(State.data.user.name)}</button>` : ''}
         </div>
       </div>
@@ -1961,11 +1990,15 @@ const Views = {
 
   play(){
     const u = State.data.user;
+    const ownedNames = State.ownedNames();
     const modes = [
       { id:"classic", name:"Classic", icon:"🎯", color:"#7c3aed", desc:"Answer questions against 3 bots. Score for speed and streaks.", tags:["Solo","Bots","10 Qs"] },
       { id:"gold", name:"Gold Quest", icon:"🪙", color:"#f59e0b", desc:"Correct answers let you pick a chest — gold, steal, or swap.", tags:["Solo","Chests","Chaos"] }
     ];
-    const avatars = Object.keys(State.data.owned).length ? Object.keys(State.data.owned) : BLOOKS.slice(0, 24).map(b => b.name);
+
+    /* Show only blooks the player owns */
+    const avatarOptions = ownedNames.map(n => BLOOK_MAP[n]);
+
     return `
     <section class="section">
       <div class="wrap">
@@ -1980,18 +2013,49 @@ const Views = {
               <button class="btn btn-primary btn-block mt16">Play ${m.name}</button>
             </div>`).join("")}
         </div>
-        <div class="card" style="max-width:720px;margin:0 auto" id="setup-panel">
-          <h3 class="mb16">Game Setup</h3>
+        <div class="card" style="max-width:780px;margin:0 auto" id="setup-panel">
+          <h3 class="mb16">Set Up Your Game</h3>
+
+          <div class="field">
+            <label class="label">👤 Username</label>
+            <input class="input" id="setup-name" value="${u ? esc(u.name) : ''}" placeholder="Enter your username..." maxlength="18">
+            <p class="tiny muted-3 mt8">This is what other players will see.</p>
+          </div>
+
+          <div class="field">
+            <label class="label">🎨 Pick a Blook you own <span class="chip chip-Hidden" style="font-size:.6rem;padding:2px 8px">${ownedNames.length} available</span></label>
+            ${avatarOptions.length ? `
+              <div class="picker-grid" id="setup-avatar-picker">
+                ${avatarOptions.map(b => {
+                  const isSelected = u && u.avatar === b.name;
+                  return `
+                    <div class="picker-blook ${isSelected ? 'selected' : ''}" data-avatar="${esc(b.name)}" title="${esc(b.name)}">
+                      ${isSelected ? '<div class="check">✓</div>' : ''}
+                      ${blookImg(b,"")}
+                      <div class="name">${esc(b.name)}</div>
+                    </div>`;
+                }).join("")}
+              </div>
+            ` : `
+              <div class="empty" style="padding:26px;border:2px dashed var(--border);border-radius:var(--r)">
+                <div class="empty-icon">📦</div>
+                <p class="muted small">You don't own any Blooks yet.</p>
+                <button class="btn btn-primary btn-sm mt16" onclick="App.go('#/market')">Open Packs First</button>
+              </div>
+            `}
+          </div>
+
           <div class="grid g2" style="gap:18px">
-            <div class="field" style="margin:0"><label class="label">Your name</label><input class="input" id="setup-name" value="${u ? esc(u.name) : 'You'}" maxlength="18"></div>
-            <div class="field" style="margin:0"><label class="label">Avatar</label><select class="select" id="setup-avatar">${avatars.slice(0, 60).map(n => { const b = BLOOK_MAP[n]; return `<option value="${esc(n)}" ${u && u.avatar===n ? "selected":""}>${esc(n)}</option>`; }).join("")}</select></div>
             <div class="field" style="margin:0"><label class="label">Questions</label><select class="select" id="setup-questions"><option value="5">5 — Quick</option><option value="10" selected>10 — Standard</option><option value="15">15 — Long</option><option value="20">20 — Marathon</option></select></div>
             <div class="field" style="margin:0"><label class="label">Time per question</label><select class="select" id="setup-time"><option value="10">10s — Hard</option><option value="15" selected>15s — Normal</option><option value="25">25s — Relaxed</option></select></div>
           </div>
+
           <div class="divider"></div>
           <div class="flex between center wrapf gap16">
             <div><div class="tiny muted-3 bold">SELECTED MODE</div><div style="font-weight:900;font-size:1.2rem" id="selected-mode-label">Classic</div></div>
-            <button class="btn btn-primary btn-lg" id="start-game" ${u ? "" : "disabled"}>${u ? "▶ Start Game" : "Create a profile first"}</button>
+            <button class="btn btn-primary btn-lg" id="start-game" ${!u || !ownedNames.length ? "disabled" : ""}>
+              ${!u ? "Set username & Blook first" : !ownedNames.length ? "Own a Blook first" : "▶ Start Game"}
+            </button>
           </div>
         </div>
       </div>
@@ -2241,7 +2305,7 @@ const Views = {
                 <div class="field">
                   <label class="label">Avatar</label>
                   <select class="select" id="a-profile-avatar">
-                    ${BLOOKS.slice(0, 60).map(b => `<option value="${esc(b.name)}" ${State.data.user && State.data.user.avatar === b.name ? "selected" : ""}>${esc(b.name)}</option>`).join("")}
+                    ${State.ownedBlooks().map(b => `<option value="${esc(b.name)}" ${State.data.user && State.data.user.avatar === b.name ? "selected" : ""}>${esc(b.name)}</option>`).join("")}
                   </select>
                 </div>
                 <button class="btn btn-primary" id="a-set-profile">Save Profile</button>
@@ -2338,20 +2402,27 @@ const Mounts = {
   },
   home(){},
   login(){
-    let selectedAvatar = State.data.user ? State.data.user.avatar : "Chick";
-    const grid = $("#avatar-grid");
-    if(!grid) return;
-    $$("[data-avatar]", grid).forEach(card => {
-      card.addEventListener("click", () => {
-        $$("[data-avatar]", grid).forEach(c => c.classList.remove("owned"));
-        card.classList.add("owned");
-        selectedAvatar = card.dataset.avatar;
+    let selectedAvatar = State.data.user ? State.data.user.avatar : (State.ownedNames()[0] || "Chick");
+    const picker = $("#avatar-picker");
+    if(picker){
+      $$("[data-avatar]", picker).forEach(card => {
+        card.addEventListener("click", () => {
+          $$("[data-avatar]", picker).forEach(c => c.classList.remove("selected"));
+          $$(".check", picker).forEach(c => c.remove());
+          card.classList.add("selected");
+          const check = document.createElement("div");
+          check.className = "check";
+          check.textContent = "✓";
+          card.appendChild(check);
+          selectedAvatar = card.dataset.avatar;
+        });
       });
-    });
+    }
     const submit = $("#login-submit");
     submit.addEventListener("click", () => {
       const name = $("#login-name").value.trim();
       if(!name){ UI.toast("Please enter a display name.", "error"); return; }
+      if(!BLOOK_MAP[selectedAvatar]){ UI.toast("Pick a valid Blook.", "error"); return; }
       Auth.login(name, selectedAvatar);
       App.go("#/dashboard");
     });
@@ -2512,6 +2583,8 @@ const Mounts = {
   },
   play(){
     let selectedMode = "classic";
+    let selectedAvatar = State.data.user ? State.data.user.avatar : (State.ownedNames()[0] || "");
+
     $$(".mode-card").forEach(card => {
       card.addEventListener("click", () => {
         $$(".mode-card").forEach(c => c.style.borderColor = "var(--border)");
@@ -2521,16 +2594,44 @@ const Mounts = {
         if(label) label.textContent = selectedMode === "gold" ? "Gold Quest" : "Classic";
       });
     });
+
+    const picker = $("#setup-avatar-picker");
+    if(picker){
+      $$("[data-avatar]", picker).forEach(card => {
+        card.addEventListener("click", () => {
+          $$("[data-avatar]", picker).forEach(c => c.classList.remove("selected"));
+          $$(".check", picker).forEach(c => c.remove());
+          card.classList.add("selected");
+          const check = document.createElement("div");
+          check.className = "check";
+          check.textContent = "✓";
+          card.appendChild(check);
+          selectedAvatar = card.dataset.avatar;
+        });
+      });
+    }
+
     const startBtn = $("#start-game");
     if(startBtn){
       startBtn.addEventListener("click", () => {
-        if(!Auth.require()) return;
-        const name = $("#setup-name").value.trim() || "You";
-        const avatar = $("#setup-avatar").value;
+        const name = $("#setup-name").value.trim();
+        if(!name){ UI.toast("Please enter a username.", "error"); $("#setup-name").focus(); return; }
+        if(!selectedAvatar || !State.hasBlook(selectedAvatar)){
+          UI.toast("Please pick a Blook you own.", "error"); return;
+        }
         const questions = Number($("#setup-questions").value);
         const time = Number($("#setup-time").value);
-        if(State.data.user){ State.data.user.name = name; State.data.user.avatar = avatar; State.save(); }
-        Game.start({ mode:selectedMode, questions, time, name, avatar });
+        if(State.data.user){
+          State.data.user.name = name;
+          State.data.user.avatar = selectedAvatar;
+          State.save();
+          App.refreshUserChip();
+        } else {
+          State.data.user = { name, avatar: selectedAvatar, joined: Date.now() };
+          State.save();
+          App.refreshUserChip();
+        }
+        Game.start({ mode:selectedMode, questions, time, name, avatar:selectedAvatar });
       });
     }
   },
@@ -2545,13 +2646,11 @@ const Mounts = {
     }
   },
   settings(){
-    /* Theme toggle */
     const themeToggle = $("#s-theme-toggle");
     if(themeToggle){
       themeToggle.addEventListener("click", () => App.toggleTheme());
     }
 
-    /* Admin login */
     const loginBtn = $("#s-admin-login");
     if(loginBtn){
       const pw = $("#s-admin-pw");
@@ -2568,16 +2667,13 @@ const Mounts = {
       pw.addEventListener("keydown", e => { if(e.key === "Enter") submit(); });
     }
 
-    /* Admin logout */
     const adminLogout = $("#s-admin-logout");
     if(adminLogout){
       adminLogout.addEventListener("click", () => { Admin.logout(); UI.toast("Signed out of admin", "info"); App.render(); });
     }
 
-    /* Only attach admin handlers if authed */
     if(!Admin.isAuthed()) return;
 
-    /* ---- Power 1: Unlock blook ---- */
     const blookInput = $("#a-unlock-name");
     const resultBox = $("#a-unlock-result");
     const showUnlockResult = (r) => {
@@ -2605,7 +2701,6 @@ const Mounts = {
       setTimeout(() => App.render(), 500);
     });
 
-    /* ---- Power 2: Unlock all ---- */
     const allBox = $("#a-all-result");
     $("#a-unlock-all").addEventListener("click", () => {
       UI.confirm("Unlock all blooks?", `Adds all ${BLOOKS.length} blooks. You won't lose anything.`, () => {
@@ -2625,7 +2720,6 @@ const Mounts = {
       }, "Max Out");
     });
 
-    /* ---- Power 4: Unlock set ---- */
     $("#a-unlock-set").addEventListener("click", () => {
       const setName = $("#a-set-select").value;
       const r = Admin.unlockSet(setName);
@@ -2633,7 +2727,6 @@ const Mounts = {
       App.render();
     });
 
-    /* ---- Power 5: Unlock rarity ---- */
     $("#a-unlock-rarity").addEventListener("click", () => {
       const rarity = $("#a-rarity-select").value;
       const r = Admin.unlockRarity(rarity);
@@ -2641,7 +2734,6 @@ const Mounts = {
       App.render();
     });
 
-    /* ---- Power 6: Random N ---- */
     $("#a-unlock-random-n").addEventListener("click", () => {
       const n = Number($("#a-random-count").value) || 10;
       const r = Admin.unlockRandomN(n);
@@ -2650,7 +2742,6 @@ const Mounts = {
       App.render();
     });
 
-    /* ---- Power 7/8: Set count / remove ---- */
     $("#a-set-count").addEventListener("click", () => {
       const name = $("#a-count-name").value.trim();
       const count = Number($("#a-count-value").value);
@@ -2667,7 +2758,6 @@ const Mounts = {
       App.render();
     });
 
-    /* ---- Power 10/11: Tokens ---- */
     $("#a-grant-tokens").addEventListener("click", () => {
       const amt = Number($("#a-token-amount").value) || 0;
       if(amt === 0){ UI.toast("Enter a non-zero amount", "error"); return; }
@@ -2682,7 +2772,6 @@ const Mounts = {
       App.render();
     });
 
-    /* ---- Power 12/13: XP / Level ---- */
     $("#a-add-xp").addEventListener("click", () => {
       const amt = Number($("#a-xp-amount").value) || 0;
       Admin.addXP(amt);
@@ -2696,7 +2785,6 @@ const Mounts = {
       App.render();
     });
 
-    /* ---- Power 14/15/26: Stats ---- */
     $("#a-reset-stats").addEventListener("click", () => {
       UI.confirm("Reset stats?", "Clears games, wins, accuracy, history. Collection untouched.", () => {
         Admin.resetStats();
@@ -2715,7 +2803,6 @@ const Mounts = {
       App.render();
     });
 
-    /* ---- Power 16/17: Daily ---- */
     $("#a-reset-daily").addEventListener("click", () => {
       Admin.resetDaily();
       UI.toast("Daily cooldown reset — claim now!", "gold");
@@ -2726,7 +2813,6 @@ const Mounts = {
       UI.toast(`Daily streak set to ${n}`, "success");
     });
 
-    /* ---- Power 18: Profile ---- */
     $("#a-set-profile").addEventListener("click", () => {
       const name = $("#a-profile-name").value;
       const avatar = $("#a-profile-avatar").value;
@@ -2736,7 +2822,6 @@ const Mounts = {
       App.render();
     });
 
-    /* ---- Power 3: Open packs ---- */
     const packSelect = $("#a-pack-select");
     const packCount = $("#a-pack-count");
     const packPreset = $("#a-pack-preset");
@@ -2767,7 +2852,6 @@ const Mounts = {
       } else run();
     });
 
-    /* ---- Power 22: Monte Carlo ---- */
     $("#a-simulate").addEventListener("click", () => {
       const packId = $("#a-sim-pack").value;
       const rolls = Number($("#a-sim-count").value) || 1000;
@@ -2786,7 +2870,6 @@ const Mounts = {
         </div>`;
     });
 
-    /* ---- Power 23/24/25: Cheats ---- */
     $("#a-god-toggle").addEventListener("click", () => {
       const on = Admin.toggleGodMode();
       UI.toast(on ? "😇 God Mode ON" : "😇 God Mode OFF", on ? "success" : "info");
@@ -2804,7 +2887,6 @@ const Mounts = {
       App.render();
     });
 
-    /* ---- Power 19/20/21: Save data ---- */
     $("#a-export").addEventListener("click", () => {
       const json = Admin.exportSave();
       const blob = new Blob([json], { type:"application/json" });
@@ -2836,7 +2918,6 @@ const Mounts = {
       }, "Wipe Everything", true);
     });
 
-    /* ---- Power 7: Remove specific ---- */
     $("#a-remove-specific").addEventListener("click", () => {
       const name = $("#a-remove-name").value.trim();
       const r = Admin.removeBlook(name);
@@ -2906,10 +2987,14 @@ const App = {
     const chip = $("#user-chip");
     if(!chip) return;
     const u = State.data.user;
-    if(u){
-      const b = BLOOK_MAP[u.avatar] || BLOOK_MAP["Chick"];
+    if(u && State.hasBlook(u.avatar)){
+      const b = BLOOK_MAP[u.avatar];
       const lv = levelInfo(State.data.xp).level;
       chip.innerHTML = `<div class="user-avatar">${blookImg(b,"")}</div><div style="line-height:1.15"><div style="font-size:.88rem">${esc(u.name)}</div><div class="tiny muted-3" style="font-weight:800">LVL ${lv}</div></div>`;
+      chip.onclick = () => this.go("#/dashboard");
+    } else if(u){
+      const lv = levelInfo(State.data.xp).level;
+      chip.innerHTML = `<div class="user-avatar">👤</div><div style="line-height:1.15"><div style="font-size:.88rem">${esc(u.name)}</div><div class="tiny muted-3" style="font-weight:800">LVL ${lv}</div></div>`;
       chip.onclick = () => this.go("#/dashboard");
     } else {
       chip.innerHTML = `<div class="user-avatar">👤</div><span style="font-size:.88rem">Sign in</span>`;
