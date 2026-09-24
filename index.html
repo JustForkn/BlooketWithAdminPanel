@@ -1,0 +1,2929 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blooket — Recreated + Admin</title>
+<link rel="icon" href="https://media.blooket.com/image/upload/v1556829562/Blooks/chicken.svg">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --brand:#7c3aed;--brand-2:#4f46e5;--brand-3:#06b6d4;--accent:#f59e0b;
+  --good:#22c55e;--bad:#ef4444;
+  --bg:#f4f5fb;--bg-2:#ffffff;--bg-3:#eef0f8;
+  --surface:#ffffff;--surface-2:#f7f8fd;
+  --border:#e2e5f0;--border-2:#cdd2e4;
+  --text:#12142b;--text-2:#4b4f6b;--text-3:#878ba8;
+  --shadow-sm:0 1px 2px rgba(18,20,43,.06),0 1px 3px rgba(18,20,43,.05);
+  --shadow:0 4px 14px rgba(18,20,43,.08);
+  --shadow-lg:0 18px 44px rgba(18,20,43,.16);
+  --shadow-xl:0 30px 70px rgba(18,20,43,.26);
+  --r-sm:8px;--r:14px;--r-lg:22px;--r-xl:32px;--r-full:999px;
+  --nav-h:68px;
+  --font:'Nunito','Segoe UI',system-ui,-apple-system,sans-serif;
+  --grad-brand:linear-gradient(135deg,#7c3aed 0%,#4f46e5 55%,#06b6d4 100%);
+  --grad-gold:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%);
+  --grad-dark:linear-gradient(160deg,#151735 0%,#241a4d 55%,#12142b 100%);
+}
+
+html[data-theme="dark"]{
+  --bg:#0c0d1c;--bg-2:#141630;--bg-3:#1a1d3d;
+  --surface:#171a38;--surface-2:#1e2148;
+  --border:#2a2e58;--border-2:#3a3f70;
+  --text:#f0f1ff;--text-2:#b4b8dc;--text-3:#7b80ad;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.4);
+  --shadow:0 4px 18px rgba(0,0,0,.45);
+  --shadow-lg:0 18px 50px rgba(0,0,0,.6);
+  --shadow-xl:0 30px 80px rgba(0,0,0,.7);
+}
+
+html,body{height:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .35s,color .35s}
+
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:var(--bg-3)}
+::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:99px;border:3px solid var(--bg-3)}
+::-webkit-scrollbar-thumb:hover{background:var(--brand)}
+
+h1,h2,h3,h4,h5{font-weight:900;line-height:1.15;letter-spacing:-.02em}
+h1{font-size:clamp(2.1rem,5vw,3.9rem)}
+h2{font-size:clamp(1.6rem,3.2vw,2.5rem)}
+h3{font-size:clamp(1.2rem,2.2vw,1.6rem)}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+
+/* NAV */
+#nav{position:sticky;top:0;z-index:900;height:var(--nav-h);display:flex;align-items:center;gap:18px;padding:0 22px;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(18px) saturate(160%);border-bottom:1px solid var(--border);box-shadow:var(--shadow-sm)}
+.brand{display:flex;align-items:center;gap:11px;font-weight:900;font-size:1.45rem;letter-spacing:-.04em;cursor:pointer;flex-shrink:0}
+.brand-badge{width:40px;height:40px;border-radius:12px;background:var(--grad-brand);display:grid;place-items:center;box-shadow:0 6px 18px rgba(124,58,237,.42);overflow:hidden}
+.brand-badge img{width:30px;height:30px;object-fit:contain}
+.brand-text{background:var(--grad-brand);-webkit-background-clip:text;background-clip:text;color:transparent}
+.nav-links{display:flex;gap:4px;margin-left:8px;flex:1}
+.nav-link{padding:9px 16px;border-radius:var(--r-full);font-weight:800;font-size:.94rem;color:var(--text-2);cursor:pointer;transition:.18s;white-space:nowrap;border:1px solid transparent}
+.nav-link:hover{background:var(--bg-3);color:var(--text)}
+.nav-link.active{background:var(--grad-brand);color:#fff;box-shadow:0 6px 18px rgba(124,58,237,.35)}
+.nav-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.token-pill{display:flex;align-items:center;gap:8px;padding:8px 16px 8px 10px;border-radius:var(--r-full);background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #fbbf24;font-weight:900;color:#78350f;font-size:.95rem;box-shadow:0 4px 14px rgba(251,191,36,.35);cursor:pointer;transition:.2s}
+html[data-theme="dark"] .token-pill{background:linear-gradient(135deg,#422006,#57320a);color:#fde68a;border-color:#b45309}
+.token-pill:hover{transform:translateY(-2px)}
+.token-coin{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#fef9c3,#f59e0b 65%,#b45309);box-shadow:inset 0 -2px 3px rgba(0,0,0,.25);display:grid;place-items:center;font-size:.68rem;color:#78350f;font-weight:900}
+.icon-btn{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--bg-3);border:1px solid var(--border);cursor:pointer;transition:.18s;font-size:1.1rem}
+.icon-btn:hover{background:var(--border);transform:translateY(-2px)}
+.user-chip{display:flex;align-items:center;gap:9px;padding:5px 14px 5px 5px;border-radius:var(--r-full);background:var(--bg-3);border:1px solid var(--border);cursor:pointer;transition:.18s;font-weight:800}
+.user-chip:hover{background:var(--border)}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:var(--grad-brand);display:grid;place-items:center;overflow:hidden}
+.user-avatar img{width:24px;height:24px;object-fit:contain}
+#hamburger{display:none}
+
+/* LAYOUT */
+#view{min-height:calc(100vh - var(--nav-h))}
+.wrap{max-width:1280px;margin:0 auto;padding:0 22px}
+.wrap-narrow{max-width:900px;margin:0 auto;padding:0 22px}
+.section{padding:56px 0}
+.section-sm{padding:32px 0}
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g5{grid-template-columns:repeat(5,1fr)}
+.g6{grid-template-columns:repeat(6,1fr)}
+.flex{display:flex}
+.between{justify-content:space-between}
+.center{align-items:center}
+.wrapf{flex-wrap:wrap}
+.gap8{gap:8px}.gap12{gap:12px}.gap16{gap:16px}.gap24{gap:24px}
+.mt8{margin-top:8px}.mt16{margin-top:16px}.mt24{margin-top:24px}.mt32{margin-top:32px}
+.mb8{margin-bottom:8px}.mb16{margin-bottom:16px}.mb24{margin-bottom:24px}
+.tc{text-align:center}
+.muted{color:var(--text-2)}
+.muted-3{color:var(--text-3)}
+.small{font-size:.85rem}
+.tiny{font-size:.75rem}
+.bold{font-weight:800}
+.mono{font-family:ui-monospace,'SF Mono',Menlo,monospace}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:12px 26px;border-radius:var(--r-full);font-weight:900;font-size:.98rem;border:2px solid transparent;cursor:pointer;transition:.18s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;position:relative;overflow:hidden;background:var(--bg-3);color:var(--text)}
+.btn:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.btn:active{transform:translateY(0) scale(.97)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+.btn-primary{background:var(--grad-brand);color:#fff;box-shadow:0 8px 22px rgba(124,58,237,.38)}
+.btn-primary:hover{box-shadow:0 12px 30px rgba(124,58,237,.5)}
+.btn-gold{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#432004;box-shadow:0 8px 22px rgba(245,158,11,.4)}
+.btn-green{background:linear-gradient(135deg,#4ade80,#22c55e);color:#052e16;box-shadow:0 8px 22px rgba(34,197,94,.4)}
+.btn-red{background:linear-gradient(135deg,#f87171,#ef4444);color:#fff;box-shadow:0 8px 22px rgba(239,68,68,.4)}
+.btn-ghost{background:transparent;border-color:var(--border-2);color:var(--text)}
+.btn-ghost:hover{background:var(--bg-3);border-color:var(--brand)}
+.btn-sm{padding:8px 18px;font-size:.86rem}
+.btn-lg{padding:16px 40px;font-size:1.12rem}
+.btn-block{width:100%}
+.btn-icon{padding:12px;width:46px;height:46px}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:22px;box-shadow:var(--shadow-sm);transition:.22s}
+.card-hover:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg);border-color:var(--border-2)}
+.card-flush{padding:0;overflow:hidden}
+.panel{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);padding:16px}
+
+/* CHIPS */
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:var(--r-full);font-size:.74rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase;border:1.5px solid transparent}
+.chip-Common{background:#e8ecf5;color:#4a5268;border-color:#c9d1e0}
+.chip-Uncommon{background:#dcfce7;color:#14532d;border-color:#86efac}
+.chip-Rare{background:#dbeafe;color:#1e3a8a;border-color:#93c5fd}
+.chip-Epic{background:#f3e8ff;color:#581c87;border-color:#d8b4fe}
+.chip-Legendary{background:linear-gradient(135deg,#fef3c7,#fde68a);color:#78350f;border-color:#fbbf24}
+.chip-Chroma{background:linear-gradient(135deg,#fce7f3,#e0e7ff,#cffafe);color:#831843;border-color:#f9a8d4;animation:chromaShift 4s linear infinite}
+.chip-Mystical{background:linear-gradient(135deg,#1e1b4b,#4c1d95,#0e7490);color:#a5f3fc;border-color:#22d3ee;animation:mysticPulse 2.5s ease-in-out infinite}
+.chip-Hidden{background:#f1f5f9;color:#475569;border-color:#cbd5e1}
+html[data-theme="dark"] .chip-Common{background:#2a2e58;color:#c3c9e8;border-color:#3d4374}
+html[data-theme="dark"] .chip-Uncommon{background:#0d3d24;color:#86efac;border-color:#166534}
+html[data-theme="dark"] .chip-Rare{background:#0d2a54;color:#93c5fd;border-color:#1e40af}
+html[data-theme="dark"] .chip-Epic{background:#331157;color:#d8b4fe;border-color:#6b21a8}
+html[data-theme="dark"] .chip-Hidden{background:#242a4d;color:#a5adcf;border-color:#3d4374}
+@keyframes chromaShift{0%{filter:hue-rotate(0)}100%{filter:hue-rotate(360deg)}}
+@keyframes mysticPulse{0%,100%{box-shadow:0 0 0 rgba(34,211,238,0)}50%{box-shadow:0 0 16px rgba(34,211,238,.7)}}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;background:var(--grad-dark);color:#fff;padding:88px 0 110px}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 12% 20%,rgba(124,58,237,.55),transparent 45%),radial-gradient(circle at 88% 75%,rgba(6,182,212,.45),transparent 45%),radial-gradient(circle at 60% 10%,rgba(245,158,11,.25),transparent 40%);animation:heroGlow 14s ease-in-out infinite alternate}
+@keyframes heroGlow{0%{opacity:.75;transform:scale(1)}100%{opacity:1;transform:scale(1.12)}}
+.hero::after{content:'';position:absolute;inset:0;opacity:.16;background-image:radial-gradient(circle,#fff 1.2px,transparent 1.2px);background-size:34px 34px}
+.hero-inner{position:relative;z-index:2}
+.hero h1{color:#fff;text-shadow:0 6px 30px rgba(0,0,0,.4)}
+.hero p.lede{font-size:1.18rem;color:rgba(255,255,255,.85);max-width:600px;margin-top:16px;font-weight:600}
+.hero-badge{display:inline-flex;align-items:center;gap:9px;padding:7px 18px;border-radius:var(--r-full);background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.25);font-weight:800;font-size:.85rem;letter-spacing:.05em;text-transform:uppercase;backdrop-filter:blur(10px);margin-bottom:22px}
+.pulse-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 0 rgba(74,222,128,.7);animation:pulseDot 2s infinite}
+@keyframes pulseDot{70%{box-shadow:0 0 0 12px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
+.hero-stats{display:flex;gap:40px;flex-wrap:wrap;margin-top:44px}
+.hero-stat-num{font-size:2.3rem;font-weight:900;background:linear-gradient(135deg,#fbbf24,#f472b6,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-stat-label{font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.6);font-weight:800}
+.floaty{position:absolute;pointer-events:none;filter:drop-shadow(0 14px 26px rgba(0,0,0,.4));animation:float 6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-26px) rotate(4deg)}}
+
+/* BLOOK CARDS */
+.blook-card{position:relative;background:var(--surface);border:2px solid var(--border);border-radius:var(--r);padding:14px 10px 12px;text-align:center;cursor:pointer;transition:.2s cubic-bezier(.34,1.56,.64,1);overflow:hidden}
+.blook-card:hover{transform:translateY(-7px) scale(1.03);box-shadow:var(--shadow-lg);border-color:var(--brand)}
+.blook-img-wrap{position:relative;width:100%;aspect-ratio:1;display:grid;place-items:center;margin-bottom:9px}
+.blook-img{width:78%;height:78%;object-fit:contain;transition:.28s;filter:drop-shadow(0 5px 10px rgba(0,0,0,.16))}
+.blook-card:hover .blook-img{transform:scale(1.12) rotate(-3deg)}
+.blook-name{font-weight:900;font-size:.82rem;line-height:1.2;margin-bottom:6px;word-break:break-word}
+.blook-card.locked .blook-img{filter:grayscale(1) brightness(0) opacity(.18)}
+html[data-theme="dark"] .blook-card.locked .blook-img{filter:grayscale(1) brightness(3) opacity(.14)}
+.blook-card.locked .blook-name{color:var(--text-3)}
+.blook-count{position:absolute;top:8px;right:8px;z-index:3;background:var(--grad-brand);color:#fff;font-size:.68rem;font-weight:900;padding:2px 8px;border-radius:var(--r-full);box-shadow:0 3px 8px rgba(124,58,237,.4)}
+.blook-card.owned{border-color:var(--brand)}
+.blook-card.locked{cursor:pointer;background:var(--surface-2)}
+.blook-card.locked:hover{border-color:var(--border-2)}
+
+/* PACK CARDS */
+.pack-card{position:relative;border-radius:var(--r-lg);overflow:hidden;border:2px solid var(--border);background:var(--surface);cursor:pointer;transition:.24s cubic-bezier(.34,1.56,.64,1);display:flex;flex-direction:column}
+.pack-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-xl);border-color:var(--brand)}
+.pack-art{position:relative;aspect-ratio:16/10;display:grid;place-items:center;overflow:hidden}
+.pack-art img{width:58%;height:58%;object-fit:contain;z-index:2;filter:drop-shadow(0 12px 24px rgba(0,0,0,.4));transition:.3s}
+.pack-card:hover .pack-art img{transform:scale(1.14) rotate(-5deg)}
+.pack-art-bg{position:absolute;inset:0;opacity:.9}
+.pack-body{padding:16px;display:flex;flex-direction:column;gap:10px;flex:1}
+.pack-title{font-weight:900;font-size:1.05rem}
+.pack-price{display:flex;align-items:center;gap:7px;font-weight:900;color:#b45309;font-size:1rem}
+html[data-theme="dark"] .pack-price{color:#fcd34d}
+.pack-odds{display:flex;flex-wrap:wrap;gap:5px}
+
+/* FORMS */
+.field{margin-bottom:16px}
+.label{display:block;font-weight:800;font-size:.86rem;margin-bottom:7px;color:var(--text-2)}
+.input,.select{width:100%;padding:13px 16px;background:var(--surface-2);border:2px solid var(--border);border-radius:var(--r);font-weight:700;font-size:.96rem;transition:.18s;outline:none}
+.input:focus,.select:focus{border-color:var(--brand);box-shadow:0 0 0 4px rgba(124,58,237,.14);background:var(--surface)}
+.input::placeholder{color:var(--text-3);font-weight:600}
+.select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23878ba8' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:16px;padding-right:42px}
+.input-group{display:flex;gap:10px}
+.input-group .input{flex:1}
+.search-wrap{position:relative;flex:1;min-width:220px}
+.search-wrap .input{padding-left:44px}
+.search-icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--text-3);pointer-events:none;font-size:1rem}
+
+/* STATS */
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:5px;position:relative;overflow:hidden}
+.stat-card::after{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--grad-brand)}
+.stat-value{font-size:1.85rem;font-weight:900;line-height:1.1}
+.stat-label{font-size:.76rem;text-transform:uppercase;letter-spacing:.09em;font-weight:900;color:var(--text-3)}
+
+.xp-bar{height:14px;border-radius:99px;background:var(--bg-3);overflow:hidden;border:1px solid var(--border);position:relative}
+.xp-fill{height:100%;background:var(--grad-brand);border-radius:99px;transition:width .7s cubic-bezier(.22,1,.36,1)}
+
+/* MODAL */
+.modal-backdrop{position:fixed;inset:0;z-index:2000;background:rgba(8,9,24,.72);backdrop-filter:blur(9px);display:grid;place-items:center;padding:20px;animation:fadeIn .22s ease;overflow-y:auto}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-xl);width:100%;max-width:560px;max-height:92vh;overflow-y:auto;animation:modalIn .32s cubic-bezier(.34,1.56,.64,1);position:relative}
+.modal-lg{max-width:880px}
+.modal-xl{max-width:1100px}
+@keyframes modalIn{from{opacity:0;transform:translateY(36px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
+.modal-head{padding:22px 26px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;background:var(--surface);z-index:5;border-radius:var(--r-xl) var(--r-xl) 0 0}
+.modal-body{padding:26px}
+.modal-foot{padding:18px 26px;border-top:1px solid var(--border);display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap}
+.modal-close{width:38px;height:38px;border-radius:11px;flex-shrink:0;display:grid;place-items:center;cursor:pointer;background:var(--bg-3);border:1px solid var(--border);font-size:1.15rem;font-weight:900;transition:.18s}
+.modal-close:hover{background:var(--bad);color:#fff;transform:rotate(90deg)}
+
+/* TOASTS */
+#toast-root{position:fixed;bottom:26px;right:26px;z-index:5000;display:flex;flex-direction:column;gap:11px;align-items:flex-end;pointer-events:none}
+.toast{display:flex;align-items:center;gap:12px;padding:14px 22px;border-radius:var(--r);background:var(--surface);border:2px solid var(--border);box-shadow:var(--shadow-lg);font-weight:800;font-size:.92rem;animation:toastIn .34s cubic-bezier(.34,1.56,.64,1);max-width:400px;pointer-events:auto}
+@keyframes toastIn{from{opacity:0;transform:translateX(80px) scale(.9)}to{opacity:1;transform:translateX(0) scale(1)}}
+.toast.out{animation:toastOut .3s ease forwards}
+@keyframes toastOut{to{opacity:0;transform:translateX(80px) scale(.9)}}
+.toast-success{border-color:var(--good)}
+.toast-error{border-color:var(--bad)}
+.toast-info{border-color:var(--brand-3)}
+.toast-gold{border-color:#fbbf24}
+.toast-icon{font-size:1.3rem;flex-shrink:0}
+
+/* PACK OPEN ANIM */
+.open-stage{position:fixed;inset:0;z-index:4000;background:radial-gradient(circle at 50% 45%,#241a4d,#08091c 70%);display:grid;place-items:center;animation:fadeIn .3s;overflow:hidden}
+.open-stage::before{content:'';position:absolute;inset:0;opacity:.25;background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:46px 46px;animation:starDrift 24s linear infinite}
+@keyframes starDrift{to{background-position:460px 460px}}
+.open-pack-visual{position:relative;width:210px;height:210px;display:grid;place-items:center;animation:packShake .5s ease-in-out infinite;filter:drop-shadow(0 22px 44px rgba(124,58,237,.7));cursor:pointer}
+@keyframes packShake{0%,100%{transform:rotate(-3deg) scale(1)}25%{transform:rotate(3deg) scale(1.04)}50%{transform:rotate(-2deg) scale(1.02)}75%{transform:rotate(2deg) scale(1.05)}}
+.open-pack-visual.burst{animation:burstOut .5s ease forwards}
+@keyframes burstOut{to{transform:scale(2.4);opacity:0;filter:blur(14px)}}
+.open-pack-visual img{width:100%;height:100%;object-fit:contain}
+.reveal-card{width:min(360px,86vw);background:linear-gradient(165deg,var(--surface),var(--surface-2));border:3px solid var(--border);border-radius:var(--r-xl);padding:30px 24px;text-align:center;animation:revealIn .62s cubic-bezier(.34,1.56,.64,1);position:relative;z-index:3}
+@keyframes revealIn{from{opacity:0;transform:scale(.4) rotateY(180deg)}to{opacity:1;transform:scale(1) rotateY(0)}}
+.reveal-card img{width:150px;height:150px;object-fit:contain;margin:0 auto 14px;display:block;animation:revealBob 3s ease-in-out infinite}
+@keyframes revealBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.reveal-name{font-size:1.6rem;font-weight:900;margin-bottom:8px}
+.reveal-glow-Legendary{border-color:#fbbf24;box-shadow:0 0 70px rgba(251,191,36,.65)}
+.reveal-glow-Epic{border-color:#a855f7;box-shadow:0 0 70px rgba(168,85,247,.6)}
+.reveal-glow-Rare{border-color:#3b82f6;box-shadow:0 0 60px rgba(59,130,246,.5)}
+.reveal-glow-Chroma{border-color:#f472b6;box-shadow:0 0 80px rgba(244,114,182,.7)}
+.reveal-glow-Mystical{border-color:#22d3ee;box-shadow:0 0 90px rgba(34,211,238,.8)}
+.reveal-glow-Uncommon{border-color:#22c55e;box-shadow:0 0 50px rgba(34,197,94,.4)}
+
+/* GAME */
+.game-shell{min-height:calc(100vh - var(--nav-h));background:var(--grad-dark);color:#fff;padding:24px 0 60px;position:relative;overflow:hidden}
+.game-shell::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 15% 15%,rgba(124,58,237,.4),transparent 45%),radial-gradient(circle at 85% 85%,rgba(6,182,212,.35),transparent 45%);pointer-events:none}
+.game-inner{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:0 22px}
+.q-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(16px);border-radius:var(--r-xl);padding:36px 28px;text-align:center;box-shadow:0 22px 60px rgba(0,0,0,.45)}
+.q-text{font-size:clamp(1.35rem,3.4vw,2.15rem);font-weight:900;line-height:1.3}
+.timer-bar{height:12px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden;margin:22px 0}
+.timer-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#22c55e,#84cc16);transition:width .12s linear}
+.timer-fill.warn{background:linear-gradient(90deg,#f59e0b,#ef4444)}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px}
+@media(max-width:640px){.answers{grid-template-columns:1fr}}
+.answer{padding:20px 22px;border-radius:var(--r);background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2);color:#fff;font-weight:900;font-size:1.05rem;cursor:pointer;transition:.16s cubic-bezier(.34,1.56,.64,1);text-align:left;display:flex;align-items:center;gap:14px}
+.answer:hover:not(:disabled){background:rgba(255,255,255,.2);transform:translateY(-3px) scale(1.02);border-color:rgba(255,255,255,.5)}
+.answer:disabled{cursor:default}
+.answer.correct{background:linear-gradient(135deg,#22c55e,#16a34a);border-color:#4ade80;animation:correctPop .4s}
+.answer.wrong{background:linear-gradient(135deg,#ef4444,#b91c1c);border-color:#f87171;animation:wrongShake .4s}
+@keyframes correctPop{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+@keyframes wrongShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-9px)}75%{transform:translateX(9px)}}
+.answer-key{width:30px;height:30px;border-radius:8px;flex-shrink:0;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:.85rem}
+.player-row{display:flex;align-items:center;gap:12px;padding:11px 15px;border-radius:var(--r);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);margin-bottom:9px;transition:.25s}
+.player-row.me{background:rgba(124,58,237,.3);border-color:rgba(167,139,250,.6)}
+.player-row.lead{box-shadow:0 0 0 2px rgba(251,191,36,.65)}
+.player-av{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.14);display:grid;place-items:center;overflow:hidden;flex-shrink:0}
+.player-av img{width:30px;height:30px;object-fit:contain}
+.player-name{font-weight:900;font-size:.92rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.player-score{font-weight:900;font-size:1.05rem;color:#fcd34d}
+.chest-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.chest{aspect-ratio:1;border-radius:var(--r-lg);background:linear-gradient(160deg,#78350f,#451a03);border:3px solid #b45309;display:grid;place-items:center;font-size:2.6rem;cursor:pointer;transition:.2s cubic-bezier(.34,1.56,.64,1)}
+.chest:hover{transform:translateY(-8px) scale(1.06);border-color:#fbbf24;box-shadow:0 0 40px rgba(251,191,36,.6)}
+
+/* LEADERBOARD */
+.lb-row{display:flex;align-items:center;gap:14px;padding:13px 18px;border-radius:var(--r);background:var(--surface);border:1px solid var(--border);margin-bottom:9px;transition:.18s}
+.lb-row:hover{transform:translateX(5px);border-color:var(--brand)}
+.lb-rank{width:34px;height:34px;border-radius:10px;flex-shrink:0;display:grid;place-items:center;font-weight:900;font-size:.9rem;background:var(--bg-3);border:1px solid var(--border)}
+.lb-rank.gold{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#432004;border-color:#fbbf24}
+.lb-rank.silver{background:linear-gradient(135deg,#e5e7eb,#9ca3af);color:#1f2937;border-color:#d1d5db}
+.lb-rank.bronze{background:linear-gradient(135deg,#d97706,#92400e);color:#fff;border-color:#b45309}
+
+/* TABS */
+.tabs{display:flex;gap:6px;background:var(--bg-3);padding:6px;border-radius:var(--r-full);border:1px solid var(--border);overflow-x:auto;flex-wrap:wrap}
+.tab{padding:9px 20px;border-radius:var(--r-full);font-weight:900;font-size:.88rem;cursor:pointer;color:var(--text-2);transition:.18s;white-space:nowrap;border:none;background:none}
+.tab:hover{color:var(--text)}
+.tab.active{background:var(--surface);color:var(--brand);box-shadow:var(--shadow-sm)}
+
+/* EMPTY */
+.empty{text-align:center;padding:64px 24px;color:var(--text-3)}
+.empty-icon{font-size:3.6rem;margin-bottom:14px;opacity:.5}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);background:var(--surface);padding:44px 0 30px;margin-top:64px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px}
+@media(max-width:820px){.footer-grid{grid-template-columns:1fr 1fr}}
+.footer-title{font-weight:900;font-size:.82rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-3);margin-bottom:14px}
+.footer-link{display:block;padding:5px 0;color:var(--text-2);font-weight:700;font-size:.9rem;cursor:pointer;transition:.16s}
+.footer-link:hover{color:var(--brand);transform:translateX(4px)}
+
+/* CONFETTI */
+.confetti-piece{position:fixed;width:11px;height:11px;z-index:6000;pointer-events:none;border-radius:2px}
+@keyframes confettiFall{0%{transform:translateY(-10vh) rotate(0) scale(1);opacity:1}100%{transform:translateY(110vh) rotate(720deg) scale(.4);opacity:0}}
+
+/* MISC */
+.divider{height:1px;background:var(--border);margin:22px 0}
+.spinner{width:36px;height:36px;border-radius:50%;border:4px solid var(--border);border-top-color:var(--brand);animation:spin .8s linear infinite;margin:0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.reveal-up{animation:revealUp .5s cubic-bezier(.22,1,.36,1) both}
+@keyframes revealUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.stagger>*{animation:revealUp .5s cubic-bezier(.22,1,.36,1) both}
+.stagger>*:nth-child(1){animation-delay:.02s}
+.stagger>*:nth-child(2){animation-delay:.05s}
+.stagger>*:nth-child(3){animation-delay:.08s}
+.stagger>*:nth-child(4){animation-delay:.11s}
+.stagger>*:nth-child(5){animation-delay:.14s}
+.stagger>*:nth-child(6){animation-delay:.17s}
+.stagger>*:nth-child(7){animation-delay:.2s}
+.stagger>*:nth-child(8){animation-delay:.23s}
+.stagger>*:nth-child(9){animation-delay:.26s}
+.stagger>*:nth-child(10){animation-delay:.29s}
+.bar-chart{display:flex;align-items:flex-end;gap:10px;height:170px;padding:0 4px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;height:100%;justify-content:flex-end}
+.bar-fill{width:100%;border-radius:9px 9px 3px 3px;background:var(--grad-brand);min-height:5px;transition:height .8s cubic-bezier(.22,1,.36,1)}
+.bar-label{font-size:.7rem;font-weight:800;color:var(--text-3);text-transform:uppercase}
+.hidden{display:none!important}
+.pointer{cursor:pointer}
+.relative{position:relative}
+
+/* ADMIN */
+.admin-toggle{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:var(--r);background:var(--surface-2);border:1px solid var(--border);margin-bottom:9px;transition:.2s}
+.admin-toggle.on{background:color-mix(in srgb,var(--good) 14%,var(--surface));border-color:var(--good)}
+.switch{position:relative;width:52px;height:30px;border-radius:99px;background:var(--border-2);cursor:pointer;transition:.2s;flex-shrink:0}
+.switch::after{content:'';position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 2px 4px rgba(0,0,0,.25)}
+.switch.on{background:var(--good)}
+.switch.on::after{transform:translateX(22px)}
+.admin-power{border-left:4px solid var(--brand);padding-left:14px;margin-bottom:14px}
+.admin-danger{border-left-color:var(--bad)}
+.admin-good{border-left-color:var(--good)}
+.admin-gold{border-left-color:#fbbf24}
+.admin-header{background:linear-gradient(135deg,#0f172a,#1e293b);border:none;color:#fff;padding:26px;border-radius:var(--r-lg);margin-bottom:24px}
+html[data-theme="dark"] .admin-header{background:linear-gradient(135deg,#000,#1e293b)}
+.log-entry{padding:6px 12px;border-radius:6px;background:var(--bg-3);border-left:3px solid var(--brand);margin-bottom:5px;font-size:.8rem;font-family:ui-monospace,monospace}
+
+/* RESPONSIVE */
+@media(max-width:1080px){.g6{grid-template-columns:repeat(4,1fr)}.g5{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:900px){.nav-links{display:none}#hamburger{display:grid}.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.wrap{padding:0 15px}.g6,.g5,.g4,.g3,.g2{grid-template-columns:repeat(2,1fr)}.hero{padding:56px 0 70px}.hero-stats{gap:24px}.modal-body{padding:18px}.modal-head{padding:16px 18px}#toast-root{left:14px;right:14px;bottom:14px;align-items:stretch}.toast{max-width:100%}}
+
+#mobile-menu{position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;z-index:880;background:var(--surface);padding:20px;display:none;flex-direction:column;gap:8px}
+#mobile-menu.open{display:flex}
+#mobile-menu .nav-link{padding:15px 20px;font-size:1.05rem}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="brand" onclick="location.hash='#/'">
+    <div class="brand-badge" id="brand-badge"><img src="https://media.blooket.com/image/upload/v1556829562/Blooks/chicken.svg" alt=""></div>
+    <span class="brand-text">Blooket</span>
+  </div>
+  <div class="nav-links" id="nav-links">
+    <a class="nav-link" data-route="#/" href="#/">Home</a>
+    <a class="nav-link" data-route="#/dashboard" href="#/dashboard">Dashboard</a>
+    <a class="nav-link" data-route="#/market" href="#/market">Market</a>
+    <a class="nav-link" data-route="#/blooks" href="#/blooks">Blooks</a>
+    <a class="nav-link" data-route="#/play" href="#/play">Play</a>
+    <a class="nav-link" data-route="#/stats" href="#/stats">Stats</a>
+  </div>
+  <div class="nav-right">
+    <div class="token-pill" id="token-pill" onclick="App.go('#/market')" title="Your tokens">
+      <span class="token-coin">T</span><span id="token-count">0</span>
+    </div>
+    <button class="icon-btn" id="theme-btn" title="Toggle theme">🌙</button>
+    <div class="user-chip" id="user-chip"></div>
+    <button class="icon-btn" id="hamburger">☰</button>
+  </div>
+</nav>
+
+<div id="mobile-menu"></div>
+<main id="view"></main>
+<div id="modal-root"></div>
+<div id="toast-root"></div>
+
+<script>
+"use strict";
+
+const S3_BASE    = "https://blooket.s3.us-east-2.amazonaws.com/blooks/";
+const MEDIA_BASE = "https://media.blooket.com/image/upload/";
+
+const RAW_BLOOKS = `
+Chick|farmAnimals/chick.svg|v1645222006/Blooks/yellowBird.svg|Farm Animal||Common|Happy Hatchers|#ffcd05
+Chicken|farmAnimals/chicken.svg|v1556829562/Blooks/chicken.svg|Farm Animal||Common|Early Birds|#ed1c24
+Cow|farmAnimals/cow.svg|v1556829562/Blooks/cow.svg|Farm Animal||Common|Udder Chaos|#58595b
+Goat|farmAnimals/goat.svg|v1556829562/Blooks/goat.svg|Farm Animal||Common|Goatee OG's|#c59a74
+Horse|farmAnimals/horse.svg|v1556829562/Blooks/horse.svg|Farm Animal||Common|Radical Racers|#995b3c
+Pig|farmAnimals/pig.svg|v1556829564/Blooks/pig.svg|Farm Animal||Common|Orderly Oinkers|#f6a9cb
+Sheep|farmAnimals/sheep.svg|v1556829564/Blooks/sheep.svg|Farm Animal||Common|Wool Winners|#414042
+Duck|farmAnimals/duck.svg|v1556829562/Blooks/duck.svg|Farm Animal||Common|Quirky Quackers|#4ab96d
+Alpaca|farmAnimals/alpaca.svg|v1675381970/Blooks/alpaca.svg|Farm Animal||Common|Fluffy Friends|#d4803c
+Dog|pets/dog.svg|v1556831934/Blooks/dog.svg|Pet||Common|Diligent Doggos|#995b3c
+Cat|pets/cat.svg|v1556831934/Blooks/cat.svg|Pet||Common|Meow Mates|#f49849
+Rabbit|pets/rabbit.svg|v1556831935/Blooks/rabbit.svg|Pet||Common|Fluffy Bunnies|#e7bf9a
+Goldfish|pets/goldfish.svg|v1556831934/Blooks/goldfish.svg|Pet||Common|Pretty Fishies|#f18221
+Hamster|pets/hamster.svg|v1556831934/Blooks/hamster.svg|Pet||Common|HAMSTA TIME|#ce9176
+Turtle|pets/turtle.svg|v1556831935/Blooks/turtle.svg|Pet||Common|Shell Shocked|#619a3c
+Kitten|pets/kitten.svg|v1556831934/Blooks/kitten.svg|Pet||Common|Purrfect People|#58595b
+Puppy|pets/puppy.svg|v1556831934/Blooks/puppy.svg|Pet||Common|Super Puppers|#414042
+Snowy Owl|arcticAnimals/snowyOwl.svg|v1566679726/Blooks/snowyOwl.svg|Arctic Animal||Common|Kool Kids|#feda3f
+Polar Bear|arcticAnimals/polarBear.svg|v1566679726/Blooks/polarBear.svg|Arctic Animal||Common|Snowy Students|#7ca1d5
+Arctic Fox|arcticAnimals/arcticFox.svg|v1566679726/Blooks/arcticFox.svg|Arctic Animal||Common|Chilly Chosen|#7ca1d5
+Baby Penguin|arcticAnimals/babyPenguin.svg|v1566679726/Blooks/babyPenguin.svg|Arctic Animal||Common|Party Penguins|#414042
+Penguin|arcticAnimals/penguin.svg|v1582775344/Blooks/penguin.svg|Arctic Animal||Common|Better Birds|#fb8640
+Arctic Hare|arcticAnimals/arcticHare.svg|v1566679726/Blooks/arcticHare.svg|Arctic Animal||Common|Arctic Achievers|#7ca1d5
+Seal|arcticAnimals/seal.svg|v1566679726/Blooks/seal.svg|Arctic Animal||Common|Super Seals|#7ca1d5
+Walrus|arcticAnimals/walrus.svg|v1582775344/Blooks/walrus.svg|Arctic Animal||Common|Wordy Walruses|#7d4f33
+Bear|forestAnimals/bear.svg|v1556832316/Blooks/bear.svg|Forest Animal||Common|Bear Necessities|#995b3c
+Moose|forestAnimals/moose.svg|v1556832316/Blooks/moose.svg|Forest Animal||Common|Moose Caboose|#995b3c
+Fox|forestAnimals/fox.svg|v1556832316/Blooks/fox.svg|Forest Animal||Common|Swifty Swipers|#f49849
+Raccoon|forestAnimals/raccoon.svg|v1556832316/Blooks/raccoon.svg|Forest Animal||Common|Trash Pandas|#6d6e71
+Squirrel|forestAnimals/squirrel.svg|v1582775344/Blooks/squirrel.svg|Forest Animal||Common|Nutty Buddies|#d25927
+Owl|forestAnimals/owl.svg|v1556832316/Blooks/owl.svg|Forest Animal||Common|Hooooooooo|#594a42
+Hedgehog|forestAnimals/hedgehog.svg|v1556832316/Blooks/hedgehog.svg|Forest Animal||Common|Spikey Friends|#3f312b
+Deer|forestAnimals/deer.svg|v1675381970/Blooks/deer.svg|Forest Animal||Common|Dashing Deer|#c2541f
+Wolf|forestAnimals/wolf.svg|v1675381967/Blooks/wolf.svg|Forest Animal||Common|The Pack|#7b7c81
+Beaver|forestAnimals/beaver.svg|v1675381970/Blooks/beaver.svg|Forest Animal||Common|Building Beavers|#bd6231
+Two of Spades|wonderland/twoOfSpades.svg|v1582080264/Blooks/twoOfSpades.svg|Wonderland||Uncommon|Dueling Deuces|#414042
+Eat Me|wonderland/eat.svg|v1620676285/Blooks/eat.svg|Wonderland||Uncommon|Hungry Heroes|#d58c55
+Drink Me|wonderland/drink.svg|v1620676285/Blooks/drink.svg|Wonderland||Uncommon|Potion Power|#dd7399
+Alice|wonderland/alice.svg|v1582080264/Blooks/alice.svg|Wonderland||Uncommon|Wonderland|#4cc9f5
+Queen of Hearts|wonderland/queenOfHearts.svg|v1582080266/Blooks/queenOfHearts.svg|Wonderland||Uncommon|❤️❤️❤️|#d62027
+Dormouse|wonderland/dormouse.svg|v1582080264/Blooks/dormouse.svg|Wonderland||Rare|Short and Stout|#89d6f8
+White Rabbit|wonderland/whiteRabbit.svg|v1582080266/Blooks/whiteRabbit.svg|Wonderland||Rare|Classy Classmates|#ffcd05
+Cheshire Cat|wonderland/cheshireCat.svg|v1582080264/Blooks/cheshireCat.svg|Wonderland||Rare|Cool Cats|#dd7399
+Caterpillar|wonderland/caterpillar.svg|v1581831553/Blooks/caterpillar.svg|Wonderland||Epic|Caterpillar Cuties|#00c0f3
+Mad Hatter|wonderland/madHatter.svg|v1582080266/Blooks/madHatter.svg|Wonderland||Epic|Goofy Gurus|#914f93
+King of Hearts|wonderland/kingOfHearts.svg|v1582080266/Blooks/kingOfHearts.svg|Wonderland||Legendary|The Royals|#c62127
+Toast|breakfast/toast.svg|v1584483097/Blooks/toast.svg|Breakfast||Uncommon|Toasty Teammates|#e9a058
+Cereal|breakfast/cereal.svg|v1584483097/Blooks/cereal.svg|Breakfast||Uncommon|Fruity Friends|#2fa04a
+Yogurt|breakfast/yogurt.svg|v1584483097/Blooks/yogurt.svg|Breakfast||Uncommon|Yogurt Youngins|#00aeef
+Breakfast Combo|breakfast/breakfastCombo.svg|v1584483097/Blooks/breakfastCombo.svg|Breakfast||Uncommon|Combo Cooks|#c3d8ea
+Orange Juice|breakfast/orangeJuice.svg|v1584483099/Blooks/orangeJuice.svg|Breakfast||Uncommon|OJ OG's|#f7941d
+Milk|breakfast/milk.svg|v1584483097/Blooks/milk.svg|Breakfast||Uncommon|Got Milk?|#77c6e2
+Waffle|breakfast/waffle.svg|v1584483099/Blooks/waffle.svg|Breakfast||Rare|Holey Pancakes|#f9a241
+Pancakes|breakfast/pancakes.svg|v1584483099/Blooks/pancakes.svg|Breakfast||Rare|Flat Waffles|#f9a241
+French Toast|breakfast/frenchToast.svg|v1584483097/Blooks/frenchToast.svg|Breakfast||Epic|Bonjour Boomers|#f9a241
+Pizza|foods/pizza.svg|v1599952272/Blooks/pizza.svg|Breakfast||Epic|Pizza Popstars|#fdb913
+Earth|space/earth.svg|v1613003831/Blooks/earth.svg|Space||Uncommon|Earthlings|#416eb5
+Meteor|space/meteor.svg|v1613003835/Blooks/meteor.svg|Space||Uncommon|Meteorites|#c68c3c
+Stars|space/stars.svg|v1613003833/Blooks/stars.svg|Space||Uncommon|Shooting Stars|#19184d
+Alien|space/alien.svg|v1613004231/Blooks/alien.svg|Space||Uncommon|Awesome Aliens|#8dc63f
+Planet|space/planet.svg|v1613003832/Blooks/planet.svg|Space||Rare|Galactic Warriors|#9dc6ea
+UFO|space/UFO.svg|v1613004088/Blooks/UFO.svg|Space||Rare|Unidentified Students|#a15095
+Spaceship|space/spaceship.svg|v1613003833/Blooks/spaceship.svg|Space||Epic|We Have a Problem|#ffcb29
+Astronaut|space/astronaut.svg|v1613003835/Blooks/astronaut.svg|Space||Legendary|Astro Aviators|#9bd4ee
+Lil Bot|bots/lilBot.svg|v1620677386/Blooks/lilBot.svg|Bot||Uncommon|Lil Bots|#3e564a
+Lovely Bot|bots/lovelyBot.svg|v1620677386/Blooks/lovelyBot.svg|Bot||Uncommon|Lovely Leaders|#f179af
+Angry Bot|bots/angryBot.svg|v1620677386/Blooks/angryBot.svg|Bot||Uncommon|Evil Geniuses|#f1613a
+Happy Bot|bots/happyBot.svg|v1620677386/Blooks/happyBot.svg|Bot||Uncommon|The Calculators|#51ba6b
+Watson|bots/watson.svg|v1620677388/Blooks/watson.svg|Bot||Rare|Sophistication|#d69b5a
+Buddy Bot|bots/buddyBot.svg|v1620677386/Blooks/buddyBot.svg|Bot||Rare|Best Buddies|#9dc6ea
+Brainy Bot|bots/brainyBot.svg|v1620677386/Blooks/brainyBot.svg|Bot||Epic|Big Brain Bots|#9ecf7a
+Mega Bot|bots/megaBot.svg|v1620677388/Blooks/megaBot.svg|Bot||Legendary|THE MEGA BOTS|#d71f27
+Old Boot|aquatic/oldBoot.svg|v1628956580/Blooks/oldBoot.svg|Aquatic||Uncommon|Da Boots|#995b3c
+Jellyfish|aquatic/jellyfish.svg|v1628956578/Blooks/jellyfish.svg|Aquatic||Uncommon|Jelly Jumpers|#c385b9
+Clownfish|aquatic/clownfish.svg|v1628956576/Blooks/clownfish.svg|Aquatic||Uncommon|Nemo Extras|#f7941d
+Frog|aquatic/frog.svg|v1628956578/Blooks/frog.svg|Aquatic||Uncommon|Hippity Hoppers|#a7d054
+Crab|aquatic/crab.svg|v1628956578/Blooks/crab.svg|Aquatic||Uncommon|Cool Claws|#cf1f3d
+Pufferfish|aquatic/pufferFish.svg|v1628956580/Blooks/pufferFish.svg|Aquatic||Rare|TEAM BIG|#ddc4a6
+Blobfish|aquatic/blobfish.svg|v1628956576/Blooks/blobfish.svg|Aquatic||Rare|blob blob blob|#f3c1da
+Octopus|aquatic/octopus.svg|v1628956580/Blooks/octopus.svg|Aquatic||Rare|Team 8|#a15095
+Narwhal|aquatic/narwhal.svg|v1628956578/Blooks/narwhal.svg|Aquatic||Epic|NARWHALLLLL|#dae6f5
+Dolphin|aquatic/dolphin.svg|v1675381971/Blooks/dolphin.svg|Aquatic||Epic|Diving Dolphins|#4e7197
+Baby Shark|aquatic/babyShark.svg|v1628956576/Blooks/babyShark.svg|Aquatic||Legendary|BABY SHARK|#5588b7
+Megalodon|aquatic/megalodon.svg|v1628956576/Blooks/megalodon.svg|Aquatic||Legendary|Megan's the Name|#3d5d80
+Panda|safari/panda.svg|v1643835595/Blooks/panda.svg|Safari||Uncommon|Prime Pandas|#2f2c38
+Sloth|safari/sloth.svg|v1643835594/Blooks/sloth.svg|Safari||Uncommon|Silly Sloths|#765b46
+Tenrec|safari/tenrec.svg|v1643835594/Blooks/tenrec.svg|Safari||Uncommon|Troubling Tenrecs|#ffcb29
+Flamingo|safari/flamingo.svg|v1643835592/Blooks/flamingo.svg|Safari||Uncommon|Pink And Proud|#f38db6
+Zebra|safari/zebra.svg|v1643835592/Blooks/zebra.svg|Safari||Uncommon|Super Stripes|#2f2c38
+Elephant|safari/elephant.svg|v1643835592/Blooks/elephant.svg|Safari||Rare|Erudite Elephants|#bac4e4
+Lemur|safari/lemur.svg|v1643835594/Blooks/lemur.svg|Safari||Rare|Leaping Lemurs|#aeaba7
+Peacock|safari/peacock.svg|v1643835594/Blooks/peacock.svg|Safari||Rare|Fearless Feathers|#2b3990
+Chameleon|safari/chameleon.svg|v1643835592/Blooks/chameleon.svg|Safari||Epic|Cool Chameleons|#8dc63f
+Lion|safari/lion.svg|v1643835592/Blooks/lion.svg|Safari||Legendary|The Pride|#f47e20
+Amber|dinos/amber.svg|v1650433846/Blooks/amber.svg|Dino||Uncommon|Ambitious Ambers|#f7913f
+Dino Egg|dinos/dinoEgg.svg|v1650433846/Blooks/dinoEgg.svg|Dino||Uncommon|Eggcellence|#d69b5a
+Dino Fossil|dinos/dinoFossil.svg|v1650433846/Blooks/dinoFossil.svg|Dino||Uncommon|Fighting Fossils|#a46735
+Stegosaurus|dinos/stegosaurus.svg|v1650433846/Blooks/stegosaurus.svg|Dino||Uncommon|Hearty Herbivores|#6c9355
+Velociraptor|dinos/velociraptor.svg|v1650433848/Blooks/velociraptor.svg|Dino||Rare|Prehistorics|#cf1f3d
+Brontosaurus|dinos/brontosaurus.svg|v1650433846/Blooks/brontosaurus.svg|Dino||Rare|Big Giraffes|#416eb5
+Triceratops|dinos/triceratops.svg|v1650433848/Blooks/triceratops.svg|Dino||Epic|Daring Dinos|#f1613a
+Tyrannosaurus Rex|dinos/tyrannosaurusRex.svg|v1650433848/Blooks/tyrannosaurusRex.svg|Dino||Legendary|The Terror|#6c9355
+Ice Bat|iceMonsters/iceBat.svg|v1663061338/Blooks/iceBat.svg|Ice Monster||Uncommon|Frozen Wings|#295eb6
+Ice Bug|iceMonsters/iceBug.svg|v1663061339/Blooks/iceBug.svg|Ice Monster||Uncommon|Bold Bugs|#337ae2
+Ice Elemental|iceMonsters/iceElemental.svg|v1663061336/Blooks/iceElemental.svg|Ice Monster||Uncommon|ICED|#58c7f0
+Rock Monster|iceMonsters/rockMonster.svg|v1663061337/Blooks/rockMonster.svg|Ice Monster||Uncommon|Ready Rocks|#5a617f
+Dink|iceMonsters/dink.svg|v1663061338/Blooks/dink.svg|Ice Monster||Rare|Dink Donk 1|#8f78a5
+Donk|iceMonsters/donk.svg|v1663061338/Blooks/donk.svg|Ice Monster||Rare|Dink Donk 2|#677c9e
+Bush Monster|iceMonsters/bushMonster.svg|v1663061336/Blooks/bushMonster.svg|Ice Monster||Epic|Brave Bushes|#44c649
+Yeti|iceMonsters/yeti.svg|v1663061336/Blooks/yeti.svg|Ice Monster||Legendary|Everest|#5a81c5
+Dingo|outback/dingo.svg|v1675381968/Blooks/dingo.svg|Outback||Uncommon|Daring Dingos|#e38e4d
+Echidna|outback/echidna.svg|v1675381967/Blooks/echidna.svg|Outback||Uncommon|Erudite Echidnas|#88766b
+Koala|outback/koala.svg|v1675381970/Blooks/koala.svg|Outback||Uncommon|Kool Koalas|#827b8b
+Kookaburra|outback/kookaburra.svg|v1675381970/Blooks/kookaburra.svg|Outback||Uncommon|Kind Kookaburras|#4d4d85
+Platypus|outback/platypus.svg|v1675381968/Blooks/platypus.svg|Outback||Rare|Playful Platypus|#9d594e
+Joey|outback/joey.svg|v1675381968/Blooks/joey.svg|Outback||Rare|Jumping Joeys|#9f693c
+Kangaroo|outback/kangaroo.svg|v1675381969/Blooks/kangaroo.svg|Outback||Rare|Kicking Kangaroos|#b9853f
+Crocodile|outback/crocodile.svg|v1675381968/Blooks/crocodile.svg|Outback||Epic|The Crocs|#679b4f
+Sugar Glider|outback/sugarGlider.svg|v1675381967/Blooks/sugarGlider.svg|Outback||Legendary|Fancy Flyers|#131f2b
+Snow Globe|winterHoliday/snowGlobe.svg|v1575848338/Blooks/snowGlobe.svg|Blizzard||Uncommon|Globetrotters|#10afd1
+Holiday Gift|winterHoliday/holidayGift.svg|v1575848338/Blooks/holidayGift.svg|Blizzard||Uncommon|Generous Givers|#4ab96d
+Hot Chocolate|winterHoliday/hotChocolate.svg|v1575848338/Blooks/hotChocolate.svg|Blizzard||Uncommon|Cocoa Coziness|#663723
+Holiday Wreath|winterHoliday/holidayWreath.svg|v1575848338/Blooks/holidayWreath.svg|Blizzard||Uncommon|Wreath Wreckers|#6c9355
+Stocking|winterHoliday/stocking.svg|v1670298616/Blooks/stocking.svg|Blizzard||Uncommon|Stocking Stuffers|#e52a00
+Gingerbread Man|winterHoliday/gingerbreadMan.svg|v1575604963/Blooks/gingerbreadMan.svg|Blizzard||Rare|Cookie Crunchers|#995b3c
+Gingerbread House|winterHoliday/gingerbreadHouse.svg|v1575605860/Blooks/gingerbreadHouse.svg|Blizzard||Rare|Healthy Houses|#995b3c
+Reindeer|winterHoliday/reindeer.svg|v1670298616/Blooks/reindeer.svg|Blizzard||Rare|Ready Reindeer|#9a5b3c
+Snowman|winterHoliday/snowman.svg|v1575604963/Blooks/snowman.svg|Blizzard||Epic|Summer Puddles|#7ca1d5
+Santa Claus|winterHoliday/santaClaus.svg|v1575606016/Blooks/santaClaus.svg|Blizzard||Legendary|Santa's Squad|#d62027
+Pumpkin|halloween/pumpkin.svg|v1601168910/Blooks/pumpkin.svg|Spooky||Uncommon|Pumpkin Smashers|#f7941d
+Swamp Monster|halloween/swampMonster.svg|v1601168910/Blooks/swampMonster.svg|Spooky||Uncommon|Swamp Things|#2fa04a
+Frankenstein|halloween/frankenstein.svg|v1601168910/Blooks/frankenstein.svg|Spooky||Uncommon|The Monsters|#56884b
+Vampire|halloween/vampire.svg|v1601168910/Blooks/vampire.svg|Spooky||Uncommon|Valiant Vampires|#a15095
+Zombie|halloween/zombie.svg|v1601168912/Blooks/zombie.svg|Spooky||Rare|Walking Dead|#80a55d
+Mummy|halloween/mummy.svg|v1601168910/Blooks/mummy.svg|Spooky||Rare|Motivated Mummies|#e8d8c7
+Caramel Apple|halloween/caramelApple.svg|v1666248719/Blooks/caramelApple.svg|Spooky||Rare|Caring Caramels|#8d432a
+Werewolf|halloween/werewolf.svg|v1601168912/Blooks/werewolf.svg|Spooky||Epic|Werewolf Warriors|#594a42
+Ghost|halloween/ghost.svg|v1601168910/Blooks/ghost.svg|Spooky||Legendary|BOO!|#c2def4
+Rainbow Jellyfish|bonus/aquatic/rainbowJellyfish.svg|v1628956581/Blooks/rainbowJellyfish.svg|Hidden|Aquatic|Chroma|Underwater Disco|#c9d6ed
+Blizzard Clownfish|bonus/aquatic/blizzardClownfish.svg|v1628956578/Blooks/blizzardClownfish.svg|Hidden|Aquatic|Chroma|Winter Circus|#dae6f5
+Lovely Frog|bonus/aquatic/lovelyFrog.svg|v1628956576/Blooks/lovelyFrog.svg|Hidden|Aquatic|Chroma|Cute Companions|#f38db6
+Lucky Frog|bonus/aquatic/luckyFrog.svg|v1647451022/Blooks/luckyFrog.svg|Hidden|Aquatic|Chroma|Lucky Leapers|#4eb151
+Spring Frog|bonus/aquatic/springFrog.svg|v1649909367/Blooks/springFrog.svg|Hidden|Aquatic|Chroma|Spring Spirit|#f2bd8c
+Poison Dart Frog|bonus/aquatic/poisonDartFrog.svg|v1628956580/Blooks/poisonDartFrog.svg|Hidden|Aquatic|Chroma|TOXIC HAZARD|#ffcb29
+Lucky Hamster|bonus/chromas/luckyHamster.svg|v1679020768/Blooks/luckyHamster.svg|Hidden|Pet|Chroma|Little Luckies|#17a34a
+Chocolate Rabbit|bonus/chromas/chocolateRabbit.svg|v1681031184/Blooks/chocolateRabbit.svg|Hidden|Pet|Chroma|Ready Rabbits|#914b32
+Lemon Crab|bonus/aquatic/lemonCrab.svg|v1628956576/Blooks/lemonCrab.svg|Hidden|Aquatic|Chroma|Citrus Claws|#f7d959
+Pirate Pufferfish|bonus/aquatic/piratePufferfish.svg|v1641935517/Blooks/piratePufferfish.svg|Hidden|Aquatic|Chroma|Perfect Pirates|#8b5aa5
+Donut Blobfish|bonus/aquatic/donutBlobfish.svg|v1641935517/Blooks/donutBlobfish.svg|Hidden|Aquatic|Chroma|Donut Mess Up|#f3c1da
+Crimson Octopus|bonus/aquatic/crimsonOctopus.svg|v1628956578/Blooks/crimsonOctopus.svg|Hidden|Aquatic|Chroma|Red Team 8|#b3303b
+Rainbow Narwhal|bonus/aquatic/rainbowNarwhal.svg|v1628956581/Blooks/rainbowNarwhal.svg|Hidden|Aquatic|Chroma|Sea Unicorns|#cfe8e9
+Frost Wreath|bonus/winterHoliday/frostWreath.svg|v1607304954/Blooks/frostWreath.svg|Hidden|Blizzard|Chroma|TEAM FREEZE|#2086df
+Tropical Globe|bonus/winterHoliday/tropicalGlobe.svg|v1607304954/Blooks/tropicalGlobe.svg|Hidden|Blizzard|Chroma|WARM HUGS|#fb7c2f
+New York Snow Globe|winterHoliday/newYorkSnowGlobe.svg|v1670298616/Blooks/newYorkSnowGlobe.svg|Hidden|Blizzard|Chroma|NY Tourists|#4aa891
+London Snow Globe|winterHoliday/londonSnowGlobe.svg|v1670298617/Blooks/londonSnowGlobe.svg|Hidden|Blizzard|Chroma|London Tourists|#c88829
+Japan Snow Globe|winterHoliday/japanSnowGlobe.svg|v1670298616/Blooks/japanSnowGlobe.svg|Hidden|Blizzard|Chroma|Japan Tourists|#d62027
+Egypt Snow Globe|winterHoliday/egyptSnowGlobe.svg|v1670298616/Blooks/egyptSnowGlobe.svg|Hidden|Blizzard|Chroma|Egypt Tourists|#d47630
+Paris Snow Globe|winterHoliday/parisSnowGlobe.svg|v1670298616/Blooks/parisSnowGlobe.svg|Hidden|Blizzard|Chroma|Paris Tourists|#858585
+Sandwich|foods/sandwich.svg|v1599952272/Blooks/sandwich.svg|Hidden|Breakfast|Epic|Super Sandwiches|#8cbd40
+Ice Slime|iceMonsters/iceSlime.svg|v1663061336/Blooks/iceSlime.svg|Hidden|Ice Monster|Chroma|Slip n Slide|#42b7ea
+Frozen Fossil|iceMonsters/frozenFossil.svg|v1663061338/Blooks/frozenFossil.svg|Hidden|Ice Monster|Chroma|Ice Age|#9ed2ef
+Ice Crab|iceMonsters/iceCrab.svg|v1663061336/Blooks/iceCrab.svg|Hidden|Ice Monster|Chroma|ICE ICE BABY|#3ea8cf
+Rainbow Panda|safari/rainbowPanda.svg|v1643835594/Blooks/rainbowPanda.svg|Hidden|Safari|Chroma|The Rainbows|#2f2c38
+White Peacock|bonus/safari/whitePeacock.svg|v1643835592/Blooks/whitePeacock.svg|Hidden|Safari|Chroma|Fast Feathers|#69c1d3
+Tiger Zebra|bonus/safari/tigerZebra.svg|v1643835596/Blooks/tigerZebra.svg|Hidden|Safari|Chroma|Agent Zs|#f18221
+Teal Platypus|outback/tealPlatypus.svg|v1675381970/Blooks/tealPlatypus.svg|Hidden|Outback|Chroma|Detectives|#1fa49f
+Red Astronaut|bonus/space/redAstronaut.svg|v1613003832/Blooks/redAstronaut.svg|Hidden|Space|Chroma|Red Crewmates|#ee2324
+Orange Astronaut|bonus/space/orangeAstronaut.svg|v1613003831/Blooks/orangeAstronaut.svg|Hidden|Space|Chroma|Orange Crewmates|#f79320
+Yellow Astronaut|bonus/space/yellowAstronaut.svg|v1613003833/Blooks/yellowAstronaut.svg|Hidden|Space|Chroma|Yellow Crewmates|#edcb1f
+Lime Astronaut|bonus/space/limeAstronaut.svg|v1613003834/Blooks/limeAstronaut.svg|Hidden|Space|Chroma|Lime Crewmates|#61b446
+Green Astronaut|bonus/space/greenAstronaut.svg|v1613003832/Blooks/greenAstronaut.svg|Hidden|Space|Chroma|Green Crewmates|#197b42
+Cyan Astronaut|bonus/space/cyanAstronaut.svg|v1613003831/Blooks/cyanAstronaut.svg|Hidden|Space|Chroma|Cyan Crewmates|#74cbcb
+Blue Astronaut|bonus/space/blueAstronaut.svg|v1613003835/Blooks/blueAstronaut.svg|Hidden|Space|Chroma|Blue Crewmates|#2867b1
+Pink Astronaut|bonus/space/pinkAstronaut.svg|v1613003831/Blooks/pinkAstronaut.svg|Hidden|Space|Chroma|Pink Crewmates|#e573ac
+Purple Astronaut|bonus/space/purpleAstronaut.svg|v1613003831/Blooks/purpleAstronaut.svg|Hidden|Space|Chroma|Purple Crewmates|#9068ad
+Brown Astronaut|bonus/space/brownAstronaut.svg|v1613003831/Blooks/brownAstronaut.svg|Hidden|Space|Chroma|Brown Crewmates|#9e5a3a
+Black Astronaut|bonus/space/blackAstronaut.svg|v1613003835/Blooks/blackAstronaut.svg|Hidden|Space|Chroma|Black Crewmates|#413f56
+Lovely Planet|bonus/chromas/lovelyPlanet.svg|v1678327690/Blooks/lovelyPlanet.svg|Hidden|Space|Chroma|Lovers|#db302c
+Haunted Pumpkin|bonus/halloween/hauntedPumpkin.svg|v1641935071/Blooks/hauntedPumpkin.svg|Hidden|Spooky|Chroma|Haunted Helpers|#939385
+Pumpkin Cookie|bonus/halloween/pumpkinCookie.svg|v1666248719/Blooks/pumpkinCookie.svg|Hidden|Spooky|Chroma|Cookie Monsters|#f7941d
+Ghost Cookie|bonus/halloween/ghostCookie.svg|v1666248719/Blooks/ghostCookie.svg|Hidden|Spooky|Chroma|COOKIES|#c2def4
+Chick Chicken|bonus/chromas/chickChicken.svg|v1667010822/Blooks/chickChicken.svg|Hidden|Spooky|Chroma|Tricky Chickens|#eaa622
+Chicken Chick|bonus/chromas/chickenChick.svg|v1667010822/Blooks/chickenChick.svg|Hidden|Spooky|Chroma|Tricky Chicks|#9dd7f4
+Raccoon Bandit|bonus/chromas/raccoonBandit.svg|v1667011259/Blooks/raccoonBandit.svg|Hidden|Spooky|Chroma|Bandits|#bb2222
+Owl Sheriff|bonus/chromas/owlSheriff.svg|v1667010822/Blooks/owlSheriff.svg|Hidden|Spooky|Chroma|Sheriffs|#84582b
+Vampire Frog|bonus/chromas/vampireFrog.svg|v1667010822/Blooks/vampireFrog.svg|Hidden|Spooky|Chroma|Fanged Frogs|#312222
+Pumpkin King|bonus/chromas/pumpkinKing.svg|v1666681464/Blooks/pumpkinKing.svg|Hidden|Spooky|Chroma|Halloween Kings|#c1541e
+Anaconda Wizard|bonus/chromas/anacondaWizard.svg|v1667010822/Blooks/anacondaWizard.svg|Hidden|Spooky|Chroma|Sneaky Wizards|#252165
+Spooky Pumpkin|bonus/halloween/spookyPumpkin.svg|v1603679635/Blooks/spookyPumpkin.svg|Hidden|Spooky|Chroma|Ghostly Geniuses|#66f59b
+Spooky Mummy|bonus/halloween/spookyMummy.svg|v1603679635/Blooks/spookyMummy.svg|Hidden|Spooky|Chroma|Spooky 'n' Scary|#66f59b
+Agent Owl|bonus/td/agentOwl.svg|v1638737635/Blooks/agentOwl.svg|Hidden|Forest Animal|Chroma|Secret Agents|#32da4e
+Master Elf|bonus/td/masterElf.svg|v1591048518/Blooks/masterElf.svg|Hidden|Medieval|Chroma|The Masters|#3a3a3a
+Party Pig|bonus/td/partyPig.svg|v1670544090/Blooks/partyPig.svg|Hidden|Farm Animal|Chroma|MODS|#f6a9cb
+Spooky Ghost|bonus/mysticals/spookyGhost.svg|v1681884681/Blooks/spookyGhost.svg|Hidden|Spooky|Mystical|Spooksters|#66f59b
+Phantom King|bonus/mysticals/phantomKing.svg|v1681884681/Blooks/phantomKing.svg|Hidden|Medieval|Mystical|The True Kings|#2cf4e1
+Tim the Alien|bonus/mysticals/timTheAlien.svg|v1681884681/Blooks/timTheAlien.svg|Hidden|Space|Mystical|Tim's Friends|#8dc63f
+Rainbow Astronaut|bonus/mysticals/rainbowAstronaut.svg|v1681884681/Blooks/rainbowAstronaut.svg|Hidden|Space|Mystical|RAINBOW|#9068ad
+Light Blue|colors/lightBlueBlook.svg|v1615756235/Blooks/colors/lightBlueBlook.svg|Color||Common|Blooket Buds|#0bc2cf
+Black|colors/blackBlook.svg|v1593095363/Blooks/colors/blackBlook.svg|Color||Common|Black Team|#3a3a3a
+Red|colors/redBlook.svg|v1593095359/Blooks/colors/redBlook.svg|Color||Common|Red Team|#d62728
+Purple|colors/purpleBlook.svg|v1593095359/Blooks/colors/purpleBlook.svg|Color||Common|Purple Team|#9a49aa
+Pink|colors/pinkBlook.svg|v1593095358/Blooks/colors/pinkBlook.svg|Color||Common|Pink Team|#e377c2
+Orange|colors/orangeBlook.svg|v1593095357/Blooks/colors/orangeBlook.svg|Color||Common|Orange Team|#ff7f0f
+Lime|colors/limeBlook.svg|v1593095356/Blooks/colors/limeBlook.svg|Color||Common|Lime Team|#b3dc23
+Green|colors/greenBlook.svg|v1593095354/Blooks/colors/greenBlook.svg|Color||Common|Green Team|#2ca02c
+Teal|colors/tealBlook.svg|v1594135104/Blooks/colors/tealBlook.svg|Color||Common|Teal Team|#007788
+Tan|colors/tanBlook.svg|v1594135102/Blooks/colors/tanBlook.svg|Color||Common|Tan Team|#d2b48c
+Maroon|colors/maroonBlook.svg|v1594135102/Blooks/colors/maroonBlook.svg|Color||Common|Maroon Team|#800000
+Gray|colors/grayBlook.svg|v1594135102/Blooks/colors/grayBlook.svg|Color||Common|Gray Team|#999999
+Mint|colors/mintBlook.svg|v1594135102/Blooks/colors/mintBlook.svg|Color||Common|Mint Team|#aaf0d1
+Salmon|colors/salmonColorBlook.svg|v1594135102/Blooks/colors/salmonColorBlook.svg|Color||Common|Salmon Team|#fa8072
+Burgandy|colors/burgandyBlook.svg|v1594135101/Blooks/colors/burgandyBlook.svg|Color||Common|Burgandy Team|#99254d
+Baby Blue|colors/babyBlueBlook.svg|v1594135100/Blooks/colors/babyBlueBlook.svg|Color||Common|Baby Blue Team|#99ccff
+Dust|colors/dustBlook.svg|v1594135100/Blooks/colors/dustBlook.svg|Color||Common|Dust Team|#999966
+Brown|colors/brownBlook.svg|v1594135100/Blooks/colors/brownBlook.svg|Color||Common|Brown Team|#86592d
+Dull Blue|colors/dullBlueBlook.svg|v1594135100/Blooks/colors/dullBlueBlook.svg|Color||Common|Dim Blue Team|#666699
+Yellow|colors/yellowBlook.svg|v1594135100/Blooks/colors/yellowBlook.svg|Color||Common|Yellow Team|#ffff4d
+Blue|colors/blueBlook.svg|v1594135100/Blooks/colors/blueBlook.svg|Color||Common|Blue Team|#005ce6
+`.trim();
+
+const BLOOKS = RAW_BLOOKS.split("\n").filter(Boolean).map(line => {
+  const p = line.split("|");
+  return {
+    name:    p[0],
+    url:     S3_BASE + p[1],
+    mediaUrl:MEDIA_BASE + p[2],
+    set:     p[3],
+    realSet: p[4] || null,
+    rarity:  p[5],
+    team:    p[6],
+    color:   p[7]
+  };
+});
+const BLOOK_MAP = Object.fromEntries(BLOOKS.map(b => [b.name, b]));
+
+const RARITIES = ["Common","Uncommon","Rare","Epic","Legendary","Chroma","Mystical"];
+const RARITY_WEIGHT = {Common:1000,Uncommon:120,Rare:25,Epic:6,Legendary:1.2,Chroma:0.08,Mystical:0.02};
+const RARITY_DUPLICATE_REWARD = {Common:5,Uncommon:10,Rare:25,Epic:50,Legendary:100,Chroma:250,Mystical:500};
+const RARITY_ORDER = {Common:0,Uncommon:1,Rare:2,Epic:3,Legendary:4,Chroma:5,Mystical:6};
+
+const PACKS = [
+  { id:"Farm Animal",   name:"Farm Animal",   price:10,  icon:"Chick",             color:"#4ab96d", desc:"The classic starter pack. Moo, oink, cluck." },
+  { id:"Pet",           name:"Pet",           price:15,  icon:"Dog",               color:"#f49849", desc:"Furry (and scaly) friends for your collection." },
+  { id:"Arctic Animal", name:"Arctic Animal", price:20,  icon:"Penguin",           color:"#7ca1d5", desc:"Chilly companions from the frozen north." },
+  { id:"Forest Animal", name:"Forest Animal", price:25,  icon:"Fox",               color:"#2ca02c", desc:"Woodland wanderers and trash pandas." },
+  { id:"Wonderland",    name:"Wonderland",    price:30,  icon:"Cheshire Cat",      color:"#914f93", desc:"Down the rabbit hole you go." },
+  { id:"Breakfast",     name:"Breakfast",     price:35,  icon:"Waffle",            color:"#f9a241", desc:"The most important meal of the day." },
+  { id:"Space",         name:"Space",         price:40,  icon:"Astronaut",         color:"#416eb5", desc:"To infinity and beyond the classroom." },
+  { id:"Bot",           name:"Bot",           price:45,  icon:"Mega Bot",          color:"#3e564a", desc:"Beep boop. Robots have entered the chat." },
+  { id:"Aquatic",       name:"Aquatic",       price:50,  icon:"Baby Shark",        color:"#5588b7", desc:"Dive deep for underwater legends." },
+  { id:"Safari",        name:"Safari",        price:55,  icon:"Lion",              color:"#f47e20", desc:"Go on a wild adventure across the savanna." },
+  { id:"Dino",          name:"Dino",          price:60,  icon:"Tyrannosaurus Rex", color:"#6c9355", desc:"Prehistoric powerhouses from the past." },
+  { id:"Ice Monster",   name:"Ice Monster",   price:65,  icon:"Yeti",              color:"#58c7f0", desc:"Abominable snowmen and frozen beasts." },
+  { id:"Outback",       name:"Outback",       price:70,  icon:"Sugar Glider",      color:"#b9853f", desc:"G'day mate — creatures from Down Under." },
+  { id:"Blizzard",      name:"Blizzard",      price:75,  icon:"Santa Claus",       color:"#e52a00", desc:"Holiday cheer in blook form." },
+  { id:"Spooky",        name:"Spooky",        price:80,  icon:"Ghost",             color:"#80a55d", desc:"Things that go bump in the night." },
+  { id:"Color",         name:"Color",         price:5,   icon:"Blue",              color:"#005ce6", desc:"Simple, clean, and endlessly useful." },
+  { id:"Mystical",      name:"Mystical",      price:250, icon:"Rainbow Astronaut", color:"#22d3ee", desc:"The rarest of the rare. Legends only." }
+];
+const PACK_MAP = Object.fromEntries(PACKS.map(p => [p.id, p]));
+
+function packPool(packId){
+  if(packId === "Mystical") return BLOOKS.filter(b => b.rarity === "Mystical");
+  return BLOOKS.filter(b => b.set === packId || b.realSet === packId);
+}
+
+function packOdds(packId){
+  const pool = packPool(packId);
+  const byRarityCount = {};
+  pool.forEach(b => { byRarityCount[b.rarity] = (byRarityCount[b.rarity]||0)+1; });
+  const weighted = pool.map(b => ({
+    blook: b,
+    weight: RARITY_WEIGHT[b.rarity] / byRarityCount[b.rarity]
+  }));
+  const total = weighted.reduce((s,w)=>s+w.weight,0) || 1;
+  const entries = weighted.map(w => ({ blook:w.blook, chance: (w.weight/total)*100 }));
+  const byRarity = {};
+  entries.forEach(e => { byRarity[e.blook.rarity] = (byRarity[e.blook.rarity]||0) + e.chance; });
+  return { entries, byRarity, total };
+}
+
+function rollBlook(packId){
+  const { entries, total } = packOdds(packId);
+  let r = Math.random() * total;
+  for(const e of entries){ r -= e.chance; if(r <= 0) return e.blook; }
+  return entries[entries.length-1].blook;
+}
+
+/* STATE */
+const SAVE_KEY = "blooket-recreation-v2";
+const DEFAULT_STATE = {
+  user:null, tokens:500, xp:0, owned:{},
+  stats:{games:0,wins:0,correct:0,wrong:0,packsOpened:0,bestStreak:0,tokensEarned:0,tokensSpent:0,blooksFound:0},
+  lastDaily:0, dailyStreak:0, theme:"light", history:[], createdAt:Date.now()
+};
+
+const State = {
+  data:null,
+  load(){
+    try{
+      const raw = localStorage.getItem(SAVE_KEY);
+      this.data = raw ? Object.assign({}, DEFAULT_STATE, JSON.parse(raw)) : JSON.parse(JSON.stringify(DEFAULT_STATE));
+      this.data.stats = Object.assign({}, DEFAULT_STATE.stats, this.data.stats || {});
+    }catch(e){ this.data = JSON.parse(JSON.stringify(DEFAULT_STATE)); }
+    return this.data;
+  },
+  save(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(this.data)); }catch(e){} },
+  reset(){
+    this.data = JSON.parse(JSON.stringify(DEFAULT_STATE));
+    this.save();
+  },
+  get tokens(){ return this.data.tokens; },
+  addTokens(n){
+    this.data.tokens += n;
+    if(n > 0) this.data.stats.tokensEarned += n;
+    this.save(); App.refreshTokens();
+  },
+  spendTokens(n){
+    if(this.data.tokens < n) return false;
+    this.data.tokens -= n;
+    this.data.stats.tokensSpent += n;
+    this.save(); App.refreshTokens();
+    return true;
+  },
+  addXP(n){
+    const before = levelInfo(this.data.xp).level;
+    this.data.xp += n;
+    const after = levelInfo(this.data.xp).level;
+    this.save();
+    if(after > before){
+      const bonus = after * 25;
+      this.data.tokens += bonus;
+      this.save();
+      App.refreshTokens();
+      UI.toast(`🎉 Level up! Now level ${after}. +${bonus} tokens`, "gold", 4200);
+    }
+    return after - before;
+  },
+  addBlook(name){
+    const isNew = !this.data.owned[name];
+    this.data.owned[name] = (this.data.owned[name] || 0) + 1;
+    if(isNew) this.data.stats.blooksFound++;
+    this.save();
+    return isNew;
+  },
+  hasBlook(name){ return !!this.data.owned[name]; },
+  uniqueOwned(){ return Object.keys(this.data.owned).length; },
+  totalOwned(){ return Object.values(this.data.owned).reduce((a,b)=>a+b,0); },
+  completion(){ return (this.uniqueOwned() / BLOOKS.length) * 100; }
+};
+
+function levelInfo(xp){
+  let level = 1, need = 100, remaining = xp;
+  while(remaining >= need){ remaining -= need; level++; need = Math.round(need * 1.25); }
+  return { level, into: remaining, need, pct: (remaining/need)*100 };
+}
+
+const $  = (sel, root=document) => root.querySelector(sel);
+const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = n => Number(n).toLocaleString("en-US");
+const pct = n => n >= 1 ? n.toFixed(2)+"%" : n >= 0.01 ? n.toFixed(3)+"%" : n.toExponential(2)+"%";
+const rand = (min, max) => Math.random()*(max-min)+min;
+const randInt = (min, max) => Math.floor(rand(min, max+1));
+const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function timeAgo(ts){
+  const s = Math.floor((Date.now()-ts)/1000);
+  if(s < 60) return "just now";
+  if(s < 3600) return Math.floor(s/60)+"m ago";
+  if(s < 86400) return Math.floor(s/3600)+"h ago";
+  return Math.floor(s/86400)+"d ago";
+}
+const blookImg = (b, cls="blook-img") =>
+  `<img class="${cls}" src="${b.mediaUrl}" alt="${esc(b.name)}" loading="lazy" onerror="this.onerror=null;this.src='${b.url}'">`;
+const rarityChip = r => `<span class="chip chip-${r}">${r}</span>`;
+const randomBlookName = () => pick(BLOOKS).name;
+
+/* UI */
+const UI = {
+  toast(msg, type="info", duration=2800){
+    const root = $("#toast-root");
+    const el = document.createElement("div");
+    const icons = { success:"✅", error:"⛔", info:"💡", gold:"🪙" };
+    el.className = `toast toast-${type}`;
+    el.innerHTML = `<span class="toast-icon">${icons[type]||"💡"}</span><span>${msg}</span>`;
+    root.appendChild(el);
+    setTimeout(()=>{ el.classList.add("out"); setTimeout(()=>el.remove(), 320); }, duration);
+  },
+  modal({title, body, footer, size="", onMount, closable=true}){
+    const root = $("#modal-root");
+    const backdrop = document.createElement("div");
+    backdrop.className = "modal-backdrop";
+    backdrop.innerHTML = `
+      <div class="modal ${size}">
+        <div class="modal-head">
+          <h3>${title}</h3>
+          ${closable ? '<button class="modal-close" data-close>✕</button>' : ''}
+        </div>
+        <div class="modal-body">${body}</div>
+        ${footer ? `<div class="modal-foot">${footer}</div>` : ''}
+      </div>`;
+    root.appendChild(backdrop);
+    const close = () => {
+      backdrop.style.animation = "fadeIn .2s reverse";
+      setTimeout(()=>backdrop.remove(), 180);
+    };
+    backdrop.addEventListener("click", e => { if(e.target === backdrop && closable) close(); });
+    $$("[data-close]", backdrop).forEach(b => b.addEventListener("click", close));
+    if(onMount) onMount(backdrop, close);
+    return { el: backdrop, close };
+  },
+  confirm(title, message, onYes, yesLabel="Confirm", danger=false){
+    UI.modal({
+      title,
+      body: `<p class="muted">${message}</p>`,
+      footer: `
+        <button class="btn btn-ghost" data-close>Cancel</button>
+        <button class="btn ${danger?'btn-red':'btn-primary'}" id="confirm-yes">${yesLabel}</button>
+      `,
+      onMount(el, close){
+        $("#confirm-yes", el).addEventListener("click", ()=>{ close(); onYes(); });
+      }
+    });
+  },
+  confetti(count=90){
+    const colors = ["#7c3aed","#4f46e5","#06b6d4","#f59e0b","#22c55e","#ef4444","#ec4899","#fbbf24"];
+    for(let i=0;i<count;i++){
+      const piece = document.createElement("div");
+      piece.className = "confetti-piece";
+      piece.style.left = Math.random()*100 + "vw";
+      piece.style.top = "-12vh";
+      piece.style.background = pick(colors);
+      piece.style.borderRadius = Math.random() > .5 ? "50%" : "2px";
+      piece.style.width = rand(6,13) + "px";
+      piece.style.height = rand(6,13) + "px";
+      const dur = rand(2.2,4.4);
+      piece.style.animation = `confettiFall ${dur}s cubic-bezier(.2,.6,.5,1) forwards`;
+      piece.style.animationDelay = rand(0,.6) + "s";
+      document.body.appendChild(piece);
+      setTimeout(()=>piece.remove(), (dur+1)*1000);
+    }
+  }
+};
+
+/* ADMIN */
+const ADMIN_PASSWORD = "6171399";
+const ADMIN_SESSION_KEY = "blooket-admin-session";
+
+window.AdminCheats = window.AdminCheats || {
+  godMode:false, infiniteTime:false, _patched:false
+};
+
+const Admin = {
+  isAuthed(){
+    try { return sessionStorage.getItem(ADMIN_SESSION_KEY) === "1"; }
+    catch(e){ return false; }
+  },
+  login(pw){
+    if(String(pw) === ADMIN_PASSWORD){
+      try { sessionStorage.setItem(ADMIN_SESSION_KEY, "1"); } catch(e){}
+      return true;
+    }
+    return false;
+  },
+  logout(){ try{ sessionStorage.removeItem(ADMIN_SESSION_KEY); }catch(e){} },
+
+  installCheatPatches(){
+    if(window.AdminCheats._patched) return;
+    window.AdminCheats._patched = true;
+
+    const _origAnswer = Game.playerAnswer;
+    Game.playerAnswer = function(option, btnEl){
+      if(window.AdminCheats.godMode && this.question) option = this.question.correct;
+      return _origAnswer.call(this, option, btnEl);
+    };
+    const _origNext = Game.nextQuestion;
+    Game.nextQuestion = function(){
+      const ret = _origNext.call(this);
+      if(window.AdminCheats.infiniteTime && this.question){
+        this.timePerQuestion = 999999;
+        this.timeLeft = 999999;
+        const fill = document.getElementById("timer-fill");
+        if(fill) fill.style.width = "100%";
+      }
+      return ret;
+    };
+  },
+
+  /* 1. Unlock a single blook */
+  unlockBlook(name){
+    const b = BLOOK_MAP[name] || BLOOKS.find(x => x.name.toLowerCase() === String(name).toLowerCase());
+    if(!b) return { ok:false, msg:`No blook named "${name}"` };
+    const isNew = !State.data.owned[b.name];
+    State.data.owned[b.name] = (State.data.owned[b.name] || 0) + 1;
+    if(isNew) State.data.stats.blooksFound++;
+    State.save(); App.refreshTokens();
+    return { ok:true, isNew, blook:b, count: State.data.owned[b.name] };
+  },
+
+  /* 2. Unlock every blook */
+  unlockAll(){
+    let added = 0;
+    BLOOKS.forEach(b => {
+      if(!State.data.owned[b.name]){
+        State.data.owned[b.name] = 1;
+        State.data.stats.blooksFound++;
+        added++;
+      }
+    });
+    State.save(); App.refreshTokens();
+    return added;
+  },
+
+  /* 3. Open N packs (free, no animation) */
+  openPacks(packId, count){
+    const pack = PACK_MAP[packId];
+    if(!pack) return { ok:false, msg:`Unknown pack: ${packId}` };
+    count = Math.max(1, Math.min(100000, Math.floor(count) || 1));
+    const s = { pack:pack.name, count, newBlooks:0, duplicates:0, refund:0, byRarity:{}, newList:new Set() };
+    for(let i=0;i<count;i++){
+      const b = rollBlook(packId);
+      if(!State.data.owned[b.name]){
+        State.data.owned[b.name] = 1;
+        State.data.stats.blooksFound++;
+        s.newBlooks++;
+        s.newList.add(b.name);
+      } else {
+        State.data.owned[b.name]++;
+        s.duplicates++;
+        const r = RARITY_DUPLICATE_REWARD[b.rarity] || 5;
+        State.data.tokens += r;
+        s.refund += r;
+      }
+      s.byRarity[b.rarity] = (s.byRarity[b.rarity] || 0) + 1;
+      State.data.stats.packsOpened++;
+    }
+    State.save(); App.refreshTokens();
+    s.newList = Array.from(s.newList);
+    return { ok:true, summary:s };
+  },
+
+  /* 4. Unlock an entire set */
+  unlockSet(setName){
+    const targets = BLOOKS.filter(b => b.set === setName || b.realSet === setName);
+    let added = 0;
+    targets.forEach(b => {
+      if(!State.data.owned[b.name]){
+        State.data.owned[b.name] = 1;
+        State.data.stats.blooksFound++;
+        added++;
+      }
+    });
+    State.save(); App.refreshTokens();
+    return { added, total:targets.length, set:setName };
+  },
+
+  /* 5. Unlock everything of a rarity */
+  unlockRarity(rarity){
+    const targets = BLOOKS.filter(b => b.rarity === rarity);
+    let added = 0;
+    targets.forEach(b => {
+      if(!State.data.owned[b.name]){
+        State.data.owned[b.name] = 1;
+        State.data.stats.blooksFound++;
+        added++;
+      }
+    });
+    State.save(); App.refreshTokens();
+    return { added, total:targets.length, rarity };
+  },
+
+  /* 6. Unlock N random missing */
+  unlockRandomN(n){
+    n = Math.max(1, Math.floor(n) || 1);
+    const missing = BLOOKS.filter(b => !State.data.owned[b.name]);
+    if(!missing.length) return { added:0, rolled:[] };
+    const chosen = shuffle(missing).slice(0, n);
+    const rolled = [];
+    chosen.forEach(b => {
+      State.data.owned[b.name] = 1;
+      State.data.stats.blooksFound++;
+      rolled.push(b);
+    });
+    State.save(); App.refreshTokens();
+    return { added:rolled.length, rolled };
+  },
+
+  /* 7. Remove a blook */
+  removeBlook(name){
+    if(!State.data.owned[name]) return { ok:false, msg:"Not owned" };
+    delete State.data.owned[name];
+    State.data.stats.blooksFound = Math.max(0, State.data.stats.blooksFound - 1);
+    State.save(); App.refreshTokens();
+    return { ok:true, name };
+  },
+
+  /* 8. Set exact count of a blook */
+  setBlookCount(name, count){
+    const b = BLOOK_MAP[name] || BLOOKS.find(x => x.name.toLowerCase() === String(name).toLowerCase());
+    if(!b) return { ok:false, msg:"Blook not found" };
+    count = Math.max(0, Math.floor(count) || 0);
+    const had = !!State.data.owned[b.name];
+    if(count === 0){
+      delete State.data.owned[b.name];
+      if(had) State.data.stats.blooksFound = Math.max(0, State.data.stats.blooksFound - 1);
+    } else {
+      State.data.owned[b.name] = count;
+      if(!had) State.data.stats.blooksFound++;
+    }
+    State.save();
+    return { ok:true, name:b.name, count };
+  },
+
+  /* 9. Max out everything */
+  maxOut(){
+    const added = this.unlockAll();
+    State.data.tokens = Math.max(State.data.tokens, 1000000);
+    State.data.xp = Math.max(State.data.xp, 1000000);
+    State.save(); App.refreshTokens();
+    return added;
+  },
+
+  /* 10. Set tokens exactly */
+  setTokens(n){ State.data.tokens = Math.max(0, Math.floor(n) || 0); State.save(); App.refreshTokens(); return State.data.tokens; },
+
+  /* 11. Grant / add tokens */
+  grantTokens(n){
+    n = Math.floor(n) || 0;
+    if(n === 0) return 0;
+    if(n > 0) State.addTokens(n);
+    else { State.data.tokens = Math.max(0, State.data.tokens + n); State.save(); App.refreshTokens(); }
+    return n;
+  },
+
+  /* 12. Add XP */
+  addXP(n){ n = Math.max(0, Math.floor(n) || 0); if(!n) return 0; State.addXP(n); return n; },
+
+  /* 13. Set exact level */
+  setLevel(level){
+    level = Math.max(1, Math.min(999, Math.floor(level) || 1));
+    let xp = 0, cur = 1, need = 100;
+    while(cur < level){ xp += need; cur++; need = Math.round(need * 1.25); }
+    State.data.xp = xp;
+    State.save(); App.refreshUserChip();
+    return level;
+  },
+
+  /* 14. Reset stats only */
+  resetStats(){
+    State.data.stats = JSON.parse(JSON.stringify(DEFAULT_STATE.stats));
+    State.data.history = [];
+    State.save();
+  },
+
+  /* 15. Add fake wins */
+  addFakeWins(n){
+    n = Math.max(1, Math.floor(n) || 1);
+    State.data.stats.games += n;
+    State.data.stats.wins += n;
+    State.data.stats.correct += n * 8;
+    State.save();
+    return n;
+  },
+
+  /* 16. Reset daily cooldown */
+  resetDaily(){ State.data.lastDaily = 0; State.save(); },
+
+  /* 17. Set daily streak */
+  setDailyStreak(n){ State.data.dailyStreak = Math.max(0, Math.floor(n) || 0); State.save(); return State.data.dailyStreak; },
+
+  /* 18. Edit profile */
+  setProfile(name, avatar){
+    if(!State.data.user) return { ok:false, msg:"No profile" };
+    if(name) State.data.user.name = String(name).slice(0, 18);
+    if(avatar && (BLOOK_MAP[avatar] || State.data.owned[avatar])) State.data.user.avatar = avatar;
+    State.save(); App.refreshUserChip();
+    return { ok:true };
+  },
+
+  /* 19. Export save */
+  exportSave(){ return JSON.stringify(State.data, null, 2); },
+
+  /* 20. Import save */
+  importSave(json){
+    try {
+      const obj = JSON.parse(json);
+      if(typeof obj !== "object" || obj === null) throw new Error("Not an object");
+      State.data = Object.assign({}, DEFAULT_STATE, obj);
+      State.data.stats = Object.assign({}, DEFAULT_STATE.stats, obj.stats || {});
+      State.save();
+      App.refreshTokens(); App.refreshUserChip();
+      return { ok:true };
+    } catch(e){ return { ok:false, msg: e.message }; }
+  },
+
+  /* 21. Factory reset */
+  factoryReset(){ State.reset(); App.refreshTokens(); App.refreshUserChip(); },
+
+  /* 22. Monte Carlo simulation */
+  simulatePack(packId, rolls){
+    rolls = Math.max(1, Math.min(1000000, Math.floor(rolls) || 1000));
+    const counts = {}, byRarity = {};
+    for(let i=0;i<rolls;i++){
+      const b = rollBlook(packId);
+      counts[b.name] = (counts[b.name] || 0) + 1;
+      byRarity[b.rarity] = (byRarity[b.rarity] || 0) + 1;
+    }
+    const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+    return { rolls, byRarity, top: sorted.slice(0,12), unique: sorted.length };
+  },
+
+  /* 23. God mode */
+  toggleGodMode(){
+    this.installCheatPatches();
+    window.AdminCheats.godMode = !window.AdminCheats.godMode;
+    return window.AdminCheats.godMode;
+  },
+
+  /* 24. Infinite time */
+  toggleInfiniteTime(){
+    this.installCheatPatches();
+    window.AdminCheats.infiniteTime = !window.AdminCheats.infiniteTime;
+    return window.AdminCheats.infiniteTime;
+  },
+
+  /* 25. Instant win */
+  instantWin(tokens=500){
+    tokens = Math.max(0, Math.floor(tokens) || 0);
+    State.addTokens(tokens);
+    State.addXP(Math.round(tokens * 1.4));
+    State.data.stats.games++;
+    State.data.stats.wins++;
+    State.data.stats.correct += 10;
+    State.save();
+    return tokens;
+  },
+
+  /* 26. Generate fake history */
+  addFakeHistory(entries=5){
+    entries = Math.max(1, Math.min(50, Math.floor(entries) || 5));
+    for(let i=0;i<entries;i++){
+      const correct = randInt(4, 10), wrong = 10 - correct;
+      State.data.history.unshift({
+        mode: Math.random() < .5 ? "classic" : "gold",
+        place: randInt(1, 4),
+        score: randInt(400, 1200),
+        correct, wrong,
+        accuracy: Math.round((correct/(correct+wrong))*100),
+        tokens: randInt(30, 200),
+        xp: randInt(40, 280),
+        at: Date.now() - i * 3600000,
+        players: []
+      });
+    }
+    State.data.history = State.data.history.slice(0, 30);
+    State.save();
+    return entries;
+  }
+};
+
+/* MARKET */
+const Market = {
+  openPack(packId, count=1){
+    const pack = PACK_MAP[packId];
+    if(!pack) return;
+    const cost = pack.price * count;
+    if(State.tokens < cost){
+      UI.toast(`Not enough tokens. Need ${fmt(cost - State.tokens)} more.`, "error", 3200);
+      return;
+    }
+    State.spendTokens(cost);
+    const results = [];
+    for(let i=0;i<count;i++){
+      const b = rollBlook(packId);
+      const isNew = State.addBlook(b.name);
+      let refund = 0;
+      if(!isNew){ refund = RARITY_DUPLICATE_REWARD[b.rarity] || 5; State.data.tokens += refund; }
+      results.push({ blook:b, isNew, refund });
+      State.data.stats.packsOpened++;
+    }
+    State.save(); App.refreshTokens();
+    this.animateOpen(pack, results);
+  },
+  animateOpen(pack, results){
+    const stage = document.createElement("div");
+    stage.className = "open-stage";
+    stage.innerHTML = `
+      <div style="text-align:center;position:relative;z-index:3">
+        <div class="open-pack-visual" id="pack-visual"><img src="${BLOOK_MAP[pack.icon].mediaUrl}" alt=""></div>
+        <div style="margin-top:26px;font-weight:900;font-size:1.3rem;color:#fff">${results.length>1?`Opening ${results.length} packs...`:"Click to open!"}</div>
+        <div style="margin-top:8px;color:rgba(255,255,255,.55);font-weight:700;font-size:.86rem">${esc(pack.name)} Pack</div>
+      </div>`;
+    document.body.appendChild(stage);
+    let idx = 0, busy = false;
+    const showNext = () => {
+      if(busy) return;
+      busy = true;
+      const visual = $("#pack-visual", stage);
+      if(visual) visual.classList.add("burst");
+      setTimeout(() => {
+        busy = false;
+        const r = results[idx]; idx++;
+        const isRare = ["Rare","Epic","Legendary","Chroma","Mystical"].includes(r.blook.rarity);
+        if(isRare) UI.confetti(["Legendary","Chroma","Mystical"].includes(r.blook.rarity) ? 130 : 60);
+        const card = document.createElement("div");
+        card.className = `reveal-card reveal-glow-${r.blook.rarity}`;
+        card.innerHTML = `
+          ${blookImg(r.blook, "")}
+          <div class="reveal-name">${esc(r.blook.name)}</div>
+          <div style="margin-bottom:14px">${rarityChip(r.blook.rarity)}</div>
+          <div style="font-weight:800;color:var(--text-2);font-size:.86rem;margin-bottom:6px">${esc(r.blook.set === "Hidden" ? (r.blook.realSet || "Hidden") : r.blook.set)} Set</div>
+          <div style="font-weight:900;color:${r.blook.color};font-size:1.02rem;margin-bottom:14px">Team: ${esc(r.blook.team)}</div>
+          ${r.isNew
+            ? `<div class="chip chip-Legendary" style="font-size:.85rem;padding:6px 16px">✨ NEW BLOOK!</div>`
+            : `<div class="chip chip-Common" style="font-size:.82rem;padding:6px 16px">Duplicate — +${r.refund} tokens</div>`}`;
+        const container = stage.firstElementChild;
+        container.innerHTML = "";
+        container.appendChild(card);
+        const btnWrap = document.createElement("div");
+        btnWrap.style.marginTop = "26px";
+        const stillGoing = idx < results.length;
+        const btn = document.createElement("button");
+        btn.className = "btn btn-primary btn-lg";
+        btn.textContent = stillGoing ? `Open Next (${idx}/${results.length})` : "Awesome!";
+        btn.addEventListener("click", () => {
+          if(stillGoing){
+            container.innerHTML = `<div class="open-pack-visual" id="pack-visual"><img src="${BLOOK_MAP[pack.icon].mediaUrl}" alt=""></div><div style="margin-top:26px;font-weight:900;font-size:1.3rem;color:#fff">Click to open!</div>`;
+            setTimeout(showNext, 180);
+          } else {
+            stage.remove();
+            App.refreshTokens();
+            if(App.route === "#/market" || App.route === "#/blooks") App.render();
+          }
+        });
+        btnWrap.appendChild(btn);
+        container.appendChild(btnWrap);
+      }, 480);
+    };
+    stage.addEventListener("click", e => { if(e.target.closest("button")) return; showNext(); });
+    setTimeout(showNext, 420);
+  }
+};
+
+/* TRIVIA */
+const TRIVIA = [
+  { q:"What is the capital of France?", a:"Paris", w:["London","Berlin","Madrid"] },
+  { q:"How many continents are there on Earth?", a:"7", w:["5","6","8"] },
+  { q:"What planet is known as the Red Planet?", a:"Mars", w:["Venus","Jupiter","Mercury"] },
+  { q:"What is H2O commonly known as?", a:"Water", w:["Salt","Oxygen","Hydrogen"] },
+  { q:"How many sides does a hexagon have?", a:"6", w:["5","7","8"] },
+  { q:"Which animal is the largest on Earth?", a:"Blue Whale", w:["Elephant","Giraffe","Great White Shark"] },
+  { q:"What is the chemical symbol for gold?", a:"Au", w:["Go","Ag","Gd"] },
+  { q:"Who wrote 'Romeo and Juliet'?", a:"William Shakespeare", w:["Charles Dickens","Mark Twain","Jane Austen"] },
+  { q:"What is the largest ocean on Earth?", a:"Pacific Ocean", w:["Atlantic Ocean","Indian Ocean","Arctic Ocean"] },
+  { q:"How many bones are in the adult human body?", a:"206", w:["186","226","246"] },
+  { q:"What is the speed of light (approx)?", a:"300,000 km/s", w:["150,000 km/s","1,000 km/s","30,000 km/s"] },
+  { q:"Which gas do plants absorb from the air?", a:"Carbon Dioxide", w:["Oxygen","Nitrogen","Helium"] },
+  { q:"What is the smallest prime number?", a:"2", w:["1","3","0"] },
+  { q:"In which year did World War II end?", a:"1945", w:["1939","1918","1950"] },
+  { q:"What is the tallest mountain in the world?", a:"Mount Everest", w:["K2","Kilimanjaro","Denali"] },
+  { q:"How many players are on a soccer team on the field?", a:"11", w:["9","10","12"] },
+  { q:"What is the hardest natural substance?", a:"Diamond", w:["Gold","Iron","Quartz"] },
+  { q:"Which country invented pizza?", a:"Italy", w:["Greece","France","Spain"] },
+  { q:"What does 'CPU' stand for?", a:"Central Processing Unit", w:["Computer Personal Unit","Central Program Utility","Core Power Unit"] },
+  { q:"How many degrees are in a right angle?", a:"90", w:["45","180","360"] },
+  { q:"Which is the longest river in the world?", a:"Nile", w:["Amazon","Yangtze","Mississippi"] },
+  { q:"What is the study of rocks called?", a:"Geology", w:["Biology","Astronomy","Ecology"] },
+  { q:"How many colors are in a rainbow?", a:"7", w:["5","6","8"] },
+  { q:"What is the plural of 'cactus'?", a:"Cacti", w:["Cactuses","Cactus","Cactae"] },
+  { q:"Which planet is closest to the Sun?", a:"Mercury", w:["Venus","Earth","Mars"] },
+  { q:"What blood type is the universal donor?", a:"O negative", w:["AB positive","A positive","B negative"] },
+  { q:"How many minutes are in a full day?", a:"1440", w:["1200","1660","2400"] },
+  { q:"What is the largest mammal that can fly?", a:"Bat", w:["Eagle","Owl","Flying Squirrel"] },
+  { q:"Which element has the symbol 'Na'?", a:"Sodium", w:["Nitrogen","Nickel","Neon"] },
+  { q:"What is 15% of 200?", a:"30", w:["25","35","20"] },
+  { q:"Who painted the Mona Lisa?", a:"Leonardo da Vinci", w:["Michelangelo","Raphael","Donatello"] },
+  { q:"What is the freezing point of water in Fahrenheit?", a:"32°F", w:["0°F","100°F","64°F"] },
+  { q:"Which is the smallest country in the world?", a:"Vatican City", w:["Monaco","Nauru","San Marino"] },
+  { q:"How many strings does a standard guitar have?", a:"6", w:["4","5","7"] },
+  { q:"What galaxy do we live in?", a:"Milky Way", w:["Andromeda","Sombrero","Triangulum"] },
+  { q:"What is the main ingredient in guacamole?", a:"Avocado", w:["Tomato","Lime","Pepper"] },
+  { q:"Which animal is known as the 'King of the Jungle'?", a:"Lion", w:["Tiger","Elephant","Gorilla"] },
+  { q:"What is 9 × 9?", a:"81", w:["72","89","99"] },
+  { q:"How many sides does a triangle have?", a:"3", w:["4","5","2"] },
+  { q:"What language has the most native speakers?", a:"Mandarin Chinese", w:["English","Spanish","Hindi"] }
+];
+
+function makeArithmetic(){
+  const mode = randInt(0,4);
+  let a,b,answer,q;
+  if(mode === 0){ a = randInt(12,99); b = randInt(12,99); answer = a+b; q = `${a} + ${b}`; }
+  else if(mode === 1){ a = randInt(40,150); b = randInt(10,39); answer = a-b; q = `${a} − ${b}`; }
+  else if(mode === 2){ a = randInt(3,15); b = randInt(3,15); answer = a*b; q = `${a} × ${b}`; }
+  else if(mode === 3){ b = randInt(3,12); answer = randInt(3,12); a = b*answer; q = `${a} ÷ ${b}`; }
+  else { a = randInt(2,12); answer = a*a; q = `${a}²`; }
+  const opts = new Set([String(answer)]);
+  while(opts.size < 4){
+    const delta = randInt(1, Math.max(3, Math.round(Math.abs(answer)*0.18)+3));
+    const cand = answer + (Math.random()<.5 ? -delta : delta);
+    if(cand !== answer) opts.add(String(cand));
+  }
+  return { question:`What is ${q}?`, correct:String(answer), options:shuffle([...opts]), tag:"Math" };
+}
+function makePercentage(){
+  const pcts = [5,10,15,20,25,30,40,50,60,75];
+  const p = pick(pcts);
+  const base = pick([40,60,80,100,120,150,200,240,300,400]);
+  const answer = (p/100)*base;
+  const opts = new Set([String(answer)]);
+  while(opts.size < 4){
+    const cand = answer + pick([-base*0.1, base*0.05, base*0.15, -base*0.05, base*0.2]);
+    const rounded = Math.round(cand*100)/100;
+    if(rounded !== answer && rounded > 0) opts.add(String(rounded));
+  }
+  return { question:`What is ${p}% of ${base}?`, correct:String(answer), options:shuffle([...opts]), tag:"Percent" };
+}
+function makeSequence(){
+  const start = randInt(1,12), step = randInt(2,9);
+  const seq = [start, start+step, start+step*2, start+step*3];
+  const answer = start + step*4;
+  const opts = new Set([String(answer)]);
+  while(opts.size < 4){
+    const cand = answer + randInt(-step*2, step*2);
+    if(cand !== answer) opts.add(String(cand));
+  }
+  return { question:`What comes next? ${seq.join(", ")}, ___`, correct:String(answer), options:shuffle([...opts]), tag:"Pattern" };
+}
+function makeTrivia(){
+  const t = pick(TRIVIA);
+  return { question:t.q, correct:t.a, options:shuffle([t.a, ...t.w]), tag:"Trivia" };
+}
+function generateQuestion(){
+  return pick([makeArithmetic, makeArithmetic, makeArithmetic, makePercentage, makeSequence, makeTrivia])();
+}
+
+/* GAME */
+const BOT_NAMES = [
+  "QuizWizard","PixelPanda","TurboTurtle","NeonNinja","CosmicCat","DoodleDog",
+  "MegaMoose","LavaLlama","SwiftShark","EchoEagle","FrostFox","BoltBear",
+  "ZippyZebra","RoyalRabbit","GhostGamer","StarSurfer","ThunderToad","VibeViper",
+  "ChillChick","BlazeBeaver","NovaNewt","PrismPig","RocketRaccoon","EchoElf"
+];
+
+const Game = {
+  active:false, mode:"classic", questionCount:10, timePerQuestion:15,
+  players:[], current:0, question:null, locked:false,
+  streak:0, bestStreak:0, correctCount:0, wrongCount:0,
+  timerId:null, botTimers:[], tickId:null, timeLeft:0,
+
+  buildPlayers(playerName, avatarName, botCount=3){
+    const me = { id:"me", name:playerName, avatar:avatarName, score:0, gold:0, correct:0, isMe:true, answered:false };
+    const bots = [];
+    const usedNames = new Set();
+    const difficulty = rand(0.5, 0.86);
+    for(let i=0;i<botCount;i++){
+      let n;
+      do { n = pick(BOT_NAMES); } while(usedNames.has(n));
+      usedNames.add(n);
+      bots.push({
+        id:"bot"+i, name:n, avatar:randomBlookName(),
+        score:0, gold:0, correct:0, isMe:false, answered:false,
+        accuracy: Math.min(0.95, Math.max(0.35, difficulty + rand(-0.18, 0.18))),
+        speed: rand(2.4, 7.5)
+      });
+    }
+    return [me, ...bots];
+  },
+
+  start(config){
+    this.active = true;
+    this.mode = config.mode;
+    this.questionCount = config.questions;
+    this.timePerQuestion = config.time;
+    this.players = this.buildPlayers(config.name, config.avatar);
+    this.current = 0;
+    this.streak = 0; this.bestStreak = 0;
+    this.correctCount = 0; this.wrongCount = 0;
+    this.renderShell();
+    this.nextQuestion();
+  },
+
+  renderShell(){
+    $("#view").innerHTML = `
+      <div class="game-shell">
+        <div class="game-inner">
+          <div class="flex between center wrapf gap16" style="margin-bottom:22px">
+            <div>
+              <div class="tiny" style="text-transform:uppercase;letter-spacing:.12em;font-weight:900;color:rgba(255,255,255,.55)">${esc(this.mode)}</div>
+              <div style="font-size:1.5rem;font-weight:900" id="game-progress">Question 1 of ${this.questionCount}</div>
+            </div>
+            <button class="btn btn-ghost btn-sm" style="border-color:rgba(255,255,255,.3);color:#fff" id="quit-game">Quit</button>
+          </div>
+          <div class="grid" style="grid-template-columns:1fr 320px;gap:22px" id="game-layout">
+            <div><div class="q-card" id="q-card"></div></div>
+            <div>
+              <div class="panel" style="background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.15)">
+                <div class="tiny" style="text-transform:uppercase;letter-spacing:.12em;font-weight:900;color:rgba(255,255,255,.55);margin-bottom:12px">${this.mode==="gold"?"Gold Quest Standings":"Live Standings"}</div>
+                <div id="scoreboard"></div>
+              </div>
+              <div class="panel mt16" style="background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.15)">
+                <div class="flex between center"><span class="tiny" style="text-transform:uppercase;letter-spacing:.12em;font-weight:900;color:rgba(255,255,255,.55)">Streak</span><span style="font-weight:900;font-size:1.3rem;color:#fcd34d" id="streak-display">0</span></div>
+                <div class="flex between center mt8"><span class="tiny" style="text-transform:uppercase;letter-spacing:.12em;font-weight:900;color:rgba(255,255,255,.55)">Accuracy</span><span style="font-weight:900;font-size:1.05rem" id="acc-display">—</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    const layout = $("#game-layout");
+    const fixLayout = () => { layout.style.gridTemplateColumns = window.innerWidth < 900 ? "1fr" : "1fr 320px"; };
+    fixLayout(); window.addEventListener("resize", fixLayout);
+    $("#quit-game").addEventListener("click", () => {
+      UI.confirm("Quit game?", "Your progress will be lost.", () => { this.cleanup(); App.go("#/play"); }, "Quit", true);
+    });
+    this.renderScoreboard();
+  },
+
+  renderScoreboard(){
+    const el = $("#scoreboard");
+    if(!el) return;
+    const key = this.mode === "gold" ? "gold" : "score";
+    const sorted = [...this.players].sort((a,b) => b[key] - a[key]);
+    const top = sorted[0];
+    el.innerHTML = sorted.map(p => {
+      const b = BLOOK_MAP[p.avatar] || BLOOK_MAP["Chick"];
+      return `<div class="player-row ${p.isMe?'me':''} ${p === top && top[key] > 0 ? 'lead':''}">
+        <div class="player-av">${blookImg(b,"")}</div>
+        <div class="player-name">${esc(p.name)}${p.isMe?' (you)':''}</div>
+        <div class="player-score">${this.mode === "gold" ? "🪙 " : ""}${fmt(p[key])}</div>
+      </div>`;
+    }).join("");
+  },
+
+  updateHUD(){
+    const total = this.correctCount + this.wrongCount;
+    const acc = $("#acc-display");
+    if(acc) acc.textContent = total ? Math.round((this.correctCount/total)*100) + "%" : "—";
+    const st = $("#streak-display");
+    if(st) st.textContent = this.streak;
+    const gp = $("#game-progress");
+    if(gp) gp.textContent = `Question ${Math.min(this.current+1, this.questionCount)} of ${this.questionCount}`;
+  },
+
+  nextQuestion(){
+    if(this.current >= this.questionCount){ this.finish(); return; }
+    this.locked = false;
+    this.players.forEach(p => p.answered = false);
+    this.question = generateQuestion();
+    this.timeLeft = this.timePerQuestion;
+    const letters = ["A","B","C","D","E"];
+    const qc = $("#q-card");
+    qc.innerHTML = `
+      <div class="tiny" style="text-transform:uppercase;letter-spacing:.14em;font-weight:900;color:rgba(255,255,255,.5);margin-bottom:14px">${esc(this.question.tag)}</div>
+      <div class="q-text">${esc(this.question.question)}</div>
+      <div class="timer-bar"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div>
+      <div class="answers" id="answers">
+        ${this.question.options.map((opt,i) => `<button class="answer" data-opt="${esc(opt)}"><span class="answer-key">${letters[i]}</span><span>${esc(opt)}</span></button>`).join("")}
+      </div>`;
+    $$("#answers .answer", qc).forEach(btn => btn.addEventListener("click", () => this.playerAnswer(btn.dataset.opt, btn)));
+    this.botTimers.forEach(t => clearTimeout(t));
+    this.botTimers = [];
+    this.players.filter(p => !p.isMe).forEach(bot => {
+      const delay = rand(1400, Math.min(this.timePerQuestion*1000 - 900, bot.speed*1000));
+      const t = setTimeout(() => {
+        if(!this.active || this.locked) return;
+        const gotIt = Math.random() < bot.accuracy;
+        bot.answered = true;
+        if(gotIt){
+          bot.correct++;
+          if(this.mode === "gold") bot.gold += randInt(80, 340);
+          else bot.score += randInt(70, 130);
+        }
+        this.renderScoreboard();
+      }, delay);
+      this.botTimers.push(t);
+    });
+    clearInterval(this.tickId);
+    this.tickId = setInterval(() => {
+      if(this.locked) return;
+      this.timeLeft -= 0.1;
+      const fill = $("#timer-fill");
+      if(fill){
+        const p = Math.max(0, (this.timeLeft / this.timePerQuestion) * 100);
+        fill.style.width = p + "%";
+        fill.classList.toggle("warn", p < 35);
+      }
+      if(this.timeLeft <= 0){ clearInterval(this.tickId); this.timeUp(); }
+    }, 100);
+    this.updateHUD();
+    this.renderScoreboard();
+  },
+
+  playerAnswer(option, btnEl){
+    if(this.locked) return;
+    this.locked = true;
+    clearInterval(this.tickId);
+    this.botTimers.forEach(t => clearTimeout(t));
+    const me = this.players.find(p => p.isMe);
+    const isCorrect = option === this.question.correct;
+    $$("#answers .answer").forEach(b => {
+      b.disabled = true;
+      if(b.dataset.opt === this.question.correct) b.classList.add("correct");
+    });
+    if(isCorrect){
+      me.correct++;
+      this.correctCount++;
+      this.streak++;
+      this.bestStreak = Math.max(this.bestStreak, this.streak);
+      const speedBonus = Math.round(Math.max(0, this.timeLeft) * 6);
+      const streakBonus = Math.min(this.streak, 10) * 10;
+      const gain = 80 + speedBonus + streakBonus;
+      if(this.mode === "gold"){
+        me.score += gain;
+        UI.toast(`Correct! +${gain} points`, "success", 1500);
+        setTimeout(() => this.showChests(), 900);
+        this.renderScoreboard(); this.updateHUD();
+        return;
+      } else { me.score += gain; }
+    } else {
+      me.answered = true;
+      this.wrongCount++;
+      this.streak = 0;
+      if(btnEl) btnEl.classList.add("wrong");
+      UI.toast(`Nope — the answer was ${this.question.correct}`, "error", 1800);
+    }
+    this.renderScoreboard();
+    this.updateHUD();
+    setTimeout(() => { this.current++; this.nextQuestion(); }, 1500);
+  },
+
+  timeUp(){
+    if(this.locked) return;
+    this.locked = true;
+    this.streak = 0;
+    this.wrongCount++;
+    $$("#answers .answer").forEach(b => {
+      b.disabled = true;
+      if(b.dataset.opt === this.question.correct) b.classList.add("correct");
+    });
+    UI.toast(`Time's up! Answer: ${this.question.correct}`, "error", 1800);
+    this.renderScoreboard(); this.updateHUD();
+    setTimeout(() => { this.current++; this.nextQuestion(); }, 1600);
+  },
+
+  showChests(){
+    const me = this.players.find(p => p.isMe);
+    const qc = $("#q-card");
+    qc.innerHTML = `
+      <div class="tiny" style="text-transform:uppercase;letter-spacing:.14em;font-weight:900;color:rgba(255,255,255,.5);margin-bottom:12px">Gold Quest</div>
+      <div class="q-text" style="font-size:1.6rem">Pick a chest!</div>
+      <p style="color:rgba(255,255,255,.7);font-weight:700;margin-top:10px">One holds gold. One steals. One swaps.</p>
+      <div class="chest-grid" id="chest-grid">
+        <div class="chest" data-i="0">🎁</div>
+        <div class="chest" data-i="1">🎁</div>
+        <div class="chest" data-i="2">🎁</div>
+      </div>`;
+    const outcomes = shuffle(["gold","steal","swap"]);
+    $$("#chest-grid .chest", qc).forEach(chest => {
+      chest.addEventListener("click", () => {
+        const i = Number(chest.dataset.i);
+        const type = outcomes[i];
+        let msg = "";
+        if(type === "gold"){
+          const amt = randInt(150, 500);
+          me.gold += amt;
+          msg = `🪙 You found ${amt} gold!`;
+        } else if(type === "steal"){
+          const others = this.players.filter(p => !p.isMe);
+          const target = pick(others);
+          const amt = Math.min(target.gold, randInt(80, 350));
+          target.gold -= amt;
+          me.gold += amt;
+          msg = amt > 0 ? `🏴‍☠️ Stole ${amt} gold from ${esc(target.name)}!` : `🏴‍☠️ ${esc(target.name)} had nothing to steal!`;
+        } else {
+          const others = this.players.filter(p => !p.isMe);
+          const target = pick(others);
+          const tmp = me.gold;
+          me.gold = target.gold;
+          target.gold = tmp;
+          msg = `🔄 Swapped gold with ${esc(target.name)}!`;
+        }
+        qc.innerHTML = `<div class="q-text" style="font-size:1.5rem;padding:40px 0">${msg}</div>`;
+        UI.toast(msg, type === "gold" ? "gold" : "info", 2000);
+        this.renderScoreboard(); this.updateHUD();
+        setTimeout(() => { this.current++; this.nextQuestion(); }, 1700);
+      });
+    });
+  },
+
+  finish(){
+    this.cleanup();
+    const me = this.players.find(p => p.isMe);
+    const key = this.mode === "gold" ? "gold" : "score";
+    const sorted = [...this.players].sort((a,b) => b[key] - a[key]);
+    const place = sorted.findIndex(p => p.isMe) + 1;
+    const won = place === 1;
+    const totalAnswers = this.correctCount + this.wrongCount;
+    const accuracy = totalAnswers ? Math.round((this.correctCount/totalAnswers)*100) : 0;
+    const baseTokens = this.mode === "gold" ? Math.round(me.gold / 4) : Math.round(me.score / 6);
+    const winBonus = won ? 60 : place === 2 ? 30 : 15;
+    const accuracyBonus = Math.round(accuracy * 0.9);
+    const streakBonus = this.bestStreak * 8;
+    const totalTokens = Math.max(10, baseTokens + winBonus + accuracyBonus + streakBonus);
+    const xpGain = Math.round(totalTokens * 1.4);
+    State.addTokens(totalTokens);
+    State.addXP(xpGain);
+    State.data.stats.games++;
+    if(won) State.data.stats.wins++;
+    State.data.stats.correct += this.correctCount;
+    State.data.stats.wrong += this.wrongCount;
+    State.data.stats.bestStreak = Math.max(State.data.stats.bestStreak, this.bestStreak);
+    State.data.history.unshift({
+      mode:this.mode, place, score:me[key], correct:this.correctCount, wrong:this.wrongCount,
+      accuracy, tokens:totalTokens, xp:xpGain, at:Date.now(),
+      players: sorted.map(p => ({name:p.name, score:p[key], avatar:p.avatar}))
+    });
+    State.data.history = State.data.history.slice(0, 30);
+    State.save();
+    if(won) UI.confetti(140);
+    $("#view").innerHTML = `
+      <div class="game-shell">
+        <div class="game-inner" style="max-width:820px">
+          <div style="text-align:center;margin-bottom:28px" class="reveal-up">
+            <div style="font-size:4.4rem;line-height:1;margin-bottom:10px">${won ? "🏆" : place === 2 ? "🥈" : place === 3 ? "🥉" : "🎮"}</div>
+            <h1 style="font-size:2.2rem;color:#fff">${won ? "Victory!" : `You placed #${place}`}</h1>
+            <p style="color:rgba(255,255,255,.7);font-weight:700;margin-top:8px">${this.mode === "gold" ? "Gold Quest" : "Classic"} · ${this.questionCount} questions</p>
+          </div>
+          <div class="grid g4 stagger" style="margin-bottom:26px">
+            <div class="stat-card" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15)"><div class="stat-value" style="color:#fff">${this.correctCount}</div><div class="stat-label" style="color:rgba(255,255,255,.5)">Correct</div></div>
+            <div class="stat-card" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15)"><div class="stat-value" style="color:#fff">${accuracy}%</div><div class="stat-label" style="color:rgba(255,255,255,.5)">Accuracy</div></div>
+            <div class="stat-card" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15)"><div class="stat-value" style="color:#fcd34d">${this.bestStreak}</div><div class="stat-label" style="color:rgba(255,255,255,.5)">Best Streak</div></div>
+            <div class="stat-card" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15)"><div class="stat-value" style="color:#4ade80">+${totalTokens}</div><div class="stat-label" style="color:rgba(255,255,255,.5)">Tokens</div></div>
+          </div>
+          <div class="panel" style="background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.15);margin-bottom:24px">
+            <div class="tiny" style="text-transform:uppercase;letter-spacing:.12em;font-weight:900;color:rgba(255,255,255,.55);margin-bottom:14px">Final Standings</div>
+            ${sorted.map((p,i) => {
+              const b = BLOOK_MAP[p.avatar] || BLOOK_MAP["Chick"];
+              return `<div class="player-row ${p.isMe?'me':''}">
+                <div class="lb-rank ${i===0?'gold':i===1?'silver':i===2?'bronze':''}" style="background:${i<3?'':'rgba(255,255,255,.12)'};color:${i<3?'':'#fff'};border-color:transparent">${i+1}</div>
+                <div class="player-av">${blookImg(b,"")}</div>
+                <div class="player-name">${esc(p.name)}</div>
+                <div class="player-score">${fmt(p[key])}</div>
+              </div>`;
+            }).join("")}
+          </div>
+          <div class="flex gap12 wrapf" style="justify-content:center">
+            <button class="btn btn-primary btn-lg" id="play-again">Play Again</button>
+            <button class="btn btn-ghost btn-lg" style="border-color:rgba(255,255,255,.3);color:#fff" id="back-lobby">Game Modes</button>
+            <button class="btn btn-gold btn-lg" id="go-market">Spend Tokens</button>
+          </div>
+        </div>
+      </div>`;
+    $("#play-again").addEventListener("click", () => {
+      this.start({ mode:this.mode, questions:this.questionCount, time:this.timePerQuestion, name:State.data.user?State.data.user.name:"You", avatar:State.data.user?State.data.user.avatar:"Chick" });
+    });
+    $("#back-lobby").addEventListener("click", () => App.go("#/play"));
+    $("#go-market").addEventListener("click", () => App.go("#/market"));
+  },
+
+  cleanup(){
+    this.active = false;
+    clearInterval(this.tickId);
+    this.botTimers.forEach(t => clearTimeout(t));
+    this.botTimers = [];
+  }
+};
+
+/* AUTH */
+const Auth = {
+  login(name, avatar){
+    State.data.user = { name: name.trim().slice(0,18) || "Blooket Player", avatar: avatar || "Chick", joined: Date.now() };
+    State.save();
+    App.refreshUserChip();
+    UI.toast(`Welcome, ${esc(State.data.user.name)}!`, "success");
+  },
+  logout(){
+    State.data.user = null;
+    State.save();
+    App.refreshUserChip();
+    UI.toast("Signed out. Collection still saved.", "info");
+    App.go("#/");
+  },
+  require(){
+    if(!State.data.user){
+      UI.toast("Create a profile first to save progress.", "info");
+      App.go("#/login");
+      return false;
+    }
+    return true;
+  }
+};
+
+/* VIEWS */
+const Views = {
+  home(){
+    const u = State.data.user;
+    const showcase = ["Penguin","Astronaut","Baby Shark","Lion","Ghost","Rainbow Panda"].filter(n => BLOOK_MAP[n]);
+    return `
+    <section class="hero">
+      <div class="wrap hero-inner">
+        <div class="grid" style="grid-template-columns:1.15fr .85fr;align-items:center;gap:40px">
+          <div>
+            <div class="hero-badge"><span class="pulse-dot"></span> Learn • Play • Collect</div>
+            <h1>Blooket,<br>rebuilt from scratch.</h1>
+            <p class="lede">Answer questions, earn tokens, and unlock ${BLOOKS.length} collectible Blooks across ${PACKS.length} themed packs.</p>
+            <div class="flex gap12 wrapf mt32">
+              <button class="btn btn-gold btn-lg" onclick="App.go('#/play')">▶ Play Now</button>
+              <button class="btn btn-ghost btn-lg" style="border-color:rgba(255,255,255,.35);color:#fff" onclick="App.go('#/market')">Open Packs</button>
+            </div>
+            <div class="hero-stats">
+              <div><div class="hero-stat-num">${BLOOKS.length}</div><div class="hero-stat-label">Blooks</div></div>
+              <div><div class="hero-stat-num">${PACKS.length}</div><div class="hero-stat-label">Packs</div></div>
+              <div><div class="hero-stat-num">${RARITIES.length}</div><div class="hero-stat-label">Rarities</div></div>
+              <div><div class="hero-stat-num">∞</div><div class="hero-stat-label">Questions</div></div>
+            </div>
+          </div>
+          <div style="position:relative;height:380px">
+            ${showcase.map((n,i) => {
+              const b = BLOOK_MAP[n];
+              const positions = [
+                { top:"0%",  left:"18%", size:110, delay:"0s" },
+                { top:"8%",  left:"62%", size:92,  delay:".6s" },
+                { top:"42%", left:"0%",  size:96,  delay:"1.2s" },
+                { top:"36%", left:"44%", size:138, delay:".3s" },
+                { top:"72%", left:"22%", size:104, delay:".9s" },
+                { top:"64%", left:"66%", size:88,  delay:"1.5s" }
+              ];
+              const p = positions[i % positions.length];
+              return `<div class="floaty" style="top:${p.top};left:${p.left};width:${p.size}px;height:${p.size}px;animation-delay:${p.delay}">${blookImg(b,"")}</div>`;
+            }).join("")}
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="wrap">
+        <div class="tc mb24"><h2>Everything you'd expect</h2></div>
+        <div class="grid g3 stagger">
+          ${[
+            {i:"🎯", t:"Solo Games", d:"Classic and Gold Quest with bots, streaks, and speed bonuses."},
+            {i:"📦", t:"Pack Opening", d:"Weighted rarity odds, animated reveals, confetti, refunds."},
+            {i:"📚", t:`Collect ${BLOOKS.length}`, d:"Every Blook in the database — filter by set, rarity, ownership."},
+            {i:"🏅", t:"Levels & XP", d:"Earn XP every game. Level up for bonus tokens."},
+            {i:"📊", t:"Deep Stats", d:"Accuracy, streaks, games, tokens earned, rarest finds."},
+            {i:"🎨", t:"Themes", d:"Light and dark mode persisted across sessions."}
+          ].map(f => `<div class="card card-hover"><div style="font-size:2.2rem;margin-bottom:12px">${f.i}</div><h3 style="margin-bottom:8px">${f.t}</h3><p class="muted small">${f.d}</p></div>`).join("")}
+        </div>
+      </div>
+    </section>
+    <section class="section-sm">
+      <div class="wrap">
+        <div class="card" style="background:var(--grad-brand);border:none;color:#fff;padding:38px;text-align:center">
+          <h2 style="color:#fff">Ready to build your collection?</h2>
+          <p style="color:rgba(255,255,255,.85);max-width:520px;margin:12px auto 24px;font-weight:700">
+            ${u ? `Welcome back, ${esc(u.name)}. You have ${fmt(State.tokens)} tokens waiting.` : "Create a free local profile and start with 500 tokens."}
+          </p>
+          <div class="flex gap12 wrapf" style="justify-content:center">
+            <button class="btn btn-gold btn-lg" onclick="App.go('${u ? "#/dashboard" : "#/login"}')">${u ? "Go to Dashboard" : "Create Profile"}</button>
+            <button class="btn btn-lg" style="background:rgba(255,255,255,.18);color:#fff" onclick="App.go('#/blooks')">Browse Blooks</button>
+          </div>
+        </div>
+      </div>
+    </section>`;
+  },
+
+  login(){
+    const avatars = ["Chick","Penguin","Astronaut","Baby Shark","Fox","Ghost","Panda","Lion","Cat","Dog","Narwhal","Megalodon"];
+    return `
+    <section class="section">
+      <div class="wrap-narrow" style="max-width:520px">
+        <div class="card reveal-up">
+          <div class="tc mb24">
+            <div style="width:74px;height:74px;border-radius:22px;background:var(--grad-brand);display:grid;place-items:center;margin:0 auto 16px;box-shadow:0 12px 32px rgba(124,58,237,.4)">${blookImg(BLOOK_MAP["Chick"],"")}</div>
+            <h2>Create your profile</h2>
+            <p class="muted small mt8">Stored locally. No account required.</p>
+          </div>
+          <div class="field">
+            <label class="label">Display name</label>
+            <input class="input" id="login-name" placeholder="e.g. BlookMaster" maxlength="18" value="${State.data.user ? esc(State.data.user.name) : ''}">
+          </div>
+          <div class="field">
+            <label class="label">Choose your avatar Blook</label>
+            <div class="grid g6" style="gap:9px" id="avatar-grid">
+              ${avatars.map((n,i) => {
+                const b = BLOOK_MAP[n];
+                return `<div class="blook-card ${i===0?'owned':''}" data-avatar="${esc(n)}" style="padding:7px 4px 4px">${blookImg(b,"blook-img")}</div>`;
+              }).join("")}
+            </div>
+          </div>
+          <button class="btn btn-primary btn-lg btn-block mt16" id="login-submit">Start Playing</button>
+          ${State.data.user ? `<div class="divider"></div><button class="btn btn-ghost btn-block" id="login-logout">Sign out of ${esc(State.data.user.name)}</button>` : ''}
+        </div>
+      </div>
+    </section>`;
+  },
+
+  dashboard(){
+    const u = State.data.user;
+    if(!u) return `<section class="section"><div class="wrap"><div class="empty"><div class="empty-icon">🔒</div><h2>Sign in to view dashboard</h2><button class="btn btn-primary btn-lg mt24" onclick="App.go('#/login')">Create Profile</button></div></div></section>`;
+    const lv = levelInfo(State.data.xp);
+    const s = State.data.stats;
+    const winRate = s.games ? Math.round((s.wins/s.games)*100) : 0;
+    const accuracy = (s.correct + s.wrong) ? Math.round((s.correct/(s.correct+s.wrong))*100) : 0;
+    const completion = State.completion();
+    const rarityCount = {};
+    RARITIES.forEach(r => rarityCount[r] = 0);
+    Object.keys(State.data.owned).forEach(n => { const b = BLOOK_MAP[n]; if(b) rarityCount[b.rarity] += 1; });
+    const now = Date.now(), DAY = 86400000;
+    const canClaim = now - (State.data.lastDaily || 0) > DAY;
+    const recent = State.data.history.slice(0, 5);
+    let rarest = null;
+    Object.keys(State.data.owned).forEach(n => {
+      const b = BLOOK_MAP[n]; if(!b) return;
+      if(!rarest || RARITY_ORDER[b.rarity] > RARITY_ORDER[rarest.rarity]) rarest = b;
+    });
+    return `
+    <section class="section">
+      <div class="wrap">
+        <div class="card reveal-up" style="background:var(--grad-dark);border:none;color:#fff;padding:32px;margin-bottom:24px;position:relative;overflow:hidden">
+          <div style="position:absolute;right:-40px;top:-40px;width:280px;height:280px;opacity:.14;transform:rotate(-12deg)">${blookImg(BLOOK_MAP[u.avatar] || BLOOK_MAP["Chick"], "")}</div>
+          <div class="flex between center wrapf gap16" style="position:relative;z-index:2">
+            <div class="flex center gap16">
+              <div style="width:88px;height:88px;border-radius:26px;background:rgba(255,255,255,.14);display:grid;place-items:center;border:2px solid rgba(255,255,255,.25)">${blookImg(BLOOK_MAP[u.avatar] || BLOOK_MAP["Chick"], "")}</div>
+              <div>
+                <h2 style="color:#fff">${esc(u.name)}</h2>
+                <div class="flex gap8 wrapf mt8">
+                  <span class="chip" style="background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.3)">Level ${lv.level}</span>
+                  <span class="chip" style="background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.3)">${fmt(State.tokens)} Tokens</span>
+                  <span class="chip" style="background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.3)">${State.uniqueOwned()} Blooks</span>
+                </div>
+              </div>
+            </div>
+            <div style="min-width:230px;flex:1;max-width:340px">
+              <div class="flex between center" style="margin-bottom:8px"><span class="tiny" style="font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6)">Level Progress</span><span class="tiny bold" style="color:rgba(255,255,255,.85)">${lv.into} / ${lv.need} XP</span></div>
+              <div class="xp-bar" style="background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.2)"><div class="xp-fill" style="width:${lv.pct}%;background:linear-gradient(90deg,#fbbf24,#f472b6)"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="grid g4 stagger mb24">
+          <div class="card card-hover pointer" onclick="App.go('#/play')"><div style="font-size:2rem;margin-bottom:8px">🎮</div><h3 style="font-size:1.05rem">Play a Game</h3><p class="muted small mt8">Classic or Gold Quest.</p></div>
+          <div class="card card-hover pointer" onclick="App.go('#/market')"><div style="font-size:2rem;margin-bottom:8px">🛒</div><h3 style="font-size:1.05rem">Open Packs</h3><p class="muted small mt8">${fmt(State.tokens)} tokens available.</p></div>
+          <div class="card card-hover pointer" onclick="App.go('#/blooks')"><div style="font-size:2rem;margin-bottom:8px">📖</div><h3 style="font-size:1.05rem">Collection</h3><p class="muted small mt8">${completion.toFixed(1)}% complete.</p></div>
+          <div class="card card-hover pointer" id="daily-card"><div style="font-size:2rem;margin-bottom:8px">🎁</div><h3 style="font-size:1.05rem">Daily Reward</h3><p class="muted small mt8">${canClaim ? "Click to claim +75 tokens!" : `Come back later`}</p></div>
+        </div>
+        <div class="grid g4 stagger mb24">
+          <div class="stat-card"><div class="stat-value">${fmt(s.games)}</div><div class="stat-label">Games Played</div></div>
+          <div class="stat-card"><div class="stat-value">${winRate}%</div><div class="stat-label">Win Rate</div></div>
+          <div class="stat-card"><div class="stat-value">${accuracy}%</div><div class="stat-label">Accuracy</div></div>
+          <div class="stat-card"><div class="stat-value">${s.bestStreak}</div><div class="stat-label">Best Streak</div></div>
+        </div>
+        <div class="grid" style="grid-template-columns:1.4fr 1fr;gap:22px">
+          <div class="card">
+            <div class="flex between center mb16"><h3>Recent Games</h3><button class="btn btn-ghost btn-sm" onclick="App.go('#/stats')">View all</button></div>
+            ${recent.length ? recent.map(g => `
+              <div class="lb-row">
+                <div class="lb-rank ${g.place===1?'gold':g.place===2?'silver':g.place===3?'bronze':''}">${g.place}</div>
+                <div style="flex:1"><div class="bold" style="font-size:.92rem">${g.mode === "gold" ? "Gold Quest" : "Classic"} · ${g.correct}/${g.correct+g.wrong} correct</div><div class="tiny muted-3">${timeAgo(g.at)} · +${g.tokens} tokens · +${g.xp} XP</div></div>
+                <div class="bold" style="color:var(--brand)">${g.accuracy}%</div>
+              </div>`).join("")
+            : `<div class="empty" style="padding:34px"><div class="empty-icon">🎮</div><p class="muted">No games yet</p><button class="btn btn-primary mt16" onclick="App.go('#/play')">Play Now</button></div>`}
+          </div>
+          <div class="card">
+            <h3 class="mb16">Rarity Breakdown</h3>
+            ${RARITIES.map(r => {
+              const total = BLOOKS.filter(b => b.rarity === r).length;
+              const have = rarityCount[r] || 0;
+              const p = total ? (have/total)*100 : 0;
+              return `<div style="margin-bottom:13px"><div class="flex between center" style="margin-bottom:5px"><span class="chip chip-${r}" style="font-size:.66rem">${r}</span><span class="tiny bold">${have} / ${total}</span></div><div class="xp-bar" style="height:9px"><div class="xp-fill" style="width:${p}%"></div></div></div>`;
+            }).join("")}
+            ${rarest ? `<div class="divider"></div><div class="flex center gap12"><div style="width:52px;height:52px">${blookImg(rarest,"")}</div><div><div class="tiny muted-3 bold">RAREST BLOOK</div><div class="bold">${esc(rarest.name)}</div><div class="tiny">${rarityChip(rarest.rarity)}</div></div></div>` : ''}
+          </div>
+        </div>
+      </div>
+    </section>`;
+  },
+
+  market(){
+    return `
+    <section class="section">
+      <div class="wrap">
+        <div class="flex between center wrapf gap16 mb24">
+          <div><h2>Marketplace</h2><p class="muted mt8">Spend tokens on packs. Duplicates refund tokens.</p></div>
+          <div class="token-pill" style="font-size:1.05rem;padding:11px 20px"><span class="token-coin" style="width:26px;height:26px"></span><span>${fmt(State.tokens)}</span></div>
+        </div>
+        <div class="grid g3 stagger" id="pack-grid">
+          ${PACKS.map(p => {
+            const pool = packPool(p.id);
+            const { byRarity } = packOdds(p.id);
+            const rarities = Object.keys(byRarity).sort((a,b) => RARITY_ORDER[a]-RARITY_ORDER[b]);
+            const icon = BLOOK_MAP[p.icon] || pool[0];
+            return `
+              <div class="pack-card" data-pack="${esc(p.id)}">
+                <div class="pack-art" style="background:linear-gradient(150deg,${p.color}33,${p.color}0d)">
+                  <div class="pack-art-bg" style="background:radial-gradient(circle at 50% 40%,${p.color}55,transparent 68%)"></div>
+                  ${blookImg(icon,"")}
+                </div>
+                <div class="pack-body">
+                  <div class="flex between center"><div class="pack-title">${esc(p.name)}</div><div class="pack-price"><span class="token-coin" style="width:17px;height:17px;font-size:.55rem">T</span>${fmt(p.price)}</div></div>
+                  <p class="tiny muted">${esc(p.desc)}</p>
+                  <div class="pack-odds">${rarities.slice(0,4).map(r => `<span class="chip chip-${r}" style="font-size:.6rem;padding:2px 8px">${r}</span>`).join("")}<span class="chip chip-Hidden" style="font-size:.6rem;padding:2px 8px">${pool.length} blooks</span></div>
+                  <button class="btn btn-primary btn-sm btn-block mt8" data-open="${esc(p.id)}">Open · ${fmt(p.price)} tokens</button>
+                </div>
+              </div>`;
+          }).join("")}
+        </div>
+      </div>
+    </section>`;
+  },
+
+  blooks(){
+    const sets = ["All", ...new Set(BLOOKS.map(b => b.set))];
+    return `
+    <section class="section">
+      <div class="wrap">
+        <div class="flex between center wrapf gap16 mb16">
+          <div><h2>Blook Collection</h2><p class="muted mt8"><span id="owned-count">${State.uniqueOwned()}</span> of ${BLOOKS.length} collected · <span id="completion-pct">${State.completion().toFixed(1)}</span>%</p></div>
+          <div class="token-pill"><span class="token-coin">T</span><span>${fmt(State.tokens)}</span></div>
+        </div>
+        <div class="xp-bar mb24" style="height:12px"><div class="xp-fill" style="width:${State.completion()}%"></div></div>
+        <div class="card mb24" style="padding:16px">
+          <div class="flex gap12 wrapf center">
+            <div class="search-wrap"><span class="search-icon">🔍</span><input class="input" id="blook-search" placeholder="Search Blooks..."></div>
+            <select class="select" id="filter-set" style="width:auto;min-width:170px">${sets.map(s => `<option value="${esc(s)}">${esc(s === "All" ? "All Sets" : s + " Set")}</option>`).join("")}</select>
+            <select class="select" id="filter-rarity" style="width:auto;min-width:150px"><option value="All">All Rarities</option>${RARITIES.map(r => `<option value="${r}">${r}</option>`).join("")}</select>
+            <div class="tabs" id="owned-tabs"><button class="tab active" data-owned="all">All</button><button class="tab" data-owned="owned">Owned</button><button class="tab" data-owned="missing">Missing</button></div>
+          </div>
+        </div>
+        <div class="grid g6 stagger" id="blook-grid"></div>
+        <div id="no-results" class="empty hidden"><div class="empty-icon">🔍</div><h3>No Blooks found</h3></div>
+      </div>
+    </section>`;
+  },
+
+  play(){
+    const u = State.data.user;
+    const modes = [
+      { id:"classic", name:"Classic", icon:"🎯", color:"#7c3aed", desc:"Answer questions against 3 bots. Score for speed and streaks.", tags:["Solo","Bots","10 Qs"] },
+      { id:"gold", name:"Gold Quest", icon:"🪙", color:"#f59e0b", desc:"Correct answers let you pick a chest — gold, steal, or swap.", tags:["Solo","Chests","Chaos"] }
+    ];
+    const avatars = Object.keys(State.data.owned).length ? Object.keys(State.data.owned) : BLOOKS.slice(0, 24).map(b => b.name);
+    return `
+    <section class="section">
+      <div class="wrap">
+        <div class="tc mb32"><h2>Choose a Game Mode</h2><p class="muted mt8">Play solo against AI opponents.</p></div>
+        <div class="grid g2 stagger mb32" style="max-width:860px;margin:0 auto 32px">
+          ${modes.map(m => `
+            <div class="card card-hover pointer mode-card" data-mode="${m.id}" style="border-width:2px">
+              <div style="width:70px;height:70px;border-radius:20px;background:${m.color}22;display:grid;place-items:center;font-size:2rem;margin-bottom:14px">${m.icon}</div>
+              <h3 style="margin-bottom:8px">${m.name}</h3>
+              <p class="muted small">${m.desc}</p>
+              <div class="flex gap8 wrapf mt16">${m.tags.map(t => `<span class="chip chip-Hidden">${t}</span>`).join("")}</div>
+              <button class="btn btn-primary btn-block mt16">Play ${m.name}</button>
+            </div>`).join("")}
+        </div>
+        <div class="card" style="max-width:720px;margin:0 auto" id="setup-panel">
+          <h3 class="mb16">Game Setup</h3>
+          <div class="grid g2" style="gap:18px">
+            <div class="field" style="margin:0"><label class="label">Your name</label><input class="input" id="setup-name" value="${u ? esc(u.name) : 'You'}" maxlength="18"></div>
+            <div class="field" style="margin:0"><label class="label">Avatar</label><select class="select" id="setup-avatar">${avatars.slice(0, 60).map(n => { const b = BLOOK_MAP[n]; return `<option value="${esc(n)}" ${u && u.avatar===n ? "selected":""}>${esc(n)}</option>`; }).join("")}</select></div>
+            <div class="field" style="margin:0"><label class="label">Questions</label><select class="select" id="setup-questions"><option value="5">5 — Quick</option><option value="10" selected>10 — Standard</option><option value="15">15 — Long</option><option value="20">20 — Marathon</option></select></div>
+            <div class="field" style="margin:0"><label class="label">Time per question</label><select class="select" id="setup-time"><option value="10">10s — Hard</option><option value="15" selected>15s — Normal</option><option value="25">25s — Relaxed</option></select></div>
+          </div>
+          <div class="divider"></div>
+          <div class="flex between center wrapf gap16">
+            <div><div class="tiny muted-3 bold">SELECTED MODE</div><div style="font-weight:900;font-size:1.2rem" id="selected-mode-label">Classic</div></div>
+            <button class="btn btn-primary btn-lg" id="start-game" ${u ? "" : "disabled"}>${u ? "▶ Start Game" : "Create a profile first"}</button>
+          </div>
+        </div>
+      </div>
+    </section>`;
+  },
+
+  stats(){
+    const s = State.data.stats;
+    const accuracy = (s.correct + s.wrong) ? Math.round((s.correct/(s.correct+s.wrong))*100) : 0;
+    const winRate = s.games ? Math.round((s.wins/s.games)*100) : 0;
+    const lv = levelInfo(State.data.xp);
+    const last10 = State.data.history.slice(0, 10).reverse();
+    const maxScore = Math.max(1, ...last10.map(g => g.score));
+    const bySet = {};
+    BLOOKS.forEach(b => {
+      const key = b.set === "Hidden" ? (b.realSet || "Hidden") : b.set;
+      if(!bySet[key]) bySet[key] = { total:0, owned:0 };
+      bySet[key].total++;
+      if(State.data.owned[b.name]) bySet[key].owned++;
+    });
+    return `
+    <section class="section">
+      <div class="wrap">
+        <h2 class="mb24">Statistics</h2>
+        <div class="grid g4 stagger mb24">
+          <div class="stat-card"><div class="stat-value">${fmt(s.games)}</div><div class="stat-label">Games Played</div></div>
+          <div class="stat-card"><div class="stat-value">${fmt(s.wins)}</div><div class="stat-label">Victories</div></div>
+          <div class="stat-card"><div class="stat-value">${winRate}%</div><div class="stat-label">Win Rate</div></div>
+          <div class="stat-card"><div class="stat-value">${accuracy}%</div><div class="stat-label">Accuracy</div></div>
+          <div class="stat-card"><div class="stat-value">${fmt(s.correct)}</div><div class="stat-label">Correct Answers</div></div>
+          <div class="stat-card"><div class="stat-value">${fmt(s.wrong)}</div><div class="stat-label">Wrong Answers</div></div>
+          <div class="stat-card"><div class="stat-value">${s.bestStreak}</div><div class="stat-label">Best Streak</div></div>
+          <div class="stat-card"><div class="stat-value">${fmt(s.packsOpened)}</div><div class="stat-label">Packs Opened</div></div>
+        </div>
+        <div class="grid" style="grid-template-columns:1.3fr 1fr;gap:22px;margin-bottom:24px">
+          <div class="card">
+            <h3 class="mb16">Recent Performance</h3>
+            ${last10.length ? `<div class="bar-chart">${last10.map((g,i) => `<div class="bar-col"><div class="bar-fill" style="height:${(g.score/maxScore)*100}%" title="${g.score} points"></div><div class="bar-label">${i+1}</div></div>`).join("")}</div>` : `<div class="empty" style="padding:30px"><div class="empty-icon">📊</div><p class="muted">Play some games first.</p></div>`}
+          </div>
+          <div class="card">
+            <h3 class="mb16">Account</h3>
+            <div class="flex between center mb8"><span class="muted small bold">Level</span><span class="bold">${lv.level}</span></div>
+            <div class="xp-bar mb16"><div class="xp-fill" style="width:${lv.pct}%"></div></div>
+            <div class="flex between center mb8"><span class="muted small bold">Total XP</span><span class="bold">${fmt(State.data.xp)}</span></div>
+            <div class="flex between center mb8"><span class="muted small bold">Tokens</span><span class="bold">${fmt(State.tokens)}</span></div>
+            <div class="flex between center mb8"><span class="muted small bold">Tokens Earned</span><span class="bold">${fmt(s.tokensEarned)}</span></div>
+            <div class="flex between center mb8"><span class="muted small bold">Tokens Spent</span><span class="bold">${fmt(s.tokensSpent)}</span></div>
+            <div class="divider"></div>
+            <button class="btn btn-red btn-block btn-sm" id="reset-progress">Reset All Progress</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="mb16">Collection by Set</h3>
+          <div class="grid g3" style="gap:14px">
+            ${Object.entries(bySet).sort((a,b)=>b[1].total-a[1].total).map(([set,d]) => `
+              <div class="panel"><div class="flex between center mb8"><span class="bold small">${esc(set)}</span><span class="tiny bold muted">${d.owned}/${d.total}</span></div><div class="xp-bar" style="height:8px"><div class="xp-fill" style="width:${(d.owned/d.total)*100}%"></div></div></div>`).join("")}
+          </div>
+        </div>
+      </div>
+    </section>`;
+  },
+
+  admin(){
+    if(!Admin.isAuthed()){
+      return `
+      <section class="section">
+        <div class="wrap-narrow" style="max-width:460px">
+          <div class="card reveal-up" style="text-align:center">
+            <div style="width:78px;height:78px;border-radius:22px;background:linear-gradient(135deg,#111827,#374151);display:grid;place-items:center;margin:0 auto 18px;font-size:2.2rem;box-shadow:0 12px 32px rgba(0,0,0,.4)">🔐</div>
+            <h2>Admin Access</h2>
+            <p class="muted small mt8">Enter the admin password to continue.</p>
+            <div class="field mt24" style="text-align:left">
+              <label class="label">Password</label>
+              <input class="input" id="admin-pw" type="password" placeholder="••••••••" autocomplete="off">
+            </div>
+            <button class="btn btn-primary btn-lg btn-block" id="admin-login">Unlock Panel</button>
+          </div>
+        </div>
+      </section>`;
+    }
+
+    const total = BLOOKS.length;
+    const owned = State.uniqueOwned();
+    const missing = total - owned;
+    const lv = levelInfo(State.data.xp);
+    const godOn = window.AdminCheats.godMode;
+    const infOn = window.AdminCheats.infiniteTime;
+    const sets = [...new Set(BLOOKS.flatMap(b => [b.set, b.realSet]).filter(Boolean))].sort();
+
+    return `
+    <section class="section">
+      <div class="wrap">
+        <div class="admin-header">
+          <div class="flex between center wrapf gap16">
+            <div class="flex center gap16">
+              <div style="width:64px;height:64px;border-radius:18px;background:rgba(255,255,255,.1);display:grid;place-items:center;font-size:1.9rem;border:1px solid rgba(255,255,255,.2)">🛠️</div>
+              <div>
+                <h2 style="color:#fff;margin:0">Admin Panel</h2>
+                <p style="color:rgba(255,255,255,.65);font-weight:700;margin-top:4px">26 powers · password 6171399</p>
+              </div>
+            </div>
+            <button class="btn btn-ghost" style="border-color:rgba(255,255,255,.3);color:#fff" id="admin-logout">Sign Out</button>
+          </div>
+        </div>
+
+        <div class="grid g4 stagger mb24">
+          <div class="stat-card"><div class="stat-value">${fmt(State.tokens)}</div><div class="stat-label">Tokens</div></div>
+          <div class="stat-card"><div class="stat-value">${owned} / ${total}</div><div class="stat-label">Blooks Owned</div></div>
+          <div class="stat-card"><div class="stat-value">${missing}</div><div class="stat-label">Missing</div></div>
+          <div class="stat-card"><div class="stat-value">${lv.level}</div><div class="stat-label">Level</div></div>
+        </div>
+
+        <div class="grid g2" style="gap:18px">
+
+          <div class="card admin-power">
+            <h3 class="mb16">🔓 Unlock Blook</h3>
+            <div class="field">
+              <label class="label">Blook name</label>
+              <input class="input" id="a-unlock-name" list="a-blook-list" placeholder="e.g. Chick, Rainbow Astronaut…" autocomplete="off">
+              <datalist id="a-blook-list">${BLOOKS.map(b => `<option value="${esc(b.name)}"></option>`).join("")}</datalist>
+            </div>
+            <div class="flex gap12 wrapf">
+              <button class="btn btn-primary" id="a-unlock-one">Unlock Blook</button>
+              <button class="btn btn-ghost" id="a-unlock-random">🎲 Random Missing</button>
+            </div>
+            <div id="a-unlock-result" class="mt16"></div>
+          </div>
+
+          <div class="card admin-power admin-good">
+            <h3 class="mb16">🌟 Unlock Everything</h3>
+            <p class="muted small mb16">Collection: ${owned}/${total}</p>
+            <div class="flex gap12 wrapf">
+              <button class="btn btn-green" id="a-unlock-all">✨ Unlock All Blooks</button>
+              <button class="btn btn-ghost" id="a-max-out">🚀 Max Out Everything</button>
+            </div>
+            <div id="a-all-result" class="mt16"></div>
+          </div>
+
+          <div class="card admin-power admin-good">
+            <h3 class="mb16">🎯 Unlock by Set</h3>
+            <div class="field">
+              <label class="label">Set</label>
+              <select class="select" id="a-set-select">${sets.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join("")}</select>
+            </div>
+            <button class="btn btn-primary" id="a-unlock-set">Unlock Set</button>
+          </div>
+
+          <div class="card admin-power admin-good">
+            <h3 class="mb16">💎 Unlock by Rarity</h3>
+            <div class="field">
+              <label class="label">Rarity</label>
+              <select class="select" id="a-rarity-select">${RARITIES.map(r => `<option value="${r}">${r}</option>`).join("")}</select>
+            </div>
+            <button class="btn btn-primary" id="a-unlock-rarity">Unlock All of Rarity</button>
+          </div>
+
+          <div class="card admin-power admin-gold">
+            <h3 class="mb16">🎲 Random Unlocks</h3>
+            <div class="field">
+              <label class="label">How many random missing?</label>
+              <input class="input" id="a-random-count" type="number" value="10" min="1" max="1000">
+            </div>
+            <button class="btn btn-gold" id="a-unlock-random-n">Roll Random Blooks</button>
+          </div>
+
+          <div class="card admin-power">
+            <h3 class="mb16">🔢 Set Blook Count</h3>
+            <div class="field">
+              <label class="label">Blook name</label>
+              <input class="input" id="a-count-name" list="a-blook-list2" placeholder="Blook name">
+              <datalist id="a-blook-list2">${BLOOKS.map(b => `<option value="${esc(b.name)}"></option>`).join("")}</datalist>
+            </div>
+            <div class="input-group mb16">
+              <input class="input" id="a-count-value" type="number" value="1" min="0" max="9999">
+              <button class="btn btn-primary" id="a-set-count">Set Count</button>
+            </div>
+            <button class="btn btn-ghost btn-sm" id="a-remove-blook" style="border-color:#ef4444;color:#ef4444">Remove This Blook</button>
+          </div>
+
+          <div class="card admin-power admin-gold">
+            <h3 class="mb16">🪙 Token Control</h3>
+            <div class="field">
+              <label class="label">Amount (negative removes)</label>
+              <div class="input-group">
+                <input class="input" id="a-token-amount" type="number" value="1000">
+                <button class="btn btn-gold" id="a-grant-tokens">+ Grant</button>
+              </div>
+            </div>
+            <button class="btn btn-ghost btn-sm" id="a-set-tokens" style="margin-top:-10px">Set Exact Balance</button>
+          </div>
+
+          <div class="card admin-power admin-gold">
+            <h3 class="mb16">⚡ XP & Level</h3>
+            <div class="field">
+              <label class="label">Add XP</label>
+              <div class="input-group">
+                <input class="input" id="a-xp-amount" type="number" value="1000">
+                <button class="btn btn-gold" id="a-add-xp">+ Add</button>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label">Set exact level</label>
+              <div class="input-group">
+                <input class="input" id="a-level-value" type="number" value="50" min="1" max="999">
+                <button class="btn btn-primary" id="a-set-level">Set Level</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card admin-power admin-gold">
+            <h3 class="mb16">📊 Stats Tampering</h3>
+            <div class="flex gap12 wrapf">
+              <button class="btn btn-ghost" id="a-reset-stats">Reset Stats Only</button>
+              <button class="btn btn-ghost" id="a-fake-wins">+50 Fake Wins</button>
+              <button class="btn btn-ghost" id="a-fake-history">+10 Fake History</button>
+            </div>
+          </div>
+
+          <div class="card admin-power admin-gold">
+            <h3 class="mb16">📅 Daily Reward</h3>
+            <div class="flex gap12 wrapf">
+              <button class="btn btn-ghost" id="a-reset-daily">Reset Daily Cooldown</button>
+              <div class="input-group" style="max-width:220px">
+                <input class="input" id="a-streak-value" type="number" value="7" min="0" max="365">
+                <button class="btn btn-ghost" id="a-set-streak">Set Streak</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card admin-power">
+            <h3 class="mb16">👤 Profile Editor</h3>
+            <div class="field">
+              <label class="label">Display name</label>
+              <input class="input" id="a-profile-name" value="${State.data.user ? esc(State.data.user.name) : ''}" maxlength="18">
+            </div>
+            <div class="field">
+              <label class="label">Avatar</label>
+              <select class="select" id="a-profile-avatar">
+                ${BLOOKS.slice(0, 60).map(b => `<option value="${esc(b.name)}" ${State.data.user && State.data.user.avatar === b.name ? "selected" : ""}>${esc(b.name)}</option>`).join("")}
+              </select>
+            </div>
+            <button class="btn btn-primary" id="a-set-profile">Save Profile</button>
+          </div>
+
+          <div class="card admin-power admin-danger">
+            <h3 class="mb16">📦 Open Packs</h3>
+            <div class="field">
+              <label class="label">Pack</label>
+              <select class="select" id="a-pack-select">${PACKS.map(p => `<option value="${esc(p.id)}">${esc(p.name)} (${packPool(p.id).length})</option>`).join("")}</select>
+            </div>
+            <div class="grid g2" style="gap:10px">
+              <div class="field" style="margin:0"><label class="label">Quantity</label><input class="input" id="a-pack-count" type="number" value="100" min="1" max="100000"></div>
+              <div class="field" style="margin:0"><label class="label">Preset</label><select class="select" id="a-pack-preset"><option value="">—</option><option value="10">10</option><option value="100">100</option><option value="500">500</option><option value="1000">1,000</option><option value="10000">10,000</option></select></div>
+            </div>
+            <button class="btn btn-primary btn-block mt8" id="a-open-packs">Open Packs</button>
+            <div id="a-pack-result" class="mt16"></div>
+          </div>
+
+          <div class="card admin-power admin-danger">
+            <h3 class="mb16">🔬 Monte Carlo Sim</h3>
+            <p class="muted small mb16">Simulate rolls WITHOUT modifying your collection.</p>
+            <div class="field">
+              <label class="label">Pack</label>
+              <select class="select" id="a-sim-pack">${PACKS.map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join("")}</select>
+            </div>
+            <div class="input-group mb16">
+              <input class="input" id="a-sim-count" type="number" value="1000" min="1" max="1000000">
+              <button class="btn btn-primary" id="a-simulate">Simulate</button>
+            </div>
+            <div id="a-sim-result"></div>
+          </div>
+
+          <div class="card admin-power admin-gold">
+            <h3 class="mb16">⚙️ Cheats</h3>
+            <div class="admin-toggle ${godOn?'on':''}" id="a-god-toggle">
+              <div><div class="bold">God Mode</div><div class="tiny muted-3">Always answer correctly</div></div>
+              <div class="switch ${godOn?'on':''}"></div>
+            </div>
+            <div class="admin-toggle ${infOn?'on':''}" id="a-inf-toggle">
+              <div><div class="bold">Infinite Time</div><div class="tiny muted-3">No timer in games</div></div>
+              <div class="switch ${infOn?'on':''}"></div>
+            </div>
+            <button class="btn btn-gold btn-block mt8" id="a-instant-win">🏆 Instant Win (+500 tokens)</button>
+          </div>
+
+          <div class="card admin-power admin-danger">
+            <h3 class="mb16">💾 Save Data</h3>
+            <div class="flex gap12 wrapf mb16">
+              <button class="btn btn-ghost" id="a-export">📤 Export JSON</button>
+              <button class="btn btn-ghost" id="a-import-trigger">📥 Import JSON</button>
+            </div>
+            <input type="file" id="a-import-file" accept=".json" style="display:none">
+            <button class="btn btn-red btn-block" id="a-factory-reset">💣 Factory Reset Everything</button>
+          </div>
+
+          <div class="card admin-power admin-danger">
+            <h3 class="mb16">🗑️ Remove Blook</h3>
+            <div class="field">
+              <label class="label">Remove one specific blook</label>
+              <input class="input" id="a-remove-name" list="a-blook-list3" placeholder="Blook name">
+              <datalist id="a-blook-list3">${BLOOKS.map(b => `<option value="${esc(b.name)}"></option>`).join("")}</datalist>
+            </div>
+            <button class="btn btn-red" id="a-remove-specific">Remove Blook</button>
+          </div>
+
+        </div>
+
+        <p class="tiny muted-3 tc mt32">Admin session active · password <span class="mono">6171399</span> · clears on tab close</p>
+      </div>
+    </section>`;
+  },
+
+  notFound(){
+    return `<section class="section"><div class="wrap"><div class="empty"><div class="empty-icon">🧭</div><h2>Page not found</h2><button class="btn btn-primary btn-lg mt24" onclick="App.go('#/')">Back Home</button></div></div></section>`;
+  }
+};
+
+/* MOUNTS */
+const Mounts = {
+  run(route){
+    switch(route){
+      case "/":          this.home(); break;
+      case "/login":     this.login(); break;
+      case "/dashboard": this.dashboard(); break;
+      case "/market":    this.market(); break;
+      case "/blooks":    this.blooks(); break;
+      case "/play":      this.play(); break;
+      case "/stats":     this.stats(); break;
+      case "/admin":     this.admin(); break;
+    }
+  },
+  home(){},
+  login(){
+    let selectedAvatar = State.data.user ? State.data.user.avatar : "Chick";
+    const grid = $("#avatar-grid");
+    if(!grid) return;
+    $$("[data-avatar]", grid).forEach(card => {
+      card.addEventListener("click", () => {
+        $$("[data-avatar]", grid).forEach(c => c.classList.remove("owned"));
+        card.classList.add("owned");
+        selectedAvatar = card.dataset.avatar;
+      });
+    });
+    const submit = $("#login-submit");
+    submit.addEventListener("click", () => {
+      const name = $("#login-name").value.trim();
+      if(!name){ UI.toast("Please enter a display name.", "error"); return; }
+      Auth.login(name, selectedAvatar);
+      App.go("#/dashboard");
+    });
+    $("#login-name").addEventListener("keydown", e => { if(e.key === "Enter") submit.click(); });
+    const lo = $("#login-logout");
+    if(lo) lo.addEventListener("click", () => Auth.logout());
+  },
+  dashboard(){
+    const card = $("#daily-card");
+    if(card){
+      card.addEventListener("click", () => {
+        const now = Date.now(), DAY = 86400000;
+        if(now - (State.data.lastDaily || 0) < DAY){ UI.toast("Already claimed today!", "info"); return; }
+        const twoDays = DAY * 2;
+        if(now - (State.data.lastDaily || 0) < twoDays && State.data.lastDaily) State.data.dailyStreak = (State.data.dailyStreak || 0) + 1;
+        else State.data.dailyStreak = 1;
+        const bonus = 75 + Math.min(State.data.dailyStreak, 7) * 15;
+        State.data.lastDaily = now;
+        State.save();
+        State.addTokens(bonus);
+        State.addXP(bonus);
+        UI.confetti(70);
+        UI.toast(`🎁 Daily reward: +${bonus} tokens`, "gold", 3800);
+        App.render();
+      });
+    }
+  },
+  market(){
+    $$("[data-pack]").forEach(card => {
+      card.addEventListener("click", (e) => {
+        if(e.target.closest("[data-open]")) return;
+        Mounts.showPackModal(card.dataset.pack);
+      });
+    });
+    $$("[data-open]").forEach(btn => {
+      btn.addEventListener("click", (e) => { e.stopPropagation(); Market.openPack(btn.dataset.open, 1); });
+    });
+  },
+  showPackModal(packId){
+    const pack = PACK_MAP[packId];
+    const { entries, byRarity } = packOdds(packId);
+    const pool = packPool(packId);
+    const rarities = Object.keys(byRarity).sort((a,b) => RARITY_ORDER[a]-RARITY_ORDER[b]);
+    const oddsRows = rarities.map(r => {
+      const chance = byRarity[r];
+      const count = pool.filter(b => b.rarity === r).length;
+      const barW = Math.min(100, chance);
+      return `<div style="margin-bottom:12px"><div class="flex between center" style="margin-bottom:5px"><span class="chip chip-${r}">${r}</span><span class="tiny bold">${pct(chance)} <span class="muted-3">(${count})</span></span></div><div class="xp-bar" style="height:8px"><div class="xp-fill" style="width:${Math.max(2, barW)}%"></div></div></div>`;
+    }).join("");
+    const canAfford = State.tokens >= pack.price;
+    UI.modal({
+      title: `${esc(pack.name)} Pack`, size: "modal-lg",
+      body: `
+        <div class="grid" style="grid-template-columns:1fr 1fr;gap:22px">
+          <div>
+            <div style="aspect-ratio:1;border-radius:var(--r-lg);background:linear-gradient(150deg,${pack.color}33,${pack.color}0d);display:grid;place-items:center;border:1px solid var(--border)">${blookImg(BLOOK_MAP[pack.icon] || pool[0], "")}</div>
+            <p class="muted small mt16">${esc(pack.desc)}</p>
+            <div class="panel mt16">
+              <div class="flex between center"><span class="muted small bold">Pack Price</span><span class="bold" style="color:var(--brand)">${fmt(pack.price)} tokens</span></div>
+              <div class="flex between center mt8"><span class="muted small bold">Your Balance</span><span class="bold">${fmt(State.tokens)} tokens</span></div>
+              <div class="flex between center mt8"><span class="muted small bold">Blooks in Pool</span><span class="bold">${pool.length}</span></div>
+            </div>
+          </div>
+          <div>
+            <h4 class="mb16">Drop Rates</h4>${oddsRows}
+            <div class="divider"></div>
+            <h4 class="mb16">Featured Blooks</h4>
+            <div class="grid g3" style="gap:10px">
+              ${entries.slice().sort((a,b) => RARITY_ORDER[b.blook.rarity] - RARITY_ORDER[a.blook.rarity]).slice(0,6).map(e => `
+                <div class="blook-card ${State.hasBlook(e.blook.name) ? 'owned':''}" style="padding:9px 6px 7px">${blookImg(e.blook,"blook-img")}<div class="blook-name" style="font-size:.7rem">${esc(e.blook.name)}</div><div class="tiny muted-3">${pct(e.chance)}</div></div>`).join("")}
+            </div>
+          </div>
+        </div>
+      `,
+      footer: `<button class="btn btn-ghost" data-close>Close</button><button class="btn btn-primary" id="buy-1" ${canAfford?"":"disabled"}>Open 1 · ${fmt(pack.price)}</button><button class="btn btn-gold" id="buy-5" ${State.tokens >= pack.price*5 ? "" : "disabled"}>Open 5 · ${fmt(pack.price*5)}</button>`,
+      onMount(el, close){
+        const b1 = $("#buy-1", el);
+        const b5 = $("#buy-5", el);
+        if(b1) b1.addEventListener("click", () => { close(); Market.openPack(packId, 1); });
+        if(b5) b5.addEventListener("click", () => { close(); Market.openPack(packId, 5); });
+      }
+    });
+  },
+  blooks(){
+    const grid = $("#blook-grid");
+    const search = $("#blook-search");
+    const setFilter = $("#filter-set");
+    const rarityFilter = $("#filter-rarity");
+    const tabs = $$("#owned-tabs .tab");
+    const noResults = $("#no-results");
+    let ownedMode = "all";
+    const apply = () => {
+      const q = (search.value || "").trim().toLowerCase();
+      const setV = setFilter.value, rarV = rarityFilter.value;
+      const filtered = BLOOKS.filter(b => {
+        if(q && !b.name.toLowerCase().includes(q)) return false;
+        if(setV !== "All" && b.set !== setV) return false;
+        if(rarV !== "All" && b.rarity !== rarV) return false;
+        const owned = State.hasBlook(b.name);
+        if(ownedMode === "owned" && !owned) return false;
+        if(ownedMode === "missing" && owned) return false;
+        return true;
+      });
+      filtered.sort((a,b) => {
+        const ao = State.hasBlook(a.name) ? 0 : 1, bo = State.hasBlook(b.name) ? 0 : 1;
+        if(ao !== bo) return ao - bo;
+        if(RARITY_ORDER[a.rarity] !== RARITY_ORDER[b.rarity]) return RARITY_ORDER[b.rarity] - RARITY_ORDER[a.rarity];
+        return a.name.localeCompare(b.name);
+      });
+      grid.innerHTML = filtered.map(b => {
+        const owned = State.hasBlook(b.name);
+        const count = State.data.owned[b.name] || 0;
+        return `<div class="blook-card ${owned?'owned':'locked'}" data-blook="${esc(b.name)}">${count>1?`<div class="blook-count">×${count}</div>`:""}<div class="blook-img-wrap">${blookImg(b,"blook-img")}</div><div class="blook-name">${owned ? esc(b.name) : "???"}</div>${rarityChip(b.rarity)}</div>`;
+      }).join("");
+      noResults.classList.toggle("hidden", filtered.length > 0);
+      $$("[data-blook]", grid).forEach(card => card.addEventListener("click", () => Mounts.showBlookModal(card.dataset.blook)));
+    };
+    search.addEventListener("input", apply);
+    setFilter.addEventListener("change", apply);
+    rarityFilter.addEventListener("change", apply);
+    tabs.forEach(t => t.addEventListener("click", () => {
+      tabs.forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      ownedMode = t.dataset.owned;
+      apply();
+    }));
+    apply();
+  },
+  showBlookModal(name){
+    const b = BLOOK_MAP[name];
+    if(!b) return;
+    const owned = State.hasBlook(name);
+    const count = State.data.owned[name] || 0;
+    const { entries } = packOdds(b.set === "Hidden" ? (b.realSet || "Color") : b.set);
+    const entry = entries.find(e => e.blook.name === name);
+    const chance = entry ? entry.chance : null;
+    const packSource = b.set === "Hidden" ? (b.realSet || "Unknown") : b.set;
+    UI.modal({
+      title: owned ? esc(b.name) : "Locked Blook",
+      body: `
+        <div class="tc">
+          <div style="width:170px;height:170px;margin:0 auto 18px;${owned?`filter:drop-shadow(0 14px 30px ${b.color}77)`:"filter:grayscale(1) opacity(.22)"}">${blookImg(b,"")}</div>
+          <h3 style="margin-bottom:10px">${owned ? esc(b.name) : "???"}</h3>
+          <div class="flex gap8 wrapf" style="justify-content:center;margin-bottom:20px">${rarityChip(b.rarity)}<span class="chip chip-Hidden">${esc(b.set)} Set</span>${b.realSet?`<span class="chip chip-Hidden">from ${esc(b.realSet)}</span>`:""}</div>
+          <div class="panel" style="text-align:left">
+            <div class="flex between center" style="padding:7px 0"><span class="muted small bold">Owned</span><span class="bold">${owned ? `×${count}` : "Not yet"}</span></div>
+            <div class="flex between center" style="padding:7px 0;border-top:1px solid var(--border)"><span class="muted small bold">Team</span><span class="bold small">${esc(b.team)}</span></div>
+            <div class="flex between center" style="padding:7px 0;border-top:1px solid var(--border)"><span class="muted small bold">Color</span><span class="bold small mono">${esc(b.color)}</span></div>
+            <div class="flex between center" style="padding:7px 0;border-top:1px solid var(--border)"><span class="muted small bold">Found In</span><span class="bold small">${esc(packSource)} Pack</span></div>
+            ${chance !== null ? `<div class="flex between center" style="padding:7px 0;border-top:1px solid var(--border)"><span class="muted small bold">Drop Rate</span><span class="bold small">${pct(chance)}</span></div>` : ""}
+          </div>
+        </div>`,
+      footer: owned ? `<button class="btn btn-ghost" data-close>Close</button>` : `<button class="btn btn-ghost" data-close>Close</button><button class="btn btn-primary" onclick="document.querySelector('.modal-close').click();App.go('#/market')">Get This Blook</button>`
+    });
+  },
+  play(){
+    let selectedMode = "classic";
+    $$(".mode-card").forEach(card => {
+      card.addEventListener("click", () => {
+        $$(".mode-card").forEach(c => c.style.borderColor = "var(--border)");
+        card.style.borderColor = "var(--brand)";
+        selectedMode = card.dataset.mode;
+        const label = $("#selected-mode-label");
+        if(label) label.textContent = selectedMode === "gold" ? "Gold Quest" : "Classic";
+      });
+    });
+    const startBtn = $("#start-game");
+    if(startBtn){
+      startBtn.addEventListener("click", () => {
+        if(!Auth.require()) return;
+        const name = $("#setup-name").value.trim() || "You";
+        const avatar = $("#setup-avatar").value;
+        const questions = Number($("#setup-questions").value);
+        const time = Number($("#setup-time").value);
+        if(State.data.user){ State.data.user.name = name; State.data.user.avatar = avatar; State.save(); }
+        Game.start({ mode:selectedMode, questions, time, name, avatar });
+      });
+    }
+  },
+  stats(){
+    const btn = $("#reset-progress");
+    if(btn){
+      btn.addEventListener("click", () => {
+        UI.confirm("Reset everything?", "Permanently deletes collection, tokens, XP, stats on this device.", () => {
+          State.reset(); UI.toast("Progress reset!", "success"); App.render();
+        }, "Reset Everything", true);
+      });
+    }
+  },
+  admin(){
+    /* ---- Password gate ---- */
+    const pwInput = $("#admin-pw");
+    if(pwInput){
+      const submit = () => {
+        if(Admin.login(pwInput.value)){
+          UI.toast("✅ Admin access granted", "success");
+          App.render();
+        } else {
+          UI.toast("❌ Incorrect password", "error");
+          pwInput.value = ""; pwInput.focus();
+        }
+      };
+      $("#admin-login").addEventListener("click", submit);
+      pwInput.addEventListener("keydown", e => { if(e.key === "Enter") submit(); });
+      pwInput.focus();
+      return;
+    }
+
+    /* ---- Sign out ---- */
+    const lo = $("#admin-logout");
+    if(lo) lo.addEventListener("click", () => { Admin.logout(); UI.toast("Signed out of admin", "info"); App.render(); });
+
+    /* ---- Power 1: Unlock blook ---- */
+    const blookInput = $("#a-unlock-name");
+    const resultBox = $("#a-unlock-result");
+    const showUnlockResult = (r) => {
+      if(!r.ok){ resultBox.innerHTML = `<div class="panel" style="border-color:#ef4444;background:#ef44441a"><span style="color:#ef4444;font-weight:800">${esc(r.msg)}</span></div>`; return; }
+      resultBox.innerHTML = `<div class="panel" style="border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,transparent)"><div class="flex center gap12"><div style="width:52px;height:52px">${blookImg(r.blook,"")}</div><div style="flex:1"><div class="bold">${r.isNew ? "✨ New blook unlocked!" : "🔁 Added another copy"}</div><div class="small muted">${esc(r.blook.name)} · now ×${r.count}</div><div class="mt8">${rarityChip(r.blook.rarity)}</div></div></div></div>`;
+    };
+    $("#a-unlock-one").addEventListener("click", () => {
+      const name = (blookInput.value || "").trim();
+      if(!name){ UI.toast("Enter a blook name", "error"); return; }
+      const r = Admin.unlockBlook(name);
+      showUnlockResult(r);
+      if(r.ok){
+        UI.toast(r.isNew ? `Unlocked ${r.blook.name}!` : `${r.blook.name} +1`, "success");
+        if(r.isNew) setTimeout(() => App.render(), 500);
+      }
+    });
+    blookInput.addEventListener("keydown", e => { if(e.key === "Enter") $("#a-unlock-one").click(); });
+    $("#a-unlock-random").addEventListener("click", () => {
+      const missing = BLOOKS.filter(b => !State.hasBlook(b.name));
+      if(!missing.length){ UI.toast("You already own every blook!", "info"); return; }
+      const target = pick(missing);
+      const r = Admin.unlockBlook(target.name);
+      showUnlockResult(r);
+      UI.toast(`🎲 Rolled: ${target.name}`, "gold");
+      setTimeout(() => App.render(), 500);
+    });
+
+    /* ---- Power 2: Unlock all ---- */
+    const allBox = $("#a-all-result");
+    $("#a-unlock-all").addEventListener("click", () => {
+      UI.confirm("Unlock all blooks?", `Adds all ${BLOOKS.length} blooks. You won't lose anything.`, () => {
+        const added = Admin.unlockAll();
+        UI.confetti(120);
+        UI.toast(`✨ Unlocked ${added} new blooks!`, "gold", 3200);
+        allBox.innerHTML = `<div class="panel" style="border-color:#22c55e;background:#22c55e1a"><span class="bold" style="color:#22c55e">✅ ${added} new · Collection: ${State.uniqueOwned()}/${BLOOKS.length}</span></div>`;
+        App.render();
+      }, "Unlock All");
+    });
+    $("#a-max-out").addEventListener("click", () => {
+      UI.confirm("Max out everything?", "Unlocks all blooks, sets 1,000,000 tokens and 1,000,000 XP.", () => {
+        const added = Admin.maxOut();
+        UI.confetti(140);
+        UI.toast(`🚀 Maxed out! +${added} blooks, 1M tokens, 1M XP`, "gold", 4000);
+        App.render();
+      }, "Max Out");
+    });
+
+    /* ---- Power 4: Unlock set ---- */
+    $("#a-unlock-set").addEventListener("click", () => {
+      const setName = $("#a-set-select").value;
+      const r = Admin.unlockSet(setName);
+      UI.toast(`🔓 ${r.added} new from ${setName} (${r.total} total)`, "success");
+      App.render();
+    });
+
+    /* ---- Power 5: Unlock rarity ---- */
+    $("#a-unlock-rarity").addEventListener("click", () => {
+      const rarity = $("#a-rarity-select").value;
+      const r = Admin.unlockRarity(rarity);
+      UI.toast(`💎 ${r.added} new ${rarity} blooks (${r.total} total)`, "gold");
+      App.render();
+    });
+
+    /* ---- Power 6: Random N ---- */
+    $("#a-unlock-random-n").addEventListener("click", () => {
+      const n = Number($("#a-random-count").value) || 10;
+      const r = Admin.unlockRandomN(n);
+      UI.confetti(Math.min(100, r.added * 4));
+      UI.toast(`🎲 Rolled ${r.added} random blooks!`, "gold");
+      App.render();
+    });
+
+    /* ---- Power 7/8: Set count / remove ---- */
+    $("#a-set-count").addEventListener("click", () => {
+      const name = $("#a-count-name").value.trim();
+      const count = Number($("#a-count-value").value);
+      const r = Admin.setBlookCount(name, count);
+      if(!r.ok){ UI.toast(r.msg, "error"); return; }
+      UI.toast(`Set ${r.name} to ×${r.count}`, "success");
+      App.render();
+    });
+    $("#a-remove-blook").addEventListener("click", () => {
+      const name = $("#a-count-name").value.trim();
+      const r = Admin.removeBlook(name);
+      if(!r.ok){ UI.toast(r.msg, "error"); return; }
+      UI.toast(`Removed ${name}`, "success");
+      App.render();
+    });
+
+    /* ---- Power 10/11: Tokens ---- */
+    $("#a-grant-tokens").addEventListener("click", () => {
+      const amt = Number($("#a-token-amount").value) || 0;
+      if(amt === 0){ UI.toast("Enter a non-zero amount", "error"); return; }
+      const r = Admin.grantTokens(amt);
+      UI.toast(r > 0 ? `🪙 Granted ${fmt(r)} tokens` : `🪙 Removed ${fmt(Math.abs(r))} tokens`, "gold");
+      App.render();
+    });
+    $("#a-set-tokens").addEventListener("click", () => {
+      const amt = Number($("#a-token-amount").value) || 0;
+      Admin.setTokens(amt);
+      UI.toast(`Set balance to ${fmt(amt)} tokens`, "gold");
+      App.render();
+    });
+
+    /* ---- Power 12/13: XP / Level ---- */
+    $("#a-add-xp").addEventListener("click", () => {
+      const amt = Number($("#a-xp-amount").value) || 0;
+      Admin.addXP(amt);
+      UI.toast(`⚡ Added ${fmt(amt)} XP`, "gold");
+      App.render();
+    });
+    $("#a-set-level").addEventListener("click", () => {
+      const lvl = Number($("#a-level-value").value) || 1;
+      const applied = Admin.setLevel(lvl);
+      UI.toast(`Set to level ${applied}`, "success");
+      App.render();
+    });
+
+    /* ---- Power 14/15/26: Stats ---- */
+    $("#a-reset-stats").addEventListener("click", () => {
+      UI.confirm("Reset stats?", "Clears games, wins, accuracy, history. Collection untouched.", () => {
+        Admin.resetStats();
+        UI.toast("Stats reset", "success");
+        App.render();
+      }, "Reset Stats", true);
+    });
+    $("#a-fake-wins").addEventListener("click", () => {
+      Admin.addFakeWins(50);
+      UI.toast("+50 fake wins added", "success");
+      App.render();
+    });
+    $("#a-fake-history").addEventListener("click", () => {
+      Admin.addFakeHistory(10);
+      UI.toast("+10 fake history entries", "success");
+      App.render();
+    });
+
+    /* ---- Power 16/17: Daily ---- */
+    $("#a-reset-daily").addEventListener("click", () => {
+      Admin.resetDaily();
+      UI.toast("Daily cooldown reset — claim now!", "gold");
+    });
+    $("#a-set-streak").addEventListener("click", () => {
+      const n = Number($("#a-streak-value").value) || 0;
+      Admin.setDailyStreak(n);
+      UI.toast(`Daily streak set to ${n}`, "success");
+    });
+
+    /* ---- Power 18: Profile ---- */
+    $("#a-set-profile").addEventListener("click", () => {
+      const name = $("#a-profile-name").value;
+      const avatar = $("#a-profile-avatar").value;
+      const r = Admin.setProfile(name, avatar);
+      if(!r.ok){ UI.toast(r.msg, "error"); return; }
+      UI.toast("Profile updated", "success");
+      App.render();
+    });
+
+    /* ---- Power 3: Open packs ---- */
+    const packSelect = $("#a-pack-select");
+    const packCount = $("#a-pack-count");
+    const packPreset = $("#a-pack-preset");
+    const packResult = $("#a-pack-result");
+    packPreset.addEventListener("change", () => {
+      if(packPreset.value){ packCount.value = packPreset.value; packPreset.value = ""; }
+    });
+    $("#a-open-packs").addEventListener("click", () => {
+      const packId = packSelect.value;
+      const count = Math.floor(Number(packCount.value) || 0);
+      if(count <= 0){ UI.toast("Enter a positive quantity", "error"); return; }
+      const run = () => {
+        const r = Admin.openPacks(packId, count);
+        if(!r.ok){ UI.toast(r.msg, "error"); return; }
+        const s = r.summary;
+        const rarityRows = Object.keys(s.byRarity).sort((a,b) => RARITY_ORDER[b]-RARITY_ORDER[a]).map(rar => `<div class="flex between center" style="padding:6px 0;border-top:1px solid var(--border)"><span class="chip chip-${rar}">${rar}</span><span class="bold small">×${fmt(s.byRarity[rar])}</span></div>`).join("");
+        packResult.innerHTML = `<div class="panel" style="border-color:var(--good)"><div class="flex between center wrapf gap12 mb8"><div class="bold">📦 ${fmt(s.count)} ${esc(s.pack)} Pack${s.count>1?"s":""}</div><div class="flex gap8 wrapf"><span class="chip chip-Uncommon">+${fmt(s.newBlooks)} new</span><span class="chip chip-Hidden">${fmt(s.duplicates)} dupes</span><span class="chip chip-Legendary">+${fmt(s.refund)} 🪙</span></div></div>${rarityRows}</div>`;
+        if(s.newBlooks > 0) UI.confetti(Math.min(140, 30 + s.newBlooks * 4));
+        UI.toast(`📦 ${fmt(s.count)} packs · +${s.newBlooks} new · +${fmt(s.refund)} refund`, "gold", 3400);
+        const statValues = $$(".stat-card .stat-value");
+        if(statValues[0]) statValues[0].textContent = fmt(State.tokens);
+        if(statValues[1]) statValues[1].textContent = `${State.uniqueOwned()} / ${BLOOKS.length}`;
+        if(statValues[2]) statValues[2].textContent = BLOOKS.length - State.uniqueOwned();
+        if(statValues[3]) statValues[3].textContent = levelInfo(State.data.xp).level;
+      };
+      if(count >= 5000){
+        UI.confirm(`Open ${fmt(count)} packs?`, "This may take a moment.", run, `Open ${fmt(count)}`);
+      } else run();
+    });
+
+    /* ---- Power 22: Monte Carlo ---- */
+    $("#a-simulate").addEventListener("click", () => {
+      const packId = $("#a-sim-pack").value;
+      const rolls = Number($("#a-sim-count").value) || 1000;
+      const r = Admin.simulatePack(packId, rolls);
+      const rarityRows = Object.entries(r.byRarity).sort((a,b) => RARITY_ORDER[b[0]] - RARITY_ORDER[a[0]]).map(([rar, n]) => {
+        const p = (n / r.rolls) * 100;
+        return `<div class="flex between center" style="padding:5px 0;border-top:1px solid var(--border)"><span class="chip chip-${rar}">${rar}</span><span class="bold small">${fmt(n)} <span class="muted-3">(${p.toFixed(2)}%)</span></span></div>`;
+      }).join("");
+      const topRows = r.top.slice(0, 6).map(([n, c]) => `<div class="flex between center" style="padding:5px 0;border-top:1px solid var(--border)"><span class="small bold">${esc(n)}</span><span class="tiny mono">${fmt(c)}</span></div>`).join("");
+      $("#a-sim-result").innerHTML = `
+        <div class="panel">
+          <div class="bold mb8">📊 ${fmt(r.rolls)} rolls · ${r.unique} unique</div>
+          ${rarityRows}
+          <div class="tiny muted-3 bold mt16 mb8" style="letter-spacing:.08em">TOP PULLS</div>
+          ${topRows}
+        </div>`;
+    });
+
+    /* ---- Power 23/24/25: Cheats ---- */
+    $("#a-god-toggle").addEventListener("click", () => {
+      const on = Admin.toggleGodMode();
+      UI.toast(on ? "😇 God Mode ON" : "😇 God Mode OFF", on ? "success" : "info");
+      App.render();
+    });
+    $("#a-inf-toggle").addEventListener("click", () => {
+      const on = Admin.toggleInfiniteTime();
+      UI.toast(on ? "⏳ Infinite Time ON" : "⏳ Infinite Time OFF", on ? "success" : "info");
+      App.render();
+    });
+    $("#a-instant-win").addEventListener("click", () => {
+      const r = Admin.instantWin(500);
+      UI.confetti(80);
+      UI.toast(`🏆 Instant win! +${r} tokens`, "gold", 3200);
+      App.render();
+    });
+
+    /* ---- Power 19/20/21: Save data ---- */
+    $("#a-export").addEventListener("click", () => {
+      const json = Admin.exportSave();
+      const blob = new Blob([json], { type:"application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `blooket-save-${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      UI.toast("📤 Save exported", "success");
+    });
+    $("#a-import-trigger").addEventListener("click", () => $("#a-import-file").click());
+    $("#a-import-file").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const r = Admin.importSave(ev.target.result);
+        if(r.ok){ UI.toast("📥 Save imported!", "success"); App.render(); }
+        else UI.toast(`Import failed: ${r.msg}`, "error");
+      };
+      reader.readAsText(file);
+    });
+    $("#a-factory-reset").addEventListener("click", () => {
+      UI.confirm("FACTORY RESET?", "This wipes EVERYTHING — collection, tokens, XP, stats, profile. Cannot be undone.", () => {
+        Admin.factoryReset();
+        UI.toast("💣 Factory reset complete", "error", 3200);
+        App.render();
+      }, "Wipe Everything", true);
+    });
+
+    /* ---- Power 7: Remove specific ---- */
+    $("#a-remove-specific").addEventListener("click", () => {
+      const name = $("#a-remove-name").value.trim();
+      const r = Admin.removeBlook(name);
+      if(!r.ok){ UI.toast(r.msg, "error"); return; }
+      UI.toast(`Removed ${name}`, "success");
+      App.render();
+    });
+  }
+};
+
+/* APP */
+const App = {
+  route: "#/",
+  init(){
+    State.load();
+    document.documentElement.setAttribute("data-theme", State.data.theme || "light");
+    this.updateThemeBtn();
+
+    $("#theme-btn").addEventListener("click", () => this.toggleTheme());
+    $("#hamburger").addEventListener("click", () => this.toggleMobileMenu());
+    window.addEventListener("hashchange", () => this.render());
+
+    // Secret triple-click on brand to open admin
+    let clicks = 0, timer = null;
+    $("#brand-badge").addEventListener("click", e => {
+      e.stopPropagation();
+      clicks++;
+      clearTimeout(timer);
+      timer = setTimeout(() => clicks = 0, 600);
+      if(clicks >= 3){ clicks = 0; this.go("#/admin"); }
+    });
+
+    if(!location.hash) location.hash = "#/";
+    this.refreshTokens();
+    this.refreshUserChip();
+    this.render();
+  },
+
+  go(hash){ if(location.hash === hash) this.render(); else location.hash = hash; },
+
+  toggleTheme(){
+    const cur = document.documentElement.getAttribute("data-theme");
+    const next = cur === "light" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", next);
+    State.data.theme = next; State.save();
+    this.updateThemeBtn();
+  },
+  updateThemeBtn(){
+    const cur = document.documentElement.getAttribute("data-theme");
+    const btn = $("#theme-btn");
+    if(btn) btn.textContent = cur === "light" ? "🌙" : "☀️";
+  },
+  toggleMobileMenu(){
+    const menu = $("#mobile-menu");
+    const open = menu.classList.toggle("open");
+    if(open){
+      menu.innerHTML = `
+        <a class="nav-link" href="#/" data-mm>Home</a>
+        <a class="nav-link" href="#/dashboard" data-mm>Dashboard</a>
+        <a class="nav-link" href="#/market" data-mm>Market</a>
+        <a class="nav-link" href="#/blooks" data-mm>Blooks</a>
+        <a class="nav-link" href="#/play" data-mm>Play</a>
+        <a class="nav-link" href="#/stats" data-mm>Stats</a>
+        <a class="nav-link" href="#/admin" data-mm style="opacity:.5">Admin</a>
+        <div class="divider"></div>
+        ${State.data.user ? `<button class="btn btn-ghost btn-block" id="mm-logout">Sign out (${esc(State.data.user.name)})</button>` : `<button class="btn btn-primary btn-block" id="mm-login">Sign in</button>`}`;
+      $$("[data-mm]", menu).forEach(a => a.addEventListener("click", () => menu.classList.remove("open")));
+      const lo = $("#mm-logout", menu); if(lo) lo.addEventListener("click", () => { Auth.logout(); menu.classList.remove("open"); });
+      const li = $("#mm-login", menu); if(li) li.addEventListener("click", () => { menu.classList.remove("open"); this.go("#/login"); });
+    }
+  },
+  refreshTokens(){
+    const el = $("#token-count");
+    if(el) el.textContent = fmt(State.tokens);
+  },
+  refreshUserChip(){
+    const chip = $("#user-chip");
+    if(!chip) return;
+    const u = State.data.user;
+    if(u){
+      const b = BLOOK_MAP[u.avatar] || BLOOK_MAP["Chick"];
+      const lv = levelInfo(State.data.xp).level;
+      chip.innerHTML = `<div class="user-avatar">${blookImg(b,"")}</div><div style="line-height:1.15"><div style="font-size:.88rem">${esc(u.name)}</div><div class="tiny muted-3" style="font-weight:800">LVL ${lv}</div></div>`;
+      chip.onclick = () => this.go("#/dashboard");
+    } else {
+      chip.innerHTML = `<div class="user-avatar">👤</div><span style="font-size:.88rem">Sign in</span>`;
+      chip.onclick = () => this.go("#/login");
+    }
+  },
+  render(){
+    const hash = location.hash || "#/";
+    this.route = hash;
+    const menu = $("#mobile-menu");
+    if(menu) menu.classList.remove("open");
+    $$(".nav-link[data-route]").forEach(a => a.classList.toggle("active", a.dataset.route === hash));
+    const [, path] = hash.split("/");
+    const key = "/" + (path || "");
+    const routes = {
+      "/":          () => Views.home(),
+      "/login":     () => Views.login(),
+      "/dashboard": () => Views.dashboard(),
+      "/market":    () => Views.market(),
+      "/blooks":    () => Views.blooks(),
+      "/play":      () => Views.play(),
+      "/stats":     () => Views.stats(),
+      "/admin":     () => Views.admin()
+    };
+    const fn = routes[key] || (() => Views.notFound());
+    $("#view").innerHTML = fn();
+    Mounts.run(key);
+    window.scrollTo({ top:0, behavior:"instant" });
+    this.refreshTokens();
+    this.refreshUserChip();
+  }
+};
+
+document.addEventListener("DOMContentLoaded", () => App.init());
+
+window.App = App;
+window.State = State;
+window.UI = UI;
+window.Market = Market;
+window.Game = Game;
+window.Views = Views;
+window.Admin = Admin;
+window.BLOOKS = BLOOKS;
+window.BLOOK_MAP = BLOOK_MAP;
+window.PACKS = PACKS;
+</script>
+</body>
+</html>
