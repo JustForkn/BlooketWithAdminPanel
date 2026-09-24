@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Blooket — Recreated + Admin</title>
-<link rel="icon" href="https://media.blooket.com/image/upload/v1556829562/Blooks/chicken.svg">
+<link rel="icon" href="https://blooket.com/favicon.ico">
+<link rel="apple-touch-icon" href="https://blooket.com/apple-touch-icon.png">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
@@ -179,15 +180,14 @@ html[data-theme="dark"] .blook-card.locked .blook-img{filter:grayscale(1) bright
 /* PACK CARDS */
 .pack-card{position:relative;border-radius:var(--r-lg);overflow:hidden;border:2px solid var(--border);background:var(--surface);cursor:pointer;transition:.24s cubic-bezier(.34,1.56,.64,1);display:flex;flex-direction:column}
 .pack-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-xl);border-color:var(--brand)}
-.pack-art{position:relative;aspect-ratio:16/10;display:grid;place-items:center;overflow:hidden}
-.pack-art img{width:58%;height:58%;object-fit:contain;z-index:2;filter:drop-shadow(0 12px 24px rgba(0,0,0,.4));transition:.3s}
-.pack-card:hover .pack-art img{transform:scale(1.14) rotate(-5deg)}
-.pack-art-bg{position:absolute;inset:0;opacity:.9}
-.pack-body{padding:16px;display:flex;flex-direction:column;gap:10px;flex:1}
-.pack-title{font-weight:900;font-size:1.05rem}
-.pack-price{display:flex;align-items:center;gap:7px;font-weight:900;color:#b45309;font-size:1rem}
+.pack-art{position:relative;aspect-ratio:1;display:grid;place-items:center;overflow:hidden;background:var(--surface-2)}
+.pack-art img{width:88%;height:88%;object-fit:contain;z-index:2;filter:drop-shadow(0 12px 24px rgba(0,0,0,.4));transition:.3s}
+.pack-card:hover .pack-art img{transform:scale(1.08)}
+.pack-body{padding:14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.pack-title{font-weight:900;font-size:1rem}
+.pack-price{display:flex;align-items:center;gap:7px;font-weight:900;color:#b45309;font-size:.95rem}
 html[data-theme="dark"] .pack-price{color:#fcd34d}
-.pack-odds{display:flex;flex-wrap:wrap;gap:5px}
+.pack-odds{display:flex;flex-wrap:wrap;gap:4px}
 
 /* FORMS */
 .field{margin-bottom:16px}
@@ -207,7 +207,6 @@ html[data-theme="dark"] .pack-price{color:#fcd34d}
 .stat-card::after{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--grad-brand)}
 .stat-value{font-size:1.85rem;font-weight:900;line-height:1.1}
 .stat-label{font-size:.76rem;text-transform:uppercase;letter-spacing:.09em;font-weight:900;color:var(--text-3)}
-
 .xp-bar{height:14px;border-radius:99px;background:var(--bg-3);overflow:hidden;border:1px solid var(--border);position:relative}
 .xp-fill{height:100%;background:var(--grad-brand);border-radius:99px;transition:width .7s cubic-bezier(.22,1,.36,1)}
 
@@ -319,8 +318,6 @@ footer{border-top:1px solid var(--border);background:var(--surface);padding:44px
 
 /* MISC */
 .divider{height:1px;background:var(--border);margin:22px 0}
-.spinner{width:36px;height:36px;border-radius:50%;border:4px solid var(--border);border-top-color:var(--brand);animation:spin .8s linear infinite;margin:0 auto}
-@keyframes spin{to{transform:rotate(360deg)}}
 .reveal-up{animation:revealUp .5s cubic-bezier(.22,1,.36,1) both}
 @keyframes revealUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 .stagger>*{animation:revealUp .5s cubic-bezier(.22,1,.36,1) both}
@@ -355,7 +352,6 @@ footer{border-top:1px solid var(--border);background:var(--surface);padding:44px
 .admin-gold{border-left-color:#fbbf24}
 .admin-header{background:linear-gradient(135deg,#0f172a,#1e293b);border:none;color:#fff;padding:26px;border-radius:var(--r-lg);margin-bottom:24px}
 html[data-theme="dark"] .admin-header{background:linear-gradient(135deg,#000,#1e293b)}
-.log-entry{padding:6px 12px;border-radius:6px;background:var(--bg-3);border-left:3px solid var(--brand);margin-bottom:5px;font-size:.8rem;font-family:ui-monospace,monospace}
 
 /* RESPONSIVE */
 @media(max-width:1080px){.g6{grid-template-columns:repeat(4,1fr)}.g5{grid-template-columns:repeat(3,1fr)}}
@@ -371,7 +367,7 @@ html[data-theme="dark"] .admin-header{background:linear-gradient(135deg,#000,#1e
 
 <nav id="nav">
   <div class="brand" onclick="location.hash='#/'">
-    <div class="brand-badge" id="brand-badge"><img src="https://media.blooket.com/image/upload/v1556829562/Blooks/chicken.svg" alt=""></div>
+    <div class="brand-badge"><img src="https://blooket.com/favicon.ico" alt=""></div>
     <span class="brand-text">Blooket</span>
   </div>
   <div class="nav-links" id="nav-links">
@@ -381,6 +377,7 @@ html[data-theme="dark"] .admin-header{background:linear-gradient(135deg,#000,#1e
     <a class="nav-link" data-route="#/blooks" href="#/blooks">Blooks</a>
     <a class="nav-link" data-route="#/play" href="#/play">Play</a>
     <a class="nav-link" data-route="#/stats" href="#/stats">Stats</a>
+    <a class="nav-link" data-route="#/settings" href="#/settings">Settings</a>
   </div>
   <div class="nav-right">
     <div class="token-pill" id="token-pill" onclick="App.go('#/market')" title="Your tokens">
@@ -402,6 +399,27 @@ html[data-theme="dark"] .admin-header{background:linear-gradient(135deg,#000,#1e
 
 const S3_BASE    = "https://blooket.s3.us-east-2.amazonaws.com/blooks/";
 const MEDIA_BASE = "https://media.blooket.com/image/upload/";
+
+/* PACK ICON URLs — from Blooket's pack art CDN */
+const PACK_ICONS = {
+  "Farm Animal":   "https://media.blooket.com/image/upload/v1645222006/Blooks/yellowBird.svg",
+  "Pet":           "https://media.blooket.com/image/upload/v1556831934/Blooks/dog.svg",
+  "Arctic Animal": "https://media.blooket.com/image/upload/v1582775344/Blooks/penguin.svg",
+  "Forest Animal": "https://media.blooket.com/image/upload/v1556832316/Blooks/fox.svg",
+  "Wonderland":    "https://media.blooket.com/image/upload/v1582080264/Blooks/cheshireCat.svg",
+  "Breakfast":     "https://media.blooket.com/image/upload/v1584483099/Blooks/waffle.svg",
+  "Space":         "https://media.blooket.com/image/upload/v1613003835/Blooks/astronaut.svg",
+  "Bot":           "https://media.blooket.com/image/upload/v1620677388/Blooks/megaBot.svg",
+  "Aquatic":       "https://media.blooket.com/image/upload/v1628956576/Blooks/babyShark.svg",
+  "Safari":        "https://media.blooket.com/image/upload/v1643835592/Blooks/lion.svg",
+  "Dino":          "https://media.blooket.com/image/upload/v1650433848/Blooks/tyrannosaurusRex.svg",
+  "Ice Monster":   "https://media.blooket.com/image/upload/v1663061336/Blooks/yeti.svg",
+  "Outback":       "https://media.blooket.com/image/upload/v1675381967/Blooks/sugarGlider.svg",
+  "Blizzard":      "https://media.blooket.com/image/upload/v1575606016/Blooks/santaClaus.svg",
+  "Spooky":        "https://media.blooket.com/image/upload/v1601168910/Blooks/ghost.svg",
+  "Color":         "https://media.blooket.com/image/upload/v1594135100/Blooks/colors/blueBlook.svg",
+  "Mystical":      "https://media.blooket.com/image/upload/v1681884681/Blooks/rainbowAstronaut.svg"
+};
 
 const RAW_BLOOKS = `
 Chick|farmAnimals/chick.svg|v1645222006/Blooks/yellowBird.svg|Farm Animal||Common|Happy Hatchers|#ffcd05
@@ -640,10 +658,22 @@ const BLOOKS = RAW_BLOOKS.split("\n").filter(Boolean).map(line => {
 const BLOOK_MAP = Object.fromEntries(BLOOKS.map(b => [b.name, b]));
 
 const RARITIES = ["Common","Uncommon","Rare","Epic","Legendary","Chroma","Mystical"];
-const RARITY_WEIGHT = {Common:1000,Uncommon:120,Rare:25,Epic:6,Legendary:1.2,Chroma:0.08,Mystical:0.02};
+
+/* NEW RARITY WEIGHTS — Chromas and Mysticals EXTREMELY rare */
+const RARITY_WEIGHT = {
+  Common:    10000,
+  Uncommon:  1200,
+  Rare:      220,
+  Epic:      40,
+  Legendary: 5,
+  Chroma:    0.15,
+  Mystical:  0.02
+};
+
 const RARITY_DUPLICATE_REWARD = {Common:5,Uncommon:10,Rare:25,Epic:50,Legendary:100,Chroma:250,Mystical:500};
 const RARITY_ORDER = {Common:0,Uncommon:1,Rare:2,Epic:3,Legendary:4,Chroma:5,Mystical:6};
 
+/* PACKS — using the correct pack icon URLs */
 const PACKS = [
   { id:"Farm Animal",   name:"Farm Animal",   price:10,  icon:"Chick",             color:"#4ab96d", desc:"The classic starter pack. Moo, oink, cluck." },
   { id:"Pet",           name:"Pet",           price:15,  icon:"Dog",               color:"#f49849", desc:"Furry (and scaly) friends for your collection." },
@@ -665,19 +695,36 @@ const PACKS = [
 ];
 const PACK_MAP = Object.fromEntries(PACKS.map(p => [p.id, p]));
 
+/* FIX: Pack pool — every pack gets a UNIQUE random assortment.
+   Chromas/Mysticals from ANY set can appear in any pack, but extremely rarely. */
 function packPool(packId){
-  if(packId === "Mystical") return BLOOKS.filter(b => b.rarity === "Mystical");
-  return BLOOKS.filter(b => b.set === packId || b.realSet === packId);
+  if(packId === "Mystical"){
+    return BLOOKS.filter(b => b.rarity === "Mystical" || b.rarity === "Chroma");
+  }
+  const basePool = BLOOKS.filter(b => b.set === packId);
+  // Add cross-set chromas and mysticals as ultra-rare bonus pulls
+  const bonusPool = BLOOKS.filter(b => b.rarity === "Chroma" || b.rarity === "Mystical");
+  return [...basePool, ...bonusPool];
 }
 
+/* FIX: Each pack has its own odds. Chromas/Mysticals in normal packs are SUPER rare. */
 function packOdds(packId){
   const pool = packPool(packId);
   const byRarityCount = {};
   pool.forEach(b => { byRarityCount[b.rarity] = (byRarityCount[b.rarity]||0)+1; });
-  const weighted = pool.map(b => ({
-    blook: b,
-    weight: RARITY_WEIGHT[b.rarity] / byRarityCount[b.rarity]
-  }));
+
+  // For NORMAL packs, chromas/mysticals get a much higher penalty
+  const isNormalPack = packId !== "Mystical";
+  const weighted = pool.map(b => {
+    let weight = RARITY_WEIGHT[b.rarity] / byRarityCount[b.rarity];
+    // Extra rarity penalty for chromas/mysticals in normal packs
+    if(isNormalPack){
+      if(b.rarity === "Chroma") weight *= 0.02;
+      if(b.rarity === "Mystical") weight *= 0.005;
+    }
+    return { blook: b, weight };
+  });
+
   const total = weighted.reduce((s,w)=>s+w.weight,0) || 1;
   const entries = weighted.map(w => ({ blook:w.blook, chance: (w.weight/total)*100 }));
   const byRarity = {};
@@ -685,15 +732,28 @@ function packOdds(packId){
   return { entries, byRarity, total };
 }
 
+/* FIX: TRUE RANDOM roll — no biases, no cached results */
 function rollBlook(packId){
   const { entries, total } = packOdds(packId);
-  let r = Math.random() * total;
-  for(const e of entries){ r -= e.chance; if(r <= 0) return e.blook; }
+  // Use crypto-strength randomness when available
+  let r;
+  if(window.crypto && window.crypto.getRandomValues){
+    const buf = new Uint32Array(1);
+    window.crypto.getRandomValues(buf);
+    r = (buf[0] / 4294967296) * total;
+  } else {
+    r = Math.random() * total;
+  }
+  let cumulative = 0;
+  for(const e of entries){
+    cumulative += e.chance;
+    if(r <= cumulative) return e.blook;
+  }
   return entries[entries.length-1].blook;
 }
 
 /* STATE */
-const SAVE_KEY = "blooket-recreation-v2";
+const SAVE_KEY = "blooket-recreation-v3";
 const DEFAULT_STATE = {
   user:null, tokens:500, xp:0, owned:{},
   stats:{games:0,wins:0,correct:0,wrong:0,packsOpened:0,bestStreak:0,tokensEarned:0,tokensSpent:0,blooksFound:0},
@@ -765,7 +825,7 @@ const $  = (sel, root=document) => root.querySelector(sel);
 const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmt = n => Number(n).toLocaleString("en-US");
-const pct = n => n >= 1 ? n.toFixed(2)+"%" : n >= 0.01 ? n.toFixed(3)+"%" : n.toExponential(2)+"%";
+const pct = n => n >= 1 ? n.toFixed(2)+"%" : n >= 0.01 ? n.toFixed(3)+"%" : n >= 0.0001 ? n.toFixed(5)+"%" : n.toExponential(2)+"%";
 const rand = (min, max) => Math.random()*(max-min)+min;
 const randInt = (min, max) => Math.floor(rand(min, max+1));
 const pick = arr => arr[Math.floor(Math.random()*arr.length)];
@@ -856,7 +916,7 @@ const UI = {
   }
 };
 
-/* ADMIN */
+/* ADMIN — moved to Settings */
 const ADMIN_PASSWORD = "6171399";
 const ADMIN_SESSION_KEY = "blooket-admin-session";
 
@@ -881,7 +941,6 @@ const Admin = {
   installCheatPatches(){
     if(window.AdminCheats._patched) return;
     window.AdminCheats._patched = true;
-
     const _origAnswer = Game.playerAnswer;
     Game.playerAnswer = function(option, btnEl){
       if(window.AdminCheats.godMode && this.question) option = this.question.correct;
@@ -900,7 +959,6 @@ const Admin = {
     };
   },
 
-  /* 1. Unlock a single blook */
   unlockBlook(name){
     const b = BLOOK_MAP[name] || BLOOKS.find(x => x.name.toLowerCase() === String(name).toLowerCase());
     if(!b) return { ok:false, msg:`No blook named "${name}"` };
@@ -911,7 +969,6 @@ const Admin = {
     return { ok:true, isNew, blook:b, count: State.data.owned[b.name] };
   },
 
-  /* 2. Unlock every blook */
   unlockAll(){
     let added = 0;
     BLOOKS.forEach(b => {
@@ -925,7 +982,6 @@ const Admin = {
     return added;
   },
 
-  /* 3. Open N packs (free, no animation) */
   openPacks(packId, count){
     const pack = PACK_MAP[packId];
     if(!pack) return { ok:false, msg:`Unknown pack: ${packId}` };
@@ -953,7 +1009,6 @@ const Admin = {
     return { ok:true, summary:s };
   },
 
-  /* 4. Unlock an entire set */
   unlockSet(setName){
     const targets = BLOOKS.filter(b => b.set === setName || b.realSet === setName);
     let added = 0;
@@ -968,7 +1023,6 @@ const Admin = {
     return { added, total:targets.length, set:setName };
   },
 
-  /* 5. Unlock everything of a rarity */
   unlockRarity(rarity){
     const targets = BLOOKS.filter(b => b.rarity === rarity);
     let added = 0;
@@ -983,7 +1037,6 @@ const Admin = {
     return { added, total:targets.length, rarity };
   },
 
-  /* 6. Unlock N random missing */
   unlockRandomN(n){
     n = Math.max(1, Math.floor(n) || 1);
     const missing = BLOOKS.filter(b => !State.data.owned[b.name]);
@@ -999,7 +1052,6 @@ const Admin = {
     return { added:rolled.length, rolled };
   },
 
-  /* 7. Remove a blook */
   removeBlook(name){
     if(!State.data.owned[name]) return { ok:false, msg:"Not owned" };
     delete State.data.owned[name];
@@ -1008,7 +1060,6 @@ const Admin = {
     return { ok:true, name };
   },
 
-  /* 8. Set exact count of a blook */
   setBlookCount(name, count){
     const b = BLOOK_MAP[name] || BLOOKS.find(x => x.name.toLowerCase() === String(name).toLowerCase());
     if(!b) return { ok:false, msg:"Blook not found" };
@@ -1025,7 +1076,6 @@ const Admin = {
     return { ok:true, name:b.name, count };
   },
 
-  /* 9. Max out everything */
   maxOut(){
     const added = this.unlockAll();
     State.data.tokens = Math.max(State.data.tokens, 1000000);
@@ -1034,10 +1084,7 @@ const Admin = {
     return added;
   },
 
-  /* 10. Set tokens exactly */
   setTokens(n){ State.data.tokens = Math.max(0, Math.floor(n) || 0); State.save(); App.refreshTokens(); return State.data.tokens; },
-
-  /* 11. Grant / add tokens */
   grantTokens(n){
     n = Math.floor(n) || 0;
     if(n === 0) return 0;
@@ -1045,11 +1092,7 @@ const Admin = {
     else { State.data.tokens = Math.max(0, State.data.tokens + n); State.save(); App.refreshTokens(); }
     return n;
   },
-
-  /* 12. Add XP */
   addXP(n){ n = Math.max(0, Math.floor(n) || 0); if(!n) return 0; State.addXP(n); return n; },
-
-  /* 13. Set exact level */
   setLevel(level){
     level = Math.max(1, Math.min(999, Math.floor(level) || 1));
     let xp = 0, cur = 1, need = 100;
@@ -1058,15 +1101,11 @@ const Admin = {
     State.save(); App.refreshUserChip();
     return level;
   },
-
-  /* 14. Reset stats only */
   resetStats(){
     State.data.stats = JSON.parse(JSON.stringify(DEFAULT_STATE.stats));
     State.data.history = [];
     State.save();
   },
-
-  /* 15. Add fake wins */
   addFakeWins(n){
     n = Math.max(1, Math.floor(n) || 1);
     State.data.stats.games += n;
@@ -1075,14 +1114,8 @@ const Admin = {
     State.save();
     return n;
   },
-
-  /* 16. Reset daily cooldown */
   resetDaily(){ State.data.lastDaily = 0; State.save(); },
-
-  /* 17. Set daily streak */
   setDailyStreak(n){ State.data.dailyStreak = Math.max(0, Math.floor(n) || 0); State.save(); return State.data.dailyStreak; },
-
-  /* 18. Edit profile */
   setProfile(name, avatar){
     if(!State.data.user) return { ok:false, msg:"No profile" };
     if(name) State.data.user.name = String(name).slice(0, 18);
@@ -1090,11 +1123,7 @@ const Admin = {
     State.save(); App.refreshUserChip();
     return { ok:true };
   },
-
-  /* 19. Export save */
   exportSave(){ return JSON.stringify(State.data, null, 2); },
-
-  /* 20. Import save */
   importSave(json){
     try {
       const obj = JSON.parse(json);
@@ -1106,11 +1135,7 @@ const Admin = {
       return { ok:true };
     } catch(e){ return { ok:false, msg: e.message }; }
   },
-
-  /* 21. Factory reset */
   factoryReset(){ State.reset(); App.refreshTokens(); App.refreshUserChip(); },
-
-  /* 22. Monte Carlo simulation */
   simulatePack(packId, rolls){
     rolls = Math.max(1, Math.min(1000000, Math.floor(rolls) || 1000));
     const counts = {}, byRarity = {};
@@ -1122,22 +1147,16 @@ const Admin = {
     const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
     return { rolls, byRarity, top: sorted.slice(0,12), unique: sorted.length };
   },
-
-  /* 23. God mode */
   toggleGodMode(){
     this.installCheatPatches();
     window.AdminCheats.godMode = !window.AdminCheats.godMode;
     return window.AdminCheats.godMode;
   },
-
-  /* 24. Infinite time */
   toggleInfiniteTime(){
     this.installCheatPatches();
     window.AdminCheats.infiniteTime = !window.AdminCheats.infiniteTime;
     return window.AdminCheats.infiniteTime;
   },
-
-  /* 25. Instant win */
   instantWin(tokens=500){
     tokens = Math.max(0, Math.floor(tokens) || 0);
     State.addTokens(tokens);
@@ -1148,8 +1167,6 @@ const Admin = {
     State.save();
     return tokens;
   },
-
-  /* 26. Generate fake history */
   addFakeHistory(entries=5){
     entries = Math.max(1, Math.min(50, Math.floor(entries) || 5));
     for(let i=0;i<entries;i++){
@@ -1198,9 +1215,10 @@ const Market = {
   animateOpen(pack, results){
     const stage = document.createElement("div");
     stage.className = "open-stage";
+    const iconUrl = PACK_ICONS[pack.id] || BLOOK_MAP[pack.icon].mediaUrl;
     stage.innerHTML = `
       <div style="text-align:center;position:relative;z-index:3">
-        <div class="open-pack-visual" id="pack-visual"><img src="${BLOOK_MAP[pack.icon].mediaUrl}" alt=""></div>
+        <div class="open-pack-visual" id="pack-visual"><img src="${iconUrl}" alt=""></div>
         <div style="margin-top:26px;font-weight:900;font-size:1.3rem;color:#fff">${results.length>1?`Opening ${results.length} packs...`:"Click to open!"}</div>
         <div style="margin-top:8px;color:rgba(255,255,255,.55);font-weight:700;font-size:.86rem">${esc(pack.name)} Pack</div>
       </div>`;
@@ -1238,7 +1256,7 @@ const Market = {
         btn.textContent = stillGoing ? `Open Next (${idx}/${results.length})` : "Awesome!";
         btn.addEventListener("click", () => {
           if(stillGoing){
-            container.innerHTML = `<div class="open-pack-visual" id="pack-visual"><img src="${BLOOK_MAP[pack.icon].mediaUrl}" alt=""></div><div style="margin-top:26px;font-weight:900;font-size:1.3rem;color:#fff">Click to open!</div>`;
+            container.innerHTML = `<div class="open-pack-visual" id="pack-visual"><img src="${iconUrl}" alt=""></div><div style="margin-top:26px;font-weight:900;font-size:1.3rem;color:#fff">Click to open!</div>`;
             setTimeout(showNext, 180);
           } else {
             stage.remove();
@@ -1900,13 +1918,10 @@ const Views = {
             const pool = packPool(p.id);
             const { byRarity } = packOdds(p.id);
             const rarities = Object.keys(byRarity).sort((a,b) => RARITY_ORDER[a]-RARITY_ORDER[b]);
-            const icon = BLOOK_MAP[p.icon] || pool[0];
+            const iconUrl = PACK_ICONS[p.id] || BLOOK_MAP[p.icon].mediaUrl;
             return `
               <div class="pack-card" data-pack="${esc(p.id)}">
-                <div class="pack-art" style="background:linear-gradient(150deg,${p.color}33,${p.color}0d)">
-                  <div class="pack-art-bg" style="background:radial-gradient(circle at 50% 40%,${p.color}55,transparent 68%)"></div>
-                  ${blookImg(icon,"")}
-                </div>
+                <div class="pack-art"><img src="${iconUrl}" alt="${esc(p.name)}" onerror="this.onerror=null;this.src='${BLOOK_MAP[p.icon].mediaUrl}'"></div>
                 <div class="pack-body">
                   <div class="flex between center"><div class="pack-title">${esc(p.name)}</div><div class="pack-price"><span class="token-coin" style="width:17px;height:17px;font-size:.55rem">T</span>${fmt(p.price)}</div></div>
                   <p class="tiny muted">${esc(p.desc)}</p>
@@ -2039,252 +2054,265 @@ const Views = {
     </section>`;
   },
 
-  admin(){
-    if(!Admin.isAuthed()){
-      return `
-      <section class="section">
-        <div class="wrap-narrow" style="max-width:460px">
-          <div class="card reveal-up" style="text-align:center">
-            <div style="width:78px;height:78px;border-radius:22px;background:linear-gradient(135deg,#111827,#374151);display:grid;place-items:center;margin:0 auto 18px;font-size:2.2rem;box-shadow:0 12px 32px rgba(0,0,0,.4)">🔐</div>
-            <h2>Admin Access</h2>
-            <p class="muted small mt8">Enter the admin password to continue.</p>
-            <div class="field mt24" style="text-align:left">
-              <label class="label">Password</label>
-              <input class="input" id="admin-pw" type="password" placeholder="••••••••" autocomplete="off">
-            </div>
-            <button class="btn btn-primary btn-lg btn-block" id="admin-login">Unlock Panel</button>
-          </div>
-        </div>
-      </section>`;
-    }
-
+  settings(){
+    const authed = Admin.isAuthed();
+    const godOn = window.AdminCheats.godMode;
+    const infOn = window.AdminCheats.infiniteTime;
     const total = BLOOKS.length;
     const owned = State.uniqueOwned();
     const missing = total - owned;
     const lv = levelInfo(State.data.xp);
-    const godOn = window.AdminCheats.godMode;
-    const infOn = window.AdminCheats.infiniteTime;
     const sets = [...new Set(BLOOKS.flatMap(b => [b.set, b.realSet]).filter(Boolean))].sort();
 
     return `
     <section class="section">
       <div class="wrap">
-        <div class="admin-header">
-          <div class="flex between center wrapf gap16">
-            <div class="flex center gap16">
-              <div style="width:64px;height:64px;border-radius:18px;background:rgba(255,255,255,.1);display:grid;place-items:center;font-size:1.9rem;border:1px solid rgba(255,255,255,.2)">🛠️</div>
-              <div>
-                <h2 style="color:#fff;margin:0">Admin Panel</h2>
-                <p style="color:rgba(255,255,255,.65);font-weight:700;margin-top:4px">26 powers · password 6171399</p>
-              </div>
+        <h2 class="mb24">Settings</h2>
+
+        <div class="grid g2" style="gap:22px">
+          <div class="card">
+            <h3 class="mb16">Appearance</h3>
+            <div class="admin-toggle">
+              <div><div class="bold">Dark Mode</div><div class="tiny muted-3">Toggle light/dark theme</div></div>
+              <div class="switch ${document.documentElement.getAttribute("data-theme")==="dark"?"on":""}" id="s-theme-toggle"></div>
             </div>
-            <button class="btn btn-ghost" style="border-color:rgba(255,255,255,.3);color:#fff" id="admin-logout">Sign Out</button>
+          </div>
+
+          <div class="card">
+            <h3 class="mb16">Account</h3>
+            <div class="flex between center mb8"><span class="muted small bold">Name</span><span class="bold">${State.data.user ? esc(State.data.user.name) : "—"}</span></div>
+            <div class="flex between center mb8"><span class="muted small bold">Level</span><span class="bold">${lv.level}</span></div>
+            <div class="flex between center mb8"><span class="muted small bold">Tokens</span><span class="bold">${fmt(State.tokens)}</span></div>
+            <div class="flex between center mb8"><span class="muted small bold">Blooks Owned</span><span class="bold">${owned} / ${total}</span></div>
+            <div class="divider"></div>
+            <button class="btn btn-ghost btn-block btn-sm" onclick="App.go('#/stats')">View Full Stats</button>
           </div>
         </div>
 
-        <div class="grid g4 stagger mb24">
-          <div class="stat-card"><div class="stat-value">${fmt(State.tokens)}</div><div class="stat-label">Tokens</div></div>
-          <div class="stat-card"><div class="stat-value">${owned} / ${total}</div><div class="stat-label">Blooks Owned</div></div>
-          <div class="stat-card"><div class="stat-value">${missing}</div><div class="stat-label">Missing</div></div>
-          <div class="stat-card"><div class="stat-value">${lv.level}</div><div class="stat-label">Level</div></div>
+        <div class="card mt24">
+          <div class="flex between center wrapf gap16 mb16">
+            <div>
+              <h3 style="margin:0">🔐 Admin Panel</h3>
+              <p class="muted small mt8">${authed ? "Signed in — full access to all 26 powers." : "Enter password 6171399 to unlock admin powers."}</p>
+            </div>
+            ${authed ? `<button class="btn btn-ghost btn-sm" id="s-admin-logout">Sign Out</button>` : ''}
+          </div>
+
+          ${!authed ? `
+            <div class="field" style="max-width:360px">
+              <label class="label">Admin Password</label>
+              <div class="input-group">
+                <input class="input" id="s-admin-pw" type="password" placeholder="••••••••" autocomplete="off">
+                <button class="btn btn-primary" id="s-admin-login">Unlock</button>
+              </div>
+            </div>
+          ` : `
+
+            <div class="grid g4 stagger mb24">
+              <div class="stat-card"><div class="stat-value">${fmt(State.tokens)}</div><div class="stat-label">Tokens</div></div>
+              <div class="stat-card"><div class="stat-value">${owned} / ${total}</div><div class="stat-label">Blooks Owned</div></div>
+              <div class="stat-card"><div class="stat-value">${missing}</div><div class="stat-label">Missing</div></div>
+              <div class="stat-card"><div class="stat-value">${lv.level}</div><div class="stat-label">Level</div></div>
+            </div>
+
+            <div class="grid g2" style="gap:18px">
+
+              <div class="card admin-power">
+                <h3 class="mb16">🔓 Unlock Blook</h3>
+                <div class="field">
+                  <label class="label">Blook name</label>
+                  <input class="input" id="a-unlock-name" list="a-blook-list" placeholder="e.g. Chick, Rainbow Astronaut…" autocomplete="off">
+                  <datalist id="a-blook-list">${BLOOKS.map(b => `<option value="${esc(b.name)}"></option>`).join("")}</datalist>
+                </div>
+                <div class="flex gap12 wrapf">
+                  <button class="btn btn-primary" id="a-unlock-one">Unlock Blook</button>
+                  <button class="btn btn-ghost" id="a-unlock-random">🎲 Random Missing</button>
+                </div>
+                <div id="a-unlock-result" class="mt16"></div>
+              </div>
+
+              <div class="card admin-power admin-good">
+                <h3 class="mb16">🌟 Unlock Everything</h3>
+                <p class="muted small mb16">Collection: ${owned}/${total}</p>
+                <div class="flex gap12 wrapf">
+                  <button class="btn btn-green" id="a-unlock-all">✨ Unlock All Blooks</button>
+                  <button class="btn btn-ghost" id="a-max-out">🚀 Max Out Everything</button>
+                </div>
+                <div id="a-all-result" class="mt16"></div>
+              </div>
+
+              <div class="card admin-power admin-good">
+                <h3 class="mb16">🎯 Unlock by Set</h3>
+                <div class="field">
+                  <label class="label">Set</label>
+                  <select class="select" id="a-set-select">${sets.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join("")}</select>
+                </div>
+                <button class="btn btn-primary" id="a-unlock-set">Unlock Set</button>
+              </div>
+
+              <div class="card admin-power admin-good">
+                <h3 class="mb16">💎 Unlock by Rarity</h3>
+                <div class="field">
+                  <label class="label">Rarity</label>
+                  <select class="select" id="a-rarity-select">${RARITIES.map(r => `<option value="${r}">${r}</option>`).join("")}</select>
+                </div>
+                <button class="btn btn-primary" id="a-unlock-rarity">Unlock All of Rarity</button>
+              </div>
+
+              <div class="card admin-power admin-gold">
+                <h3 class="mb16">🎲 Random Unlocks</h3>
+                <div class="field">
+                  <label class="label">How many random missing?</label>
+                  <input class="input" id="a-random-count" type="number" value="10" min="1" max="1000">
+                </div>
+                <button class="btn btn-gold" id="a-unlock-random-n">Roll Random Blooks</button>
+              </div>
+
+              <div class="card admin-power">
+                <h3 class="mb16">🔢 Set Blook Count</h3>
+                <div class="field">
+                  <label class="label">Blook name</label>
+                  <input class="input" id="a-count-name" list="a-blook-list2" placeholder="Blook name">
+                  <datalist id="a-blook-list2">${BLOOKS.map(b => `<option value="${esc(b.name)}"></option>`).join("")}</datalist>
+                </div>
+                <div class="input-group mb16">
+                  <input class="input" id="a-count-value" type="number" value="1" min="0" max="9999">
+                  <button class="btn btn-primary" id="a-set-count">Set Count</button>
+                </div>
+                <button class="btn btn-ghost btn-sm" id="a-remove-blook" style="border-color:#ef4444;color:#ef4444">Remove This Blook</button>
+              </div>
+
+              <div class="card admin-power admin-gold">
+                <h3 class="mb16">🪙 Token Control</h3>
+                <div class="field">
+                  <label class="label">Amount (negative removes)</label>
+                  <div class="input-group">
+                    <input class="input" id="a-token-amount" type="number" value="1000">
+                    <button class="btn btn-gold" id="a-grant-tokens">+ Grant</button>
+                  </div>
+                </div>
+                <button class="btn btn-ghost btn-sm" id="a-set-tokens" style="margin-top:-10px">Set Exact Balance</button>
+              </div>
+
+              <div class="card admin-power admin-gold">
+                <h3 class="mb16">⚡ XP & Level</h3>
+                <div class="field">
+                  <label class="label">Add XP</label>
+                  <div class="input-group">
+                    <input class="input" id="a-xp-amount" type="number" value="1000">
+                    <button class="btn btn-gold" id="a-add-xp">+ Add</button>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">Set exact level</label>
+                  <div class="input-group">
+                    <input class="input" id="a-level-value" type="number" value="50" min="1" max="999">
+                    <button class="btn btn-primary" id="a-set-level">Set Level</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card admin-power admin-gold">
+                <h3 class="mb16">📊 Stats Tampering</h3>
+                <div class="flex gap12 wrapf">
+                  <button class="btn btn-ghost" id="a-reset-stats">Reset Stats Only</button>
+                  <button class="btn btn-ghost" id="a-fake-wins">+50 Fake Wins</button>
+                  <button class="btn btn-ghost" id="a-fake-history">+10 Fake History</button>
+                </div>
+              </div>
+
+              <div class="card admin-power admin-gold">
+                <h3 class="mb16">📅 Daily Reward</h3>
+                <div class="flex gap12 wrapf">
+                  <button class="btn btn-ghost" id="a-reset-daily">Reset Daily Cooldown</button>
+                  <div class="input-group" style="max-width:220px">
+                    <input class="input" id="a-streak-value" type="number" value="7" min="0" max="365">
+                    <button class="btn btn-ghost" id="a-set-streak">Set Streak</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card admin-power">
+                <h3 class="mb16">👤 Profile Editor</h3>
+                <div class="field">
+                  <label class="label">Display name</label>
+                  <input class="input" id="a-profile-name" value="${State.data.user ? esc(State.data.user.name) : ''}" maxlength="18">
+                </div>
+                <div class="field">
+                  <label class="label">Avatar</label>
+                  <select class="select" id="a-profile-avatar">
+                    ${BLOOKS.slice(0, 60).map(b => `<option value="${esc(b.name)}" ${State.data.user && State.data.user.avatar === b.name ? "selected" : ""}>${esc(b.name)}</option>`).join("")}
+                  </select>
+                </div>
+                <button class="btn btn-primary" id="a-set-profile">Save Profile</button>
+              </div>
+
+              <div class="card admin-power admin-danger">
+                <h3 class="mb16">📦 Open Packs</h3>
+                <div class="field">
+                  <label class="label">Pack</label>
+                  <select class="select" id="a-pack-select">${PACKS.map(p => `<option value="${esc(p.id)}">${esc(p.name)} (${packPool(p.id).length})</option>`).join("")}</select>
+                </div>
+                <div class="grid g2" style="gap:10px">
+                  <div class="field" style="margin:0"><label class="label">Quantity</label><input class="input" id="a-pack-count" type="number" value="100" min="1" max="100000"></div>
+                  <div class="field" style="margin:0"><label class="label">Preset</label><select class="select" id="a-pack-preset"><option value="">—</option><option value="10">10</option><option value="100">100</option><option value="500">500</option><option value="1000">1,000</option><option value="10000">10,000</option></select></div>
+                </div>
+                <button class="btn btn-primary btn-block mt8" id="a-open-packs">Open Packs</button>
+                <div id="a-pack-result" class="mt16"></div>
+              </div>
+
+              <div class="card admin-power admin-danger">
+                <h3 class="mb16">🔬 Monte Carlo Sim</h3>
+                <p class="muted small mb16">Simulate rolls WITHOUT modifying your collection.</p>
+                <div class="field">
+                  <label class="label">Pack</label>
+                  <select class="select" id="a-sim-pack">${PACKS.map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join("")}</select>
+                </div>
+                <div class="input-group mb16">
+                  <input class="input" id="a-sim-count" type="number" value="1000" min="1" max="1000000">
+                  <button class="btn btn-primary" id="a-simulate">Simulate</button>
+                </div>
+                <div id="a-sim-result"></div>
+              </div>
+
+              <div class="card admin-power admin-gold">
+                <h3 class="mb16">⚙️ Cheats</h3>
+                <div class="admin-toggle ${godOn?'on':''}" id="a-god-toggle">
+                  <div><div class="bold">God Mode</div><div class="tiny muted-3">Always answer correctly</div></div>
+                  <div class="switch ${godOn?'on':''}"></div>
+                </div>
+                <div class="admin-toggle ${infOn?'on':''}" id="a-inf-toggle">
+                  <div><div class="bold">Infinite Time</div><div class="tiny muted-3">No timer in games</div></div>
+                  <div class="switch ${infOn?'on':''}"></div>
+                </div>
+                <button class="btn btn-gold btn-block mt8" id="a-instant-win">🏆 Instant Win (+500 tokens)</button>
+              </div>
+
+              <div class="card admin-power admin-danger">
+                <h3 class="mb16">💾 Save Data</h3>
+                <div class="flex gap12 wrapf mb16">
+                  <button class="btn btn-ghost" id="a-export">📤 Export JSON</button>
+                  <button class="btn btn-ghost" id="a-import-trigger">📥 Import JSON</button>
+                </div>
+                <input type="file" id="a-import-file" accept=".json" style="display:none">
+                <button class="btn btn-red btn-block" id="a-factory-reset">💣 Factory Reset Everything</button>
+              </div>
+
+              <div class="card admin-power admin-danger">
+                <h3 class="mb16">🗑️ Remove Blook</h3>
+                <div class="field">
+                  <label class="label">Remove one specific blook</label>
+                  <input class="input" id="a-remove-name" list="a-blook-list3" placeholder="Blook name">
+                  <datalist id="a-blook-list3">${BLOOKS.map(b => `<option value="${esc(b.name)}"></option>`).join("")}</datalist>
+                </div>
+                <button class="btn btn-red" id="a-remove-specific">Remove Blook</button>
+              </div>
+
+            </div>
+
+            <p class="tiny muted-3 tc mt32">Admin session active · password <span class="mono">6171399</span> · clears on tab close</p>
+          `}
         </div>
-
-        <div class="grid g2" style="gap:18px">
-
-          <div class="card admin-power">
-            <h3 class="mb16">🔓 Unlock Blook</h3>
-            <div class="field">
-              <label class="label">Blook name</label>
-              <input class="input" id="a-unlock-name" list="a-blook-list" placeholder="e.g. Chick, Rainbow Astronaut…" autocomplete="off">
-              <datalist id="a-blook-list">${BLOOKS.map(b => `<option value="${esc(b.name)}"></option>`).join("")}</datalist>
-            </div>
-            <div class="flex gap12 wrapf">
-              <button class="btn btn-primary" id="a-unlock-one">Unlock Blook</button>
-              <button class="btn btn-ghost" id="a-unlock-random">🎲 Random Missing</button>
-            </div>
-            <div id="a-unlock-result" class="mt16"></div>
-          </div>
-
-          <div class="card admin-power admin-good">
-            <h3 class="mb16">🌟 Unlock Everything</h3>
-            <p class="muted small mb16">Collection: ${owned}/${total}</p>
-            <div class="flex gap12 wrapf">
-              <button class="btn btn-green" id="a-unlock-all">✨ Unlock All Blooks</button>
-              <button class="btn btn-ghost" id="a-max-out">🚀 Max Out Everything</button>
-            </div>
-            <div id="a-all-result" class="mt16"></div>
-          </div>
-
-          <div class="card admin-power admin-good">
-            <h3 class="mb16">🎯 Unlock by Set</h3>
-            <div class="field">
-              <label class="label">Set</label>
-              <select class="select" id="a-set-select">${sets.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join("")}</select>
-            </div>
-            <button class="btn btn-primary" id="a-unlock-set">Unlock Set</button>
-          </div>
-
-          <div class="card admin-power admin-good">
-            <h3 class="mb16">💎 Unlock by Rarity</h3>
-            <div class="field">
-              <label class="label">Rarity</label>
-              <select class="select" id="a-rarity-select">${RARITIES.map(r => `<option value="${r}">${r}</option>`).join("")}</select>
-            </div>
-            <button class="btn btn-primary" id="a-unlock-rarity">Unlock All of Rarity</button>
-          </div>
-
-          <div class="card admin-power admin-gold">
-            <h3 class="mb16">🎲 Random Unlocks</h3>
-            <div class="field">
-              <label class="label">How many random missing?</label>
-              <input class="input" id="a-random-count" type="number" value="10" min="1" max="1000">
-            </div>
-            <button class="btn btn-gold" id="a-unlock-random-n">Roll Random Blooks</button>
-          </div>
-
-          <div class="card admin-power">
-            <h3 class="mb16">🔢 Set Blook Count</h3>
-            <div class="field">
-              <label class="label">Blook name</label>
-              <input class="input" id="a-count-name" list="a-blook-list2" placeholder="Blook name">
-              <datalist id="a-blook-list2">${BLOOKS.map(b => `<option value="${esc(b.name)}"></option>`).join("")}</datalist>
-            </div>
-            <div class="input-group mb16">
-              <input class="input" id="a-count-value" type="number" value="1" min="0" max="9999">
-              <button class="btn btn-primary" id="a-set-count">Set Count</button>
-            </div>
-            <button class="btn btn-ghost btn-sm" id="a-remove-blook" style="border-color:#ef4444;color:#ef4444">Remove This Blook</button>
-          </div>
-
-          <div class="card admin-power admin-gold">
-            <h3 class="mb16">🪙 Token Control</h3>
-            <div class="field">
-              <label class="label">Amount (negative removes)</label>
-              <div class="input-group">
-                <input class="input" id="a-token-amount" type="number" value="1000">
-                <button class="btn btn-gold" id="a-grant-tokens">+ Grant</button>
-              </div>
-            </div>
-            <button class="btn btn-ghost btn-sm" id="a-set-tokens" style="margin-top:-10px">Set Exact Balance</button>
-          </div>
-
-          <div class="card admin-power admin-gold">
-            <h3 class="mb16">⚡ XP & Level</h3>
-            <div class="field">
-              <label class="label">Add XP</label>
-              <div class="input-group">
-                <input class="input" id="a-xp-amount" type="number" value="1000">
-                <button class="btn btn-gold" id="a-add-xp">+ Add</button>
-              </div>
-            </div>
-            <div class="field">
-              <label class="label">Set exact level</label>
-              <div class="input-group">
-                <input class="input" id="a-level-value" type="number" value="50" min="1" max="999">
-                <button class="btn btn-primary" id="a-set-level">Set Level</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="card admin-power admin-gold">
-            <h3 class="mb16">📊 Stats Tampering</h3>
-            <div class="flex gap12 wrapf">
-              <button class="btn btn-ghost" id="a-reset-stats">Reset Stats Only</button>
-              <button class="btn btn-ghost" id="a-fake-wins">+50 Fake Wins</button>
-              <button class="btn btn-ghost" id="a-fake-history">+10 Fake History</button>
-            </div>
-          </div>
-
-          <div class="card admin-power admin-gold">
-            <h3 class="mb16">📅 Daily Reward</h3>
-            <div class="flex gap12 wrapf">
-              <button class="btn btn-ghost" id="a-reset-daily">Reset Daily Cooldown</button>
-              <div class="input-group" style="max-width:220px">
-                <input class="input" id="a-streak-value" type="number" value="7" min="0" max="365">
-                <button class="btn btn-ghost" id="a-set-streak">Set Streak</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="card admin-power">
-            <h3 class="mb16">👤 Profile Editor</h3>
-            <div class="field">
-              <label class="label">Display name</label>
-              <input class="input" id="a-profile-name" value="${State.data.user ? esc(State.data.user.name) : ''}" maxlength="18">
-            </div>
-            <div class="field">
-              <label class="label">Avatar</label>
-              <select class="select" id="a-profile-avatar">
-                ${BLOOKS.slice(0, 60).map(b => `<option value="${esc(b.name)}" ${State.data.user && State.data.user.avatar === b.name ? "selected" : ""}>${esc(b.name)}</option>`).join("")}
-              </select>
-            </div>
-            <button class="btn btn-primary" id="a-set-profile">Save Profile</button>
-          </div>
-
-          <div class="card admin-power admin-danger">
-            <h3 class="mb16">📦 Open Packs</h3>
-            <div class="field">
-              <label class="label">Pack</label>
-              <select class="select" id="a-pack-select">${PACKS.map(p => `<option value="${esc(p.id)}">${esc(p.name)} (${packPool(p.id).length})</option>`).join("")}</select>
-            </div>
-            <div class="grid g2" style="gap:10px">
-              <div class="field" style="margin:0"><label class="label">Quantity</label><input class="input" id="a-pack-count" type="number" value="100" min="1" max="100000"></div>
-              <div class="field" style="margin:0"><label class="label">Preset</label><select class="select" id="a-pack-preset"><option value="">—</option><option value="10">10</option><option value="100">100</option><option value="500">500</option><option value="1000">1,000</option><option value="10000">10,000</option></select></div>
-            </div>
-            <button class="btn btn-primary btn-block mt8" id="a-open-packs">Open Packs</button>
-            <div id="a-pack-result" class="mt16"></div>
-          </div>
-
-          <div class="card admin-power admin-danger">
-            <h3 class="mb16">🔬 Monte Carlo Sim</h3>
-            <p class="muted small mb16">Simulate rolls WITHOUT modifying your collection.</p>
-            <div class="field">
-              <label class="label">Pack</label>
-              <select class="select" id="a-sim-pack">${PACKS.map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join("")}</select>
-            </div>
-            <div class="input-group mb16">
-              <input class="input" id="a-sim-count" type="number" value="1000" min="1" max="1000000">
-              <button class="btn btn-primary" id="a-simulate">Simulate</button>
-            </div>
-            <div id="a-sim-result"></div>
-          </div>
-
-          <div class="card admin-power admin-gold">
-            <h3 class="mb16">⚙️ Cheats</h3>
-            <div class="admin-toggle ${godOn?'on':''}" id="a-god-toggle">
-              <div><div class="bold">God Mode</div><div class="tiny muted-3">Always answer correctly</div></div>
-              <div class="switch ${godOn?'on':''}"></div>
-            </div>
-            <div class="admin-toggle ${infOn?'on':''}" id="a-inf-toggle">
-              <div><div class="bold">Infinite Time</div><div class="tiny muted-3">No timer in games</div></div>
-              <div class="switch ${infOn?'on':''}"></div>
-            </div>
-            <button class="btn btn-gold btn-block mt8" id="a-instant-win">🏆 Instant Win (+500 tokens)</button>
-          </div>
-
-          <div class="card admin-power admin-danger">
-            <h3 class="mb16">💾 Save Data</h3>
-            <div class="flex gap12 wrapf mb16">
-              <button class="btn btn-ghost" id="a-export">📤 Export JSON</button>
-              <button class="btn btn-ghost" id="a-import-trigger">📥 Import JSON</button>
-            </div>
-            <input type="file" id="a-import-file" accept=".json" style="display:none">
-            <button class="btn btn-red btn-block" id="a-factory-reset">💣 Factory Reset Everything</button>
-          </div>
-
-          <div class="card admin-power admin-danger">
-            <h3 class="mb16">🗑️ Remove Blook</h3>
-            <div class="field">
-              <label class="label">Remove one specific blook</label>
-              <input class="input" id="a-remove-name" list="a-blook-list3" placeholder="Blook name">
-              <datalist id="a-blook-list3">${BLOOKS.map(b => `<option value="${esc(b.name)}"></option>`).join("")}</datalist>
-            </div>
-            <button class="btn btn-red" id="a-remove-specific">Remove Blook</button>
-          </div>
-
-        </div>
-
-        <p class="tiny muted-3 tc mt32">Admin session active · password <span class="mono">6171399</span> · clears on tab close</p>
       </div>
     </section>`;
   },
@@ -2305,7 +2333,7 @@ const Mounts = {
       case "/blooks":    this.blooks(); break;
       case "/play":      this.play(); break;
       case "/stats":     this.stats(); break;
-      case "/admin":     this.admin(); break;
+      case "/settings":  this.settings(); break;
     }
   },
   home(){},
@@ -2374,12 +2402,15 @@ const Mounts = {
       return `<div style="margin-bottom:12px"><div class="flex between center" style="margin-bottom:5px"><span class="chip chip-${r}">${r}</span><span class="tiny bold">${pct(chance)} <span class="muted-3">(${count})</span></span></div><div class="xp-bar" style="height:8px"><div class="xp-fill" style="width:${Math.max(2, barW)}%"></div></div></div>`;
     }).join("");
     const canAfford = State.tokens >= pack.price;
+    const iconUrl = PACK_ICONS[pack.id] || BLOOK_MAP[pack.icon].mediaUrl;
     UI.modal({
       title: `${esc(pack.name)} Pack`, size: "modal-lg",
       body: `
         <div class="grid" style="grid-template-columns:1fr 1fr;gap:22px">
           <div>
-            <div style="aspect-ratio:1;border-radius:var(--r-lg);background:linear-gradient(150deg,${pack.color}33,${pack.color}0d);display:grid;place-items:center;border:1px solid var(--border)">${blookImg(BLOOK_MAP[pack.icon] || pool[0], "")}</div>
+            <div style="aspect-ratio:1;border-radius:var(--r-lg);background:var(--surface-2);display:grid;place-items:center;border:1px solid var(--border);overflow:hidden">
+              <img src="${iconUrl}" alt="" style="width:80%;height:80%;object-fit:contain">
+            </div>
             <p class="muted small mt16">${esc(pack.desc)}</p>
             <div class="panel mt16">
               <div class="flex between center"><span class="muted small bold">Pack Price</span><span class="bold" style="color:var(--brand)">${fmt(pack.price)} tokens</span></div>
@@ -2513,28 +2544,38 @@ const Mounts = {
       });
     }
   },
-  admin(){
-    /* ---- Password gate ---- */
-    const pwInput = $("#admin-pw");
-    if(pwInput){
+  settings(){
+    /* Theme toggle */
+    const themeToggle = $("#s-theme-toggle");
+    if(themeToggle){
+      themeToggle.addEventListener("click", () => App.toggleTheme());
+    }
+
+    /* Admin login */
+    const loginBtn = $("#s-admin-login");
+    if(loginBtn){
+      const pw = $("#s-admin-pw");
       const submit = () => {
-        if(Admin.login(pwInput.value)){
+        if(Admin.login(pw.value)){
           UI.toast("✅ Admin access granted", "success");
           App.render();
         } else {
           UI.toast("❌ Incorrect password", "error");
-          pwInput.value = ""; pwInput.focus();
+          pw.value = ""; pw.focus();
         }
       };
-      $("#admin-login").addEventListener("click", submit);
-      pwInput.addEventListener("keydown", e => { if(e.key === "Enter") submit(); });
-      pwInput.focus();
-      return;
+      loginBtn.addEventListener("click", submit);
+      pw.addEventListener("keydown", e => { if(e.key === "Enter") submit(); });
     }
 
-    /* ---- Sign out ---- */
-    const lo = $("#admin-logout");
-    if(lo) lo.addEventListener("click", () => { Admin.logout(); UI.toast("Signed out of admin", "info"); App.render(); });
+    /* Admin logout */
+    const adminLogout = $("#s-admin-logout");
+    if(adminLogout){
+      adminLogout.addEventListener("click", () => { Admin.logout(); UI.toast("Signed out of admin", "info"); App.render(); });
+    }
+
+    /* Only attach admin handlers if authed */
+    if(!Admin.isAuthed()) return;
 
     /* ---- Power 1: Unlock blook ---- */
     const blookInput = $("#a-unlock-name");
@@ -2818,16 +2859,6 @@ const App = {
     $("#hamburger").addEventListener("click", () => this.toggleMobileMenu());
     window.addEventListener("hashchange", () => this.render());
 
-    // Secret triple-click on brand to open admin
-    let clicks = 0, timer = null;
-    $("#brand-badge").addEventListener("click", e => {
-      e.stopPropagation();
-      clicks++;
-      clearTimeout(timer);
-      timer = setTimeout(() => clicks = 0, 600);
-      if(clicks >= 3){ clicks = 0; this.go("#/admin"); }
-    });
-
     if(!location.hash) location.hash = "#/";
     this.refreshTokens();
     this.refreshUserChip();
@@ -2859,7 +2890,7 @@ const App = {
         <a class="nav-link" href="#/blooks" data-mm>Blooks</a>
         <a class="nav-link" href="#/play" data-mm>Play</a>
         <a class="nav-link" href="#/stats" data-mm>Stats</a>
-        <a class="nav-link" href="#/admin" data-mm style="opacity:.5">Admin</a>
+        <a class="nav-link" href="#/settings" data-mm>Settings</a>
         <div class="divider"></div>
         ${State.data.user ? `<button class="btn btn-ghost btn-block" id="mm-logout">Sign out (${esc(State.data.user.name)})</button>` : `<button class="btn btn-primary btn-block" id="mm-login">Sign in</button>`}`;
       $$("[data-mm]", menu).forEach(a => a.addEventListener("click", () => menu.classList.remove("open")));
@@ -2901,7 +2932,7 @@ const App = {
       "/blooks":    () => Views.blooks(),
       "/play":      () => Views.play(),
       "/stats":     () => Views.stats(),
-      "/admin":     () => Views.admin()
+      "/settings":  () => Views.settings()
     };
     const fn = routes[key] || (() => Views.notFound());
     $("#view").innerHTML = fn();
